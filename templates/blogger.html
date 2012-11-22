@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://juanantonio.fm/ -->
+<html class="js video maskImage placeholder wf-adelle-i4-active wf-adelle-i7-active wf-adelle-n7-active wf-adelle-i6-active wf-museosans-i3-active wf-museosans-n3-active wf-museosans-n9-active wf-museosans-i9-active wf-active" lang="en"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<style type="text/css">embed[type*="application/x-shockwave-flash"],embed[src*=".swf"],object[type*="application/x-shockwave-flash"],object[codetype*="application/x-shockwave-flash"],object[src*=".swf"],object[codebase*="swflash.cab"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"],object[classid*="d27cdb6e-ae6d-11cf-96b8-444553540000"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"]{	display: none !important;}
+</style>
+
+<body data-twttr-rendered="true">
+  <header role="banner"><hgroup>
+  <h1><a href="http://localhost:8080/capitulizer">Capitulizer</a></h1>
+
+    <h2>A tool to procrastinate even more</h2>
+
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+
+
+
+
+{% for episode in episodeObjs %}
+    <article>
+      <header>
+
+        <h1 class="entry-title">
+            <a href="{{ episode.link }}">
+                {{ episode.title }}
+            </a>
+        </h1>
+        <p class="meta">
+
+        {% if episode.addedDate %}
+            <time datetime="{{ episode.addedDate }}" pubdate="" data >
+                Added date: {{ episode.addedDate }}
+            </time>
+        {% endif %}
+
+        {% if episode.updatedDate %}
+            <time datetime="{{ episode.updatedDate }}" pubdate="" data >
+                <p>Updated date: {{ episode.updatedDate }}</p>
+            </time>
+        {% endif %}
+
+	<!-- i keep this for historical reason, as a format reminder -->
+	<!--
+	<time datetime="2012-10-17T18:39:00+02:00" pubdate="" data >Oct 17<span>th</span>, 2012</time>
+	--> 
+        </p>
+
+      </header>
+        <div class="entry-content">
+		<p>{{ episode.description }}</p>
+		<br>
+
+		{% for video in episode.videos %}
+		<li>
+		<a href="{{ video }}" >Ver Online {% if video["provider"] %}  <span> {{video["provider"] }} </span> {% endif %} </a>
+		</li>
+
+		{% endfor %}
+        
+      </div>
+    </article>
+    {% endfor %}
+
+
+
+
+
+
+
+</div>
+</div>
+</div>
+<span id="cb_message" class="cb_message" style="display: none; ">All praise to Hipno Sapo</span></body></html>

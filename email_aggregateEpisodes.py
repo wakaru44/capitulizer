@@ -1,0 +1,67 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# 2012 10 24
+# General application to receive email. It is listening in all the addresses,
+# and just logs the message to the app log.
+#
+# https://developers.google.com/appengine/docs/python/mail/receivingmail
+
+import logging
+
+import webapp2
+from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from google.appengine.api import taskqueue
+
+import extractSY
+import episode
+
+
+class CapHandler(InboundMailHandler):
+    """Receive emails with links to episodes"""
+
+    def receive(self, mail_message):
+        """receives an email and log it"""
+        logging.info("We have received someting new")
+        # log the entry .DEBUG
+        logging.debug(mail_message.subject)
+        #logging.debug(self.getBody(mail_message)) #  too many output
+
+        # extract the links to episodes in the email received
+        episodeLinks = extractSY.linksToEpisodes(
+                                self.getBody(mail_message))  # Links list
+
+        # for each one, we will create an task
+        for ep in episodeLinks:
+            logging.debug("creating a task for the episode found")
+            try:
+                # Create a queue
+                queue = taskqueue.Queue('newEpisode')
+                # Conform a task
+                task = taskqueue.Task(url='/tasks/newEpisode', 
+                              params={'episodeLink': ep,})
+                # Add the task to the queue.
+                queue.add(task)
+            except TypeError as err:
+                logging.error("Error")
+                logging.error(err)
+
+        return 0
+
+    def getBody(self, mail_message):
+        """Get the best body available. It can be the html or the text part"""
+        # TODO: improve this to fall to plain text body if not html available
+        html_bodies = mail_message.bodies('text/html')
+        for content_type, body in html_bodies:
+            decoded_html = body.decode()
+            # return the first htmlbody found in unicode format.
+            # i think that should be a way to avoid this for loop, but...
+            return decoded_html
+
+
+#######################################
+
+# Entry point for the general receiving app
+app = webapp2.WSGIApplication(
+    [CapHandler.mapping()]
+)

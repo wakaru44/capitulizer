@@ -1,0 +1,61 @@
+application: capitulizer
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /_ah/mail/agregate@capitulizer.appspotmail.com
+  script: email_aggregateEpisodes.app
+  login: admin
+
+
+- url: /_ah/mail/agregar@capitulizer.appspotmail.com
+  script: email_aggregateEpisodes.app
+  login: admin
+
+
+- url: /_ah/mail/agrega.+@capitulizer.appspotmail.com
+  script: email_aggregateEpisodes.app
+  login: admin
+
+- url: /_ah/mail/.+
+  script: email_incoming.app
+  login: admin
+
+- url: /staticfiles
+  static_dir: staticfiles
+
+- url: /tasks/.+
+  script: tasks.app
+  
+
+- url: .*
+  script: main.app
+
+libraries:
+- name: webapp2
+  version: "2.5.1"
+- name: jinja2
+  version: "2.6"
+
+inbound_services:
+- mail
+
+skip_files: |
+ ^(.*/)?(
+ (app\.yaml)|
+ (tmp)|
+ (app\.yml)|
+ (index\.yaml)|
+ (index\.yml)|
+ (#.*#)|
+ (.*~)|
+ (.*\.py[co])|
+ (.*/RCS/.*)|
+ (\..*)|
+ )$
