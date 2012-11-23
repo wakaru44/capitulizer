@@ -65,7 +65,13 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             # get the key to the episode
             # keyEpisode = epObj.key()
 
-            # create newVideo tasks to add the videos
+            # TODO 1: we should launch the task to watch the episode and notify
+            queue = taskqueue.Queue('watchNotify')
+            task = taskqueue.Task(url='/tasks/watchNotify',
+                                  params={'keyEpisode': keyEpisode,})
+            queue.add(task)
+
+            # create newVideo tasks to add videos to the episode.
             limit = 10    # TODO eliminate this limit. is horrible, sucker
                           #if we want to set a limit, we should do it better
             # with the interlinks, get some data
@@ -76,15 +82,21 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 linkInter = extractSY.buildLink(linkInter)
                 # and dont get past the limit
                 if limit > 0:
+                    # Call a newVideo task for each interlink
                     queue = taskqueue.Queue('newVideo')
                     task = taskqueue.Task(url='/tasks/newVideo', 
                                   params={'keyEpisode': keyEpisode,
                                           'interLink': linkInter})
                     queue.add(task)
 
-                    queue = taskqueue.Queue('newEmail')
-                    task = taskqueue.Task(url='/tasks/newEmail',
-                                          params={'keyEpisode': keyEpisode,})
+                    # CAREFULL this is meant to be launched once for episode
+                    # REMOVE
+                    #queue = taskqueue.Queue('newEmail')
+                    #task = taskqueue.Task(url='/tasks/newEmail',
+                    #                      params={'keyEpisode': keyEpisode,})
+                    #queue.add(task)
+
+
                 else:
                     logging.error(
                         "We still have a limit set")
