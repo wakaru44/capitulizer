@@ -220,7 +220,7 @@ def episodeDataFromEpisodeWeb(web):
     logging.debug(fullTitle)
     logging.debug("description")
     logging.debug(description)
-    return fullTitle.__str__(), description
+    return fullTitle, description
 
 
 

@@ -65,7 +65,6 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             # get the key to the episode
             # keyEpisode = epObj.key()
 
-            # TODO 1: we should launch the task to watch the episode and notify
             queue = taskqueue.Queue('watchNotify')
             task = taskqueue.Task(url='/tasks/watchNotify',
                                   params={'keyEpisode': keyEpisode,})
