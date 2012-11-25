@@ -25,6 +25,7 @@ class NewPostHandler(webapp2.RequestHandler):
         # TODO 1: in the first run, we shoul defer it for later, because if
         # there were no task pending, it will be instantly trigguered :(
 
+        logging.debug("NewPostHandler Entered")
         keyEpisode = self.request.get('keyEpisode')
         try: 
             # - get the episode from the database
@@ -138,7 +139,19 @@ class NewPostHandler(webapp2.RequestHandler):
 
 
     def get(self):
-        self.response.out.write("Welcome")
+        HTML="""
+        <body>
+
+            <form name="input" action="/tasks/newPost"
+            method="post">
+            Episode key <input type="text" name="keyEpisode" value="a1a1a1a1a1a1a"><br>
+            <input type="submit" value="Submit">
+            </form> 
+
+        </body>
+        """
+        self.response.out.write(HTML)
+
 
     def renderBody(self, values, template="error.html"):
         """render the values in the template.
