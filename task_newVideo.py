@@ -70,7 +70,7 @@ class NewVideoHandler(webapp2.RequestHandler):
                 if epObj and vLink != "":
                     epObj.addVideo(vLink, vProv)
                     #logging.debug(vLink)
-                    logging.error("saving that video for this episode in the datastore")
+                    logging.debug("saving that video for this episode in the datastore")
                     logging.debug(epObj)
                     epObj.put()
                 else:

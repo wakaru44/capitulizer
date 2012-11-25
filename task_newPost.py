@@ -32,6 +32,8 @@ class NewPostHandler(webapp2.RequestHandler):
             # QUESTION: how should i encapsulate this??
             # answer: how about putting all the stuff about
             # building the message, and leave here only the sending?
+            # answer2: and how about creating the params dictionary in
+            # one function, and passing it to the task in another one?
 
             # - check if this episode has videos.
             if len(epObj.videos) > 0:
@@ -49,12 +51,27 @@ class NewPostHandler(webapp2.RequestHandler):
                 #logging.debug(body)  # noisy
 
                 # - build the rest of the message
-                sender = "Capitulizer Mighty Poster Bot <botman@capitulizer.appspotmail.com>"
-                to = "Loscojesde@avellane.da"  # send them to IFTTT TODO
-                cc = "wakaru44@gmail.com"  # and send a copy to the admin 
+                sender = "Capitulizer Mighty Poster Bot <capitulizer@capitulizer.appspotmail.com>"
                 subject = "watch %s online" % epObj.title
+                to = "trigger@ifttt.com"  # send them to IFTTT TODO
+                cc = "wakaru44@gmail.com"  # and send a copy to the admin 
+                bodyTags = "automagicoespialidoso, %s" % "SERIE DEL CAPITULO"
                 logging.debug("subject")
                 logging.debug(repr(subject))
+
+                # QUESTION: could this way be more maintenable and powerful?
+                # QUESTION: Will we reach the size limit for task parameters??
+                logging.debug("Creating a sendEmail Task with a new Post")
+                queue = taskqueue.Queue('sendEmail')
+                task = taskqueue.Task(url='/tasks/sendEmail', 
+                                      params={'sender': sender,
+                                              'subject': subject,
+                                              'to': to,
+                                              'cc': cc,
+                                              'bodyTags': bodyTags,
+                                              'body': body})
+                queue.add(task)
+
 
 
                 

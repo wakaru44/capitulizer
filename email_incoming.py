@@ -29,7 +29,7 @@ class LogSenderHandler(InboundMailHandler):
         logging.info("Received a message from: " +
             mail_message.sender)
         logging.info(self.getBody(mail_message))
-        ## TODO finish this
+        ## TODO 1: send an email back to the admin
 
     def getBody(self, mail_message):
         """Return the html body of a message. """

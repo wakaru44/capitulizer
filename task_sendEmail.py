@@ -19,6 +19,8 @@ class SendEmailHandler(webapp2.RequestHandler):
         sender = self.request.get('sender')
         subject = self.request.get('subject')
         bodyContent = self.request.get('body')
+        bodyTags = self.request.get('bodyTags')
+        # TODO 1: we need to know the tvshow to put the fucking tag
         cc = self.request.get('cc')
         bcc = self.request.get('bcc')
         to = self.request.get('to')
@@ -37,7 +39,8 @@ class SendEmailHandler(webapp2.RequestHandler):
             if bcc != "":
                 message.bcc = "" # TODO : add bcc
             message.html = bodyContent
-            message.body = bodyContent.decode()
+            # - NOTE: we use the body to make the tags of the article
+            message.body = bodyTags
 
 
             #post(payload=body.as_string())
