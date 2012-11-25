@@ -38,7 +38,8 @@ class WatchNotifyHandler(webapp2.RequestHandler):
 
             sender = "Capitulizer Mighty Bot <botman@capitulizer.appspotmail.com>"
             to = submitter  # send them to the submitter TODO
-            cc = "wakaru44@gmail.com"  # and send a copy to the admin 
+            cc = ""  # by now, empty string so sending doesnt fail
+            bcc = "wakaru44@gmail.com"  # and send a copy to the admin 
             subject = "New Episode Available to Watch"
             body  = """<html><h1>This shoul be like the /blogger template.</h1>
             http://capitulizer.appspot.com/blogger</html>"""
@@ -56,6 +57,7 @@ class WatchNotifyHandler(webapp2.RequestHandler):
                                           'subject': subject,
                                           'body': body,
                                           'cc': cc,
+                                          'bcc': bcc,
                                           'to': to})
             queue.add(task)
 
