@@ -35,33 +35,38 @@ class NewVideoHandler(webapp2.RequestHandler):
 
             vLink, vProv = extractSY.linkToVideoAndProvFromInterLink(
                                                               interWeb)
+            # I use a function to work with the bd in a single transaction
             def saveVideo(keyEpisode, vLink, vProv):
                 # retrieve the object from the bd
                 epObj = db.get(keyEpisode)
-                if epObj:
+                if epObj and vLink is not None:
                     epObj.addVideo(vLink, vProv)
-                    logging.debug("saving the object in the datastore")
+                    #logging.debug(vLink)
+                    logging.error("NOT saving that video for this episode in the datastore")
                     logging.debug(epObj)
-                    epObj.put()
+                    #epObj.put()
                 else:
                     # if there is no object retrieved, fail the trasaction.
                     # QUESTION isn't a better way to see that it failed? i don't 
                     # know how to catch a exception or something for that 
                     # kind of failure
-                    raise Exception("Couldn't get the object from bd")
+                    logging.debug("vLink")
+                    logging.debug(vLink)
+                    raise Exception("We wont store this video.")
 
             db.run_in_transaction(saveVideo, keyEpisode, vLink, vProv)
 
         except db.datastore_errors as e:
             # TODO : catch error getting the thing from db
             logging.error("Error getting episode from bd")
-            logging.error(e)
+            #logging.error(e)
             logging.debug(dir(e))
         except db.datastore_errors.BadKeyError as e:
             # QUESTION sure that's ok folk?
             logging.error("Error getting episode from bd.BadKeyError")
-            logging.error(e)
-            raise db.datastore_errors.BadKeyError
+            #logging.error(e)
+            #raise db.datastore_errors.BadKeyError
+            raise 
         except:
             # TODO 1: define a imARobotException
             # TODO : catch errors getting request parameters

@@ -39,5 +39,36 @@ class MailTestCase(unittest.TestCase):
         """test compose_email2 with a list of good links to variuos prov."""
         pass
 
+from email.message import Message 
+
+def test_email(self):
+    body = Message()
+    body.add_header('to', 'test-unknown@other-app.com')
+    body.add_header('from', 'test@app.com')
+    body.add_header('Content-Type', 'multipart/alternative',
+                    boundary=self.boundary)
+    text = Message()
+    text['content-type'] = 'text/plain'
+    text.set_payload('I am I! Don Quixote!  The man of La
+                       Mancha!')
+    body.attach(text)
+
+    post(payload=body.as_string())
+
+
+def createPayloadForEmail(bodyTxt):
+    body = Message()
+    body.add_header('to', 'agregar@capitulizer.appspotmail.com')
+    body.add_header('from', 'manolo@nomail.com')
+    body.add_header('Content-Type', 'multipart/alternative',
+                    boundary=self.boundary)
+    text = Message()
+    text = ['content-type'] = 'text/plain'
+    text.set_payload(bodyTxt)
+    body.attach(text)
+    return body.as_string()
+
+
+
 
 #unittest.main()

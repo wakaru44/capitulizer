@@ -63,7 +63,8 @@ def openLink(link):
         # by now, this will make the task to be retried.
         raise urllib2.URLError
 
-
 c = openLink("http://www.seriescoco.com/s/y/3573901/0/s/1205")
+d = openLink(u'http://www.seriescoco.com/s/y/2997570/0/s/3566')
 
 print c.geturl()
+print d.geturl()

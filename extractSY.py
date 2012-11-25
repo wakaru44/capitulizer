@@ -82,12 +82,12 @@ def plainString(s):
             logging.debug(type(snip))
             if isinstance(snip, bs4.element.Tag):
                 logging.debug("is a tag")
-                madafaca += snip.prettify()
+                madafaca += snip.prettify().strip()
                 # madafaca += snip.__str__() # this method fails sometimes
                                             # giving unicode errors
             elif isinstance(snip, bs4.NavigableString):
                 logging.debug("is a navigable string")
-                madafaca += snip.__str__()
+                madafaca += snip.__str__().strip()
             else:
                 logging.error("is unaputamierda")
                 logging.debug(snip)
@@ -121,8 +121,8 @@ def linksToEpisodes(msg):
         soup = bs4.BeautifulSoup(syMsg)
         for link in soup.find_all("a"):
             # Check that is a "capitulo" kind of link
-            logging.debug("a link found")
-            logging.debug(link)
+            # logging.debug("a link found")  # noisy
+            # logging.debug(link)  # noisy
             try:
                 l1 = link['href']
                 l1 = l1.replace('3D"', '')
@@ -131,11 +131,13 @@ def linksToEpisodes(msg):
                     logging.debug("agregando capitulo a la lista")
                     episodeList.append(cleanLink.decode())
                 else:
-                    logging.debug("no agregamos el enlace a la lista")
+                    # logging.debug("no agregamos el enlace a la lista")  #
+                    # noisy
+                    pass
             except KeyError as e:
-                logging.debug("No href Found in Email Message")
-                logging.debug(e)
-        # lista.sort()
+                #logging.debug("No href Found in Email Message")  # noisy
+                #logging.debug(e)  # noisy
+                pass
 
     if len(episodeList) <= 0:
         logging.error("No episodes found in the mail. PLEASE REPORT THIS")
@@ -194,6 +196,11 @@ def episodeDataFromEpisodeWeb(web):
     fullTitle = u''
     description = u''
 
+    # ERROR - this can lead to a recursion error, if we feed the parser with
+    # some kind of crap. QUESTION: how can i check this
+    print "---------------------------------------------------"
+    print web
+    print "---------------------------------------------------"
     soup = bs4.BeautifulSoup(web)
     # I tried it this way, but it was a mistake. it brokes sometimes
     # soup = bs4.BeautifulSoup(web.decode("utf-8"))  # es tonteria ponerlo asi,pero
@@ -203,12 +210,12 @@ def episodeDataFromEpisodeWeb(web):
         try:
             if "section-intro" in block['class']:
                 # get the title
-                fullTitle = plainString(block.h1.contents)
+                fullTitle = plainString(block.h1.contents).strip()
                 # get the description
                 # this way, we plain the string
                 #description = plainString(block.div.contents)
                 # this way, we use the html
-                description = plainString(block.div.contents)
+                description = plainString(block.div.contents).strip()
 
         except KeyError:
             # if we enable loggin for this, would be a stom of log.
@@ -322,7 +329,8 @@ def linkToVideoAndProvFromInterLink(interWeb):
         if SYLink:
             provLink = linkToVideoInProv(SYLink)
         else:
-            logging.error("Ups, there was no return from linkToVideoSY")
+            logging.error("Ups, there was no return from linkToVideoSY extractSY:327")
+            provLink = None
         provName = providerFromInterWeb(interWeb)
         logging.debug("Provider Name: ")
         logging.debug(provName)

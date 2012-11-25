@@ -22,15 +22,18 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             episodeLink = extractSY.buildLink(episodeLink)  # make sure link its ok
             logging.debug("Creating new Episode")
             logging.debug(episodeLink)
-            # we create an object to store the episode data
+
+            # - we create an object to store the episode data
             epObj = episode.episode(link=episodeLink)
-            # to retrieve the links to intermediate, we need to
-            # get the webcontent
+
+            # - to retrieve the links to intermediate, we need to
+            # - get the webcontent
             logging.debug("opening a website")
             episodeWeb = extractSY.openWebsite(episodeLink)
             # extract the interlinks
             linksInter = extractSY.interLinks(episodeWeb)
-            # and the data of the episode
+            
+            # - and the data of the episode
             title, description = extractSY.episodeDataFromEpisodeWeb(
                                                               episodeWeb)
             logging.debug("title:")
@@ -40,30 +43,33 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
             epObj.addTitle(title)
             epObj.addDesc(description)
-     
+
+            # We use a function to store the object in a single transaction
             def putEpisode(epObj):
                 """ put the episode instance in the bd and return the key.
                     Ensure that we are not writing it twice, etc..."""
                     # TODO this is still a sketch. should improve soon
                 try:
                     # first put the episode
-                    epObj.put()
+                    logging.error("not saving - newEpisodeHandle:48")
+                    #epObj.put()
                     logging.debug("-------------- ** real transaction ** ----------------")
                     # then get the key
                     keyEpisode = epObj.key()
                     # and give it away
                     return keyEpisode 
-                except:
+                except  (Timeout, TransactionFailedError, InternalError) as err:
                     # TODO catch errors puttin in bd
                     logging.error("Error Putting episode in the bd")
-                    raise Exception("error putEpisode")
+                    logging.error(err)
+                    raise Exception(err)
 
             # put the episode in the bd and get the key in a transaction
-            keyEpisode = db.run_in_transaction(putEpisode, epObj)
-            # REMOVE old model, non trasactional
-            # epObj.put()
-            # get the key to the episode
-            # keyEpisode = epObj.key()
+            if len(linksInter) == 0:
+                logging.error("There are no videos found, so it doesn't deserve to be saved")
+                raise Exception
+            else:
+                keyEpisode = db.run_in_transaction(putEpisode, epObj)
 
             queue = taskqueue.Queue('watchNotify')
             task = taskqueue.Task(url='/tasks/watchNotify',
@@ -97,16 +103,15 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
 
                 else:
-                    logging.error(
-                        "We still have a limit set")
+                    logging.error("We still have a limit set")
                     break
         except TypeError as err:
-            logging.error("Type Error madafaca")  # TODO just dont remember why...
+            logging.error("Type Error madafaca. Dunno if this mean something, but i will just die")  # TODO just dont remember why I put this here
             logging.error(err)
-        #except:
+        #except :
         #    # TODO handle key errors in the request, to die completly and notify
         #    logging.error("Error adding the episode")
-        #    pass
+        ##    pass
 
     def get(self):
         self.response.out.write("welcome")
