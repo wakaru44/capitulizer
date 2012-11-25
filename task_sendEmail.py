@@ -33,7 +33,10 @@ class SendEmailHandler(webapp2.RequestHandler):
             # better
             message = mail.EmailMessage(sender=sender,
                               subject=subject)
-            message.to = to
+            if to != "":
+                message.to = to
+            else:
+                message.to = "wakaru44@gmail.com"
             if cc != "":
                 message.cc = cc 
             if bcc != "":
