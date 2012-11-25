@@ -41,8 +41,10 @@ def openLink(link):
     logging.debug(pickOneUserAgent)
     try:
         #headers = { 'User-Agent' : pickOneUserAgent }
-        # safe - mode TODO
-        headers = { 'User-Agent' : 'Mozilla/5.0'}
+        # safe - mode
+        # headers = { 'User-Agent' : 'Mozilla/5.0'}
+        # UNsafe - mode TODO
+        headers = { 'User-Agent' : pickOneUserAgent}
         rqst = urllib2.Request(link, None, headers)
         w = urllib2.urlopen(rqst)
         return w
@@ -53,13 +55,13 @@ def openLink(link):
         logging.error(repr(link))
         # not quite sure about raising it again.
         # by now, this will make the task to be retried.
-        raise urllib2.URLError
+        raise urllib2.URLError(e)  # REMOVE - added to raise better 
 
 
 def buildLink(link):
     """check that is a proper www.seriescoco.com link"""
-    #logging.debug("building link: ")  # noisy
-    #logging.debug(repr(link))  # noisy
+    logging.debug("building link: ")  # noisy
+    logging.debug(repr(link))  # noisy
     if "seriesyonkis" in link or "seriescoco" in link:
         return link
     else:
@@ -316,12 +318,12 @@ def linkToVideoInProv(link):
             logging.error(w.geturl())
             FinalLink = resultLink
         else:
-            logging.error("Could not get a link to video in provider.")
-            logging.error(w)
-            logging.error(w.geturl())
+            logging.error("Could not get a link to video in provider. HTTPError")
+            logging.error(repr(w))
+            logging.error(repr(w.geturl()))
     except Exception as err:
-        logging.error("Could not get a link to video in provider.")
-        logging.error(err)
+        logging.error("Could not get a link to video in provider. OTHER Error")
+        logging.error(repr(err))
         FinalLink = ""
     finally:
         return FinalLink

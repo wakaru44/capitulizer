@@ -41,8 +41,9 @@ class WatchNotifyHandler(webapp2.RequestHandler):
             cc = ""  # by now, empty string so sending doesnt fail
             bcc = "wakaru44@gmail.com"  # and send a copy to the admin 
             subject = "New Episode Available to Watch"
-            body  = """<html><h1>This shoul be like the /blogger template.</h1>
-            http://capitulizer.appspot.com/blogger</html>"""
+            # TODO 1: create the notification body 
+            body  = """<html><h1>Notification Email Body</h1>
+            http://capitulizer.appspot.com/</html>"""
 
 
             # Old version, sending the mail from here.

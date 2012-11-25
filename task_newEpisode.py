@@ -20,6 +20,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
         try:
             episodeLink = self.request.get('episodeLink')
             submitter = self.request.get('submitter')
+            logging.debug(episodeLink)
             episodeLink = extractSY.buildLink(episodeLink)  # make sure link its ok
             logging.debug("Creating new Episode")
             logging.debug(episodeLink)
@@ -52,7 +53,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                     # TODO this is still a sketch. should improve soon
                 #try:
                 # first put the episode
-                logging.error("saving - newEpisodeHandle:48")
+                logging.debug("saving - newEpisodeHandle:48")
                 epObj.put()
                 #logging.debug("--------- ** real transaction ** --------")  # noisy
                 # then get the key
@@ -108,9 +109,11 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 else:
                     logging.error("We still have a limit set")
                     break
-        except TypeError as err:
+        #except TypeError as err:
+        except TypeError:
             logging.error("Type Error madafaca. Dunno if this mean something, but i will just die")  # TODO just dont remember why I put this here
-            logging.error(err)
+            #logging.error(err)
+            raise
         #except :
         #    # TODO handle key errors in the request, to die completly and notify
         #    logging.error("Error adding the episode")

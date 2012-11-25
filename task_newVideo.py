@@ -12,13 +12,6 @@ import episode
 class NewVideoHandler(webapp2.RequestHandler):
 
 
-#    def __init__(self, request, response):
-#        logging.error("request")
-#        logging.error(request)
-#        logging.error("response")
-#        logging.error(response)
-#        super(NewVideoHandler, self).__init__(request, response)
-
     def post(self):
         """This task is responsible for adding the video links
             to an episode. If we are detected like robots, retry
@@ -53,12 +46,8 @@ class NewVideoHandler(webapp2.RequestHandler):
             # TODO 1: define a imARobotException
             # TODO : catch errors getting request parameters
             # if we are detected like robots, fail to retry
-            logging.error("Couldn't handle this")
+            logging.error("Couldn't handle this - task_newVideo:56")
             raise 
-
-
-        #return 0
-
 
     def keepThatShit(self, keyEpisode, vLink, vProv  ):
 
@@ -105,7 +94,7 @@ class NewVideoHandler(webapp2.RequestHandler):
             # TODO 1: define a imARobotException
             # if we are detected like robots, raise again to retry
             # TODO : catch errors getting request parameters
-            logging.error("Couldn't handle this")
+            logging.error("Couldn't handle this - task_newVideo:108")
             logging.error(err)
             #raise 
 

@@ -34,6 +34,7 @@ class CapHandler(InboundMailHandler):
         # for each one, we will create an task
         for ep in episodeLinks:
             logging.debug("creating a task for the episode found")
+            logging.debug(ep)
             try:
                 # Create a queue
                 queue = taskqueue.Queue('newEpisode')
