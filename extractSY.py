@@ -198,9 +198,9 @@ def episodeDataFromEpisodeWeb(web):
 
     # ERROR - this can lead to a recursion error, if we feed the parser with
     # some kind of crap. QUESTION: how can i check this
-    print "---------------------------------------------------"
-    print web
-    print "---------------------------------------------------"
+    #print "---------------------------------------------------"
+    #print web
+    #print "---------------------------------------------------"
     soup = bs4.BeautifulSoup(web)
     # I tried it this way, but it was a mistake. it brokes sometimes
     # soup = bs4.BeautifulSoup(web.decode("utf-8"))  # es tonteria ponerlo asi,pero
