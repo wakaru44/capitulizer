@@ -65,7 +65,18 @@ def buildLink(link):
     if "seriesyonkis" in link or "seriescoco" in link:
         return link
     else:
-        return "http://www.seriescoco.com" + link
+        # adding more resiliency to bad constructed URL
+        if link[0:7] == "http://":
+            logging.error("Malformed SY link")
+            # Its malformed, because we expect it to be a SY link,
+            # not another website URL, so if it has this at the 
+            # beginning, means its a broken one
+            logging.error(link)
+            link = "http://www.seriescoco.com/" + link[7:]
+            logging.error(link)
+            return link
+        else: 
+            return "http://www.seriescoco.com" + link
 
 
 def plainString(s):

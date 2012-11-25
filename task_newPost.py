@@ -71,12 +71,15 @@ class NewPostHandler(webapp2.RequestHandler):
                                               'bodyTags': bodyTags,
                                               'body': body})
                 queue.add(task)
+            else:
+                logging.error("no videos in the database yet. Retrying")
+                raise Exception
 
 
 
                 
                 # ............................................................ 
-                # TODO: .........write over the dotted line ..........
+                # TODO 1: .........write over the dotted line ..........
 
         except TypeError:
             logging.error("No episode object?")

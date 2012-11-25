@@ -53,8 +53,8 @@ class SendEmailHandler(webapp2.RequestHandler):
 
             #post(payload=body.as_string())
             # noisy group:
-            #logging.debug("sender")
-            #logging.debug(repr(sender))
+            logging.debug("sender")
+            logging.debug(repr(sender))
             #logging.debug("to")
             #logging.debug(repr(to))
             #logging.debug("cc")
