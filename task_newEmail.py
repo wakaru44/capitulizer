@@ -43,7 +43,7 @@ class NewEmailHandler(webapp2.RequestHandler):
             raise Exception("Still new videos waiting. Maybe next time...")
 
 
-        return 0 
+        #return 0 
 
     def get(self):
         self.response.out.write("Welcome")

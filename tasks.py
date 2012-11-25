@@ -11,6 +11,9 @@ import webapp2
 import task_newEpisode
 import task_newEmail
 import task_newVideo
+import task_watchNotify
+import task_sendEmail
+import task_newPost
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -25,6 +28,9 @@ app = webapp2.WSGIApplication([
     ('/tasks/newEpisode', task_newEpisode.NewEpisodeHandler),
     ('/tasks/newEmail', task_newEmail.NewEmailHandler),
     ('/tasks/newVideo', task_newVideo.NewVideoHandler),
+    ('/tasks/watchNotify', task_watchNotify.WatchNotifyHandler),
+    ('/tasks/sendEmail', task_sendEmail.SendEmailHandler),
+    ('/tasks/newPost', task_newPost.NewPostHandler),
     ('/tasks/', MainHandler),
     ('/tasks', MainHandler)
 ], debug=True)

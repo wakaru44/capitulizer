@@ -19,6 +19,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
     def post(self):  
         try:
             episodeLink = self.request.get('episodeLink')
+            submitter = self.request.get('submitter')
             episodeLink = extractSY.buildLink(episodeLink)  # make sure link its ok
             logging.debug("Creating new Episode")
             logging.debug(episodeLink)
@@ -49,32 +50,34 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 """ put the episode instance in the bd and return the key.
                     Ensure that we are not writing it twice, etc..."""
                     # TODO this is still a sketch. should improve soon
-                try:
-                    # first put the episode
-                    logging.error("not saving - newEpisodeHandle:48")
-                    #epObj.put()
-                    logging.debug("-------------- ** real transaction ** ----------------")
-                    # then get the key
-                    keyEpisode = epObj.key()
-                    # and give it away
-                    return keyEpisode 
-                except  (Timeout, TransactionFailedError, InternalError) as err:
-                    # TODO catch errors puttin in bd
-                    logging.error("Error Putting episode in the bd")
-                    logging.error(err)
-                    raise Exception(err)
+                #try:
+                # first put the episode
+                logging.error("saving - newEpisodeHandle:48")
+                epObj.put()
+                #logging.debug("--------- ** real transaction ** --------")  # noisy
+                # then get the key
+                keyEpisode = epObj.key()
+                # and give it away
+                return keyEpisode 
+                # QUESTION how can i catch Timeout? 
+                #except  (Timeout, TransactionFailedError, InternalError) as err:
+                #    # TODO catch errors puttin in bd
+                #    logging.error("Error Putting episode in the bd")
+                #    logging.error(err)
+                #    raise Exception(err)
 
             # put the episode in the bd and get the key in a transaction
             if len(linksInter) == 0:
                 logging.error("There are no videos found, so it doesn't deserve to be saved")
                 raise Exception
-            else:
-                keyEpisode = db.run_in_transaction(putEpisode, epObj)
 
+            keyEpisode = db.run_in_transaction(putEpisode, epObj)
             queue = taskqueue.Queue('watchNotify')
             task = taskqueue.Task(url='/tasks/watchNotify',
-                                  params={'keyEpisode': keyEpisode,})
+                                  params={'keyEpisode': keyEpisode,
+                                          'submitter': submitter,})
             queue.add(task)
+
 
             # create newVideo tasks to add videos to the episode.
             limit = 10    # TODO eliminate this limit. is horrible, sucker

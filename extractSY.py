@@ -58,8 +58,8 @@ def openLink(link):
 
 def buildLink(link):
     """check that is a proper www.seriescoco.com link"""
-    logging.debug("building link: ")
-    logging.debug(repr(link))
+    #logging.debug("building link: ")  # noisy
+    #logging.debug(repr(link))  # noisy
     if "seriesyonkis" in link or "seriescoco" in link:
         return link
     else:
@@ -78,19 +78,19 @@ def plainString(s):
             madafaca += snip
         else:
             # if its something else, is probably a bs4 tag
-            logging.debug("entity kind")
-            logging.debug(type(snip))
+            #logging.debug("entity kind")  # noisy
+            #logging.debug(type(snip))  # noisy
             if isinstance(snip, bs4.element.Tag):
-                logging.debug("is a tag")
+                #logging.debug("is a tag")  # noisy
                 madafaca += snip.prettify().strip()
                 # madafaca += snip.__str__() # this method fails sometimes
                                             # giving unicode errors
             elif isinstance(snip, bs4.NavigableString):
-                logging.debug("is a navigable string")
+                #logging.debug("is a navigable string")  # noisy
                 madafaca += snip.__str__().strip()
             else:
                 logging.error("is unaputamierda")
-                logging.debug(snip)
+                #logging.debug(snip)  # noisy
     madafaca = madafaca.replace("\n","")
     return madafaca
 
@@ -293,10 +293,14 @@ def linkToVideoInProv(link):
         logging.debug("LinkToVideoInProv")
         logging.debug(originLink)
         w = openLink(originLink)
+        logging.debug("resultLink")
+        logging.debug(w)
         resultLink = w.geturl()
+        logging.debug(resultLink)
         if "seriescoco" in resultLink:
             logging.error(
         "Oops, you seem like a robot to them... We couldn't download this:")
+            logging.error(resultLink)
             suspect = openWebsite(resultLink)
             if amIARobot(suspect):
                 logging.error(originLink)
@@ -306,9 +310,19 @@ def linkToVideoInProv(link):
                 logging.error(resultlink)
         else:
             FinalLink = resultLink
-    except:
+    except urllib2.HTTPError as err:
+        if err.code == '404':
+            logging.error("This guys are smart. They send a 404 but its a fake")
+            logging.error(w.geturl())
+            FinalLink = resultLink
+        else:
+            logging.error("Could not get a link to video in provider.")
+            logging.error(w)
+            logging.error(w.geturl())
+    except Exception as err:
         logging.error("Could not get a link to video in provider.")
-        FinalLink = None
+        logging.error(err)
+        FinalLink = ""
     finally:
         return FinalLink
 
@@ -321,20 +335,22 @@ def linkToVideoInProvFromEpisodeLink(link):
 
 def linkToVideoAndProvFromInterLink(interWeb):
     """Takes a interlink and
+        if no link found, returns empty string
         returns the list of videos in the provider"""
     logging.debug("getting the link to video and the provider of it")
     logging.debug(type(interWeb))
     try:
         SYLink = linkToVideoSY(interWeb)
-        if SYLink:
+        if SYLink != "":
             provLink = linkToVideoInProv(SYLink)
         else:
             logging.error("Ups, there was no return from linkToVideoSY extractSY:327")
-            provLink = None
+            provLink = ""
         provName = providerFromInterWeb(interWeb)
         logging.debug("Provider Name: ")
         logging.debug(provName)
+        return (provLink, provName)
     except:
         logging.debug("Problem trying to get linkToVideoInProvFromInterLink")
+        raise
 
-    return (provLink, provName)

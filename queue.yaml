@@ -61,6 +61,18 @@ queue:
     task_age_limit:  5d
     min_backoff_seconds: 3600   # a good amount of minutes, maybe hours
     max_backoff_seconds: 99999  # should be long, but not forever
+- name: newPost 
+  # create a queue for processing email
+  rate: 5/h
+  bucket_size: 5  # default = 5
+  max_concurrent_requests: 1   # just to be calm ;)
+  mode: push
+  retry_parameters:
+    task_retry_limit: 10
+    task_age_limit:  5d
+    min_backoff_seconds: 3600   # a good amount of minutes, maybe hours
+    max_backoff_seconds: 99999  # should be long, but not forever
+
 
 
 # fall to the default queue

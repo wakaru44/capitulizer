@@ -19,7 +19,7 @@ jinja_environment = jinja2.Environment(
 
 class CapHandler(webapp2.RequestHandler):
 
-    def render(self, values, template="error.html"):
+    def renderAndWrite(self, values, template="error.html"):
         """render the values in the template.
             by default it goes to the index page"""
         template = jinja_environment.get_template(template)
@@ -37,16 +37,16 @@ class CapHandler(webapp2.RequestHandler):
                   'episodeObjs': queriedEpisodes}
 
         # And output the thing out
-        self.render(output, "capitulizer.html")
+        self.renderAndWrite(output, "capitulizer.html")
 
     def post(self):
         pass
 
 
 class BloggerHandler(webapp2.RequestHandler):
-    # TODO: this is just a clone. There are better ways to change just a layout.
+    # TODO: this is just a clone of a handler. There are better ways to change just a layout.
 
-    def render(self, values, template="error.html"):
+    def renderAndWrite(self, values, template="error.html"):
         """render the values in the template.
             by default it goes to the index page"""
         template = jinja_environment.get_template(template)
@@ -64,7 +64,7 @@ class BloggerHandler(webapp2.RequestHandler):
                   'episodeObjs': queriedEpisodes}
 
         # And output the thing out
-        self.render(output, "blogger.html")
+        self.renderAndWrite(output, "blogger.html")
 
     def post(self):
         pass

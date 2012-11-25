@@ -11,6 +11,14 @@ import episode
 
 class NewVideoHandler(webapp2.RequestHandler):
 
+
+#    def __init__(self, request, response):
+#        logging.error("request")
+#        logging.error(request)
+#        logging.error("response")
+#        logging.error(response)
+#        super(NewVideoHandler, self).__init__(request, response)
+
     def post(self):
         """This task is responsible for adding the video links
             to an episode. If we are detected like robots, retry
@@ -35,16 +43,36 @@ class NewVideoHandler(webapp2.RequestHandler):
 
             vLink, vProv = extractSY.linkToVideoAndProvFromInterLink(
                                                               interWeb)
+            # save the video link in the episode entity
+            # I use a function to work with the bd in a single transaction
+            self.keepThatShit(keyEpisode, vLink, vProv)
+            #logging.debug("****40****")  # noisy
+            
+
+        except:
+            # TODO 1: define a imARobotException
+            # TODO : catch errors getting request parameters
+            # if we are detected like robots, fail to retry
+            logging.error("Couldn't handle this")
+            raise 
+
+
+        #return 0
+
+
+    def keepThatShit(self, keyEpisode, vLink, vProv  ):
+
+        try:
             # I use a function to work with the bd in a single transaction
             def saveVideo(keyEpisode, vLink, vProv):
                 # retrieve the object from the bd
                 epObj = db.get(keyEpisode)
-                if epObj and vLink is not None:
+                if epObj and vLink != "":
                     epObj.addVideo(vLink, vProv)
                     #logging.debug(vLink)
-                    logging.error("NOT saving that video for this episode in the datastore")
+                    logging.error("saving that video for this episode in the datastore")
                     logging.debug(epObj)
-                    #epObj.put()
+                    epObj.put()
                 else:
                     # if there is no object retrieved, fail the trasaction.
                     # QUESTION isn't a better way to see that it failed? i don't 
@@ -52,9 +80,12 @@ class NewVideoHandler(webapp2.RequestHandler):
                     # kind of failure
                     logging.debug("vLink")
                     logging.debug(vLink)
+                    logging.debug("epObj")
+                    logging.debug(epObj)
                     raise Exception("We wont store this video.")
 
             db.run_in_transaction(saveVideo, keyEpisode, vLink, vProv)
+            #logging.debug("****90****")  # noisy
 
         except db.datastore_errors as e:
             # TODO : catch error getting the thing from db
@@ -67,16 +98,21 @@ class NewVideoHandler(webapp2.RequestHandler):
             #logging.error(e)
             #raise db.datastore_errors.BadKeyError
             raise 
-        except:
+        except NameError as e:
+            logging.error("Maybe not link found")
+            logging.error(e)
+        except Exception as err:
             # TODO 1: define a imARobotException
+            # if we are detected like robots, raise again to retry
             # TODO : catch errors getting request parameters
-            # if we are detected like robots, fail to retry
             logging.error("Couldn't handle this")
-            raise 
+            logging.error(err)
+            #raise 
 
         # save the video link in the episode entity
 
-        return 0
+#        return 0
+
 
     def get(self):
         self.response.out.write("Welcome")

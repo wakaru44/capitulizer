@@ -39,14 +39,15 @@ class CapHandler(InboundMailHandler):
                 queue = taskqueue.Queue('newEpisode')
                 # Conform a task
                 task = taskqueue.Task(url='/tasks/newEpisode', 
-                              params={'episodeLink': ep,})
+                              params={'episodeLink': ep,
+                              'submitter': mail_message.sender,})
                 # Add the task to the queue.
                 queue.add(task)
             except TypeError as err:
                 logging.error("Error")
                 logging.error(err)
 
-        return 0
+        #return 0
 
     def getBody(self, mail_message):
         """Get the best body available. It can be the html or the text part"""
