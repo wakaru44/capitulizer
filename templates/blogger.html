@@ -1,60 +1,55 @@
-   <div id="content">
-      <div class="blog-index">
+<div id="MYcontent">
+    <div class="MYblog-index">
+        {% for episode in episodeObjs %}
+            <div class="MYarticle">
+              <div class="MYheader">
 
+                <p class="MYentry-title">
 
+                    {{ episode.title }}
 
+                </p>
+                <p class="MYmeta">
+                    <!-- //-- This are the dates from bd. In the blog you cas see the date of the post.
+                    {% if episode.addedDate %}
+                        <div class="MYtime" data >
+                            Added date: {{ episode.addedDate }}
+                        </div>
+                    {% endif %}
+                    {% if episode.updatedDate %}
+                        <div class="MYtime" data >
+                            <p>Updated date: {{ episode.updatedDate }}</p>
+                        </div>
+                    {% endif %}
+                    -->
+                    <br />
+                    <!-- i keep this for historical reason, as a format reminder -->
+                    <!--
+                    <time datetime="2012-10-17T18:39:00+02:00" pubdate="" data >Oct 17<span>th</span>, 2012</div>
+                    --> 
+                </p>
 
-{% for episode in episodeObjs %}
-    <article>
-      <header>
-
-        <h1 class="entry-title">
-            <a href="{{ episode.link }}">
-                {{ episode.title }}
-            </a>
-        </h1>
-        <p class="meta">
-
-        {% if episode.addedDate %}
-            <time datetime="{{ episode.addedDate }}" pubdate="" data >
-                Added date: {{ episode.addedDate }}
-            </time>
-        {% endif %}
-
-        {% if episode.updatedDate %}
-            <time datetime="{{ episode.updatedDate }}" pubdate="" data >
-                <p>Updated date: {{ episode.updatedDate }}</p>
-            </time>
-        {% endif %}
-
-	<!-- i keep this for historical reason, as a format reminder -->
-	<!--
-	<time datetime="2012-10-17T18:39:00+02:00" pubdate="" data >Oct 17<span>th</span>, 2012</time>
-	--> 
-        </p>
-
-      </header>
-        <div class="entry-content">
-		<p>{{ episode.description }}</p>
-		<br>
-
-		{% for video in episode.videos %}
-		<li>
-		<a href="{{ video }}" >Ver Online {% if video["provider"] %}  <span> {{video["provider"] }} </span> {% endif %} </a>
-		</li>
-
-		{% endfor %}
-        
-      </div>
-    </article>
-    {% endfor %}
-
-
-
-
-
-
-
+              </div>
+                <div class="MYentry-content">
+                    <p>{{ episode.description }}</p>
+                    <br>
+                    
+                    {% for video in episode.videos %}
+                        <li>
+                            <a href="{{ video }}" >
+                            Ver Online 
+                            {% if video["provider"] %}  
+                                <span> 
+                                {{video["provider"] }} 
+                                </span> 
+                            {% endif %} 
+                            </a>
+                        </li>
+                    {% endfor %}
+                
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+    <span class="MYcb_message" class="MYcb_message" >All praise to Hipno Sapo</span>
 </div>
-</div>
-<span id="cb_message" class="cb_message" style="display: none; ">All praise to Hipno Sapo</span>
