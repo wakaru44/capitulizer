@@ -29,6 +29,8 @@ class NewVideoHandler(webapp2.RequestHandler):
             # extract the link to the video and the data 
             # try to get the shortened link to the video
             # and add it to the object
+            logging.error("DEACTIVATED")
+            raise
             interWeb = extractSY.openWebsite(interLink)
 
             logging.debug("interWeb type")

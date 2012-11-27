@@ -228,10 +228,44 @@ def episodeDataFromEpisodeWeb(web):
                 # this way, we plain the string
                 #description = plainString(block.div.contents)
                 # this way, we use the html
-                description = plainString(block.div.contents).strip()
+                descriptionTag = block.div.contents
+                description = plainString(descriptionTag).strip()
+                logging.error("BOUNTY: this is the yummy content madafaca")
+                logging.debug(repr(descriptionTag))
+                logging.debug("------")
+                logging.debug(repr(block.div.contents))
+                # Try to collect the bounty (write the code)
+                # try:
+                    ##doing this in a separate function, will do perfectly
+                    # logging.debug("Entering the bounty killah")
+                    # tvshow = descriptionTag.h2.getText
+                    # details = descriptionTag.find_all("p")
+                    ## separate the bs4.Tag of each detail for ease of reading
+                    # originalTitleTag = details[0]
+                    # seasonTag = details[1]
+                    # episodeNumberTag = details[2]
+                    ## Treat each
+                    ## Original Title of the episode
+                    # originalTitle = originalTitleTag.decode()
+                    ## Season
+                    # seasonTag.strong.extract()  # remove unwanted text
+                    # season = seasonTag.decode_contents().strip()
+                    # season = int(season) 
+                    ## Episode Number
+                    # episodeNumberTag.strong.extract()  # remove unwanted text
+                    # episodeNumber = episodeNumberTag.decode_contents().strip()
+                    # episodeNumber = int(episodeNumber)
+                    
+                    # logging.debug("Original Title")
+                    # logging.debug("Seasson")
+                    # logging.debug("Episode Number")
+                    
+                # except:
+                    # logging.error("Couldn't get details of the episode")
+                    # raise
 
         except KeyError:
-            # if we enable loggin for this, would be a stom of log.
+            # if we enable loggin for this, would be a storm of log.
             # there should be exceptions in this and its normal.
             # we don't need to catch them.
             pass

@@ -32,6 +32,7 @@ handlers:
 
 - url: /tasks/.+
   script: tasks.app
+  login: admin
   
 
 - url: .*
