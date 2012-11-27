@@ -54,8 +54,9 @@ class NewPostHandler(webapp2.RequestHandler):
                 # - build the rest of the message
                 sender = "Capitulizer Mighty Poster Bot <capitulizer@capitulizer.appspotmail.com>"
                 subject = "watch %s online" % epObj.title
-                to = "trigger@ifttt.com"  # send them to IFTTT TODO
-                cc = "wakaru44@gmail.com"  # and send a copy to the admin 
+                to = "capitulizer.mail@gmail.com"  # send them to IFTTT TODO
+                cc = "trigger@ifttt.com, wakaru44@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
+                # send a copy to the admin; try to post by email also
                 bodyTags = "automagicoespialidoso, %s" % "SERIE DEL CAPITULO"
                 logging.debug("subject")
                 logging.debug(repr(subject))
@@ -101,7 +102,7 @@ class NewPostHandler(webapp2.RequestHandler):
         #     logging.debug("There are no pending video tasks")
         #     # so send an email
 
-        #     sender = "Capitulizer Mighty Bot <botman@capitulizer.appspotmail.com>"
+        #     sender = "Capitulizer Mighty Bot <capitulizer@capitulizer.appspotmail.com>"
         #     to = submitter  # send them to the submitter TODO
         #     cc = "wakaru44@gmail.com"  # and send a copy to the admin 
         #     subject = "New Episode Available to Watch"

@@ -39,12 +39,16 @@ class SendEmailHandler(webapp2.RequestHandler):
                 message.to = "wakaru44@gmail.com"
                 logging.error("No TO address. Sending one to the admin")
             if cc != "":
-                message.cc = cc 
+                logging.debug("cc type")
+                logging.debug(type(cc))
+                logging.debug(repr(cc))
+                message.cc = cc
             if bcc != "":
                 message.bcc = bcc
             else:
                 message.bcc = "wakaru44@gmail.com"
                 logging.error("No Black Carbon Copy. Sending one to the admin")
+                bcc = "wakaru44@gmail.com"
                 # TODO: disable this copy
             message.html = bodyContent
             # - NOTE: we use the body to make the tags of the article
@@ -76,9 +80,14 @@ class SendEmailHandler(webapp2.RequestHandler):
             # - then send an email
             message.send()
             logging.debug("And finally, mail sent")
-            logging.debug(to)
+            logging.debug("bcc")
             logging.debug(bcc)
-            logging.debug(subject)
+            logging.debug("to")
+            logging.debug(repr(to))
+            logging.debug("cc")
+            logging.debug(repr(cc))
+            logging.debug("subject")
+            logging.debug(repr(subject))
 
 
         except:
