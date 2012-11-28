@@ -28,12 +28,12 @@ def openWebsite(link):
 
 
 def openLink(link):
-    """open a link and return the redirection. I do this in a separate 
+    """open a link and return the redirection. I do this in a separate
     function, besides the overkill, to get the sleep time apart, and
     maybe, join all the urllib request in the same function."""
     humanizer = int(random.random() * (MAXIMUM_WAIT_TIME - MINIMUM_WAIT_TIME))
     time.sleep(MINIMUM_WAIT_TIME + humanizer)
-    userAgents = ['Amiga-AWeb/3.4.167SE ', 
+    userAgents = ['Amiga-AWeb/3.4.167SE ',
                    'Mozilla/5.0']
     pickOneUserAgent = userAgents[int((random.random() * 10 )
                                         % len(userAgents) )]
@@ -55,7 +55,7 @@ def openLink(link):
         logging.error(repr(link))
         # not quite sure about raising it again.
         # by now, this will make the task to be retried.
-        raise urllib2.URLError(e)  # REMOVE - added to raise better 
+        raise urllib2.URLError(e)  # REMOVE - added to raise better
 
 
 def buildLink(link):
@@ -69,13 +69,13 @@ def buildLink(link):
         if link[0:7] == "http://":
             logging.error("Malformed SY link")
             # Its malformed, because we expect it to be a SY link,
-            # not another website URL, so if it has this at the 
+            # not another website URL, so if it has this at the
             # beginning, means its a broken one
             logging.error(link)
             link = "http://www.seriescoco.com/" + link[7:]
             logging.error(link)
             return link
-        else: 
+        else:
             return "http://www.seriescoco.com" + link
 
 
@@ -191,7 +191,7 @@ def interLinks(web):
             # TODO: this should not even got logged.
             #       we should log it or break in case no interLinks gotten
             # logging.debug(e) #  irrelevant
-            pass 
+            pass
 
     if len(linkList) < 1:
         logging.error("No interlinks Found on the website given")
@@ -234,35 +234,47 @@ def episodeDataFromEpisodeWeb(web):
                 logging.debug(repr(descriptionTag))
                 logging.debug("------")
                 logging.debug(repr(block.div.contents))
-                # Try to collect the bounty (write the code)
-                # try:
-                    ##doing this in a separate function, will do perfectly
-                    # logging.debug("Entering the bounty killah")
-                    # tvshow = descriptionTag.h2.getText
-                    # details = descriptionTag.find_all("p")
-                    ## separate the bs4.Tag of each detail for ease of reading
-                    # originalTitleTag = details[0]
-                    # seasonTag = details[1]
-                    # episodeNumberTag = details[2]
-                    ## Treat each
-                    ## Original Title of the episode
-                    # originalTitle = originalTitleTag.decode()
-                    ## Season
-                    # seasonTag.strong.extract()  # remove unwanted text
-                    # season = seasonTag.decode_contents().strip()
-                    # season = int(season) 
-                    ## Episode Number
-                    # episodeNumberTag.strong.extract()  # remove unwanted text
-                    # episodeNumber = episodeNumberTag.decode_contents().strip()
-                    # episodeNumber = int(episodeNumber)
-                    
-                    # logging.debug("Original Title")
-                    # logging.debug("Seasson")
-                    # logging.debug("Episode Number")
-                    
-                # except:
-                    # logging.error("Couldn't get details of the episode")
-                    # raise
+                # Collect the details
+                originalTitle = u''
+                episodeNumber = u''
+                season = u''
+                tvshow = u''
+                try:
+                    #doing this in a separate function, will do perfectly
+                    logging.debug("Extracting details of the episode")
+                    for elem in descriptionTag:
+                        #plain = plainString(elem)
+                        plain = elem.decode()
+                        logging.info(u'plain: ' + plain)
+                        if u'tulo original' in plain:
+                            originalTitle = elem.decode() # Just convert it
+                        elif u'Capítulo' in plain:
+                            elem.strong.extract()  # remove unwanted tag
+                            episodeNumber = elem.decode_contents().strip()
+                        elif u'Temporada' in plain:
+                            elem.strong.extract()  # remove unwanted tag
+                            season = elem.decode_contents().strip()
+                            season = int(season)
+                        else:
+                            try:
+                                logging.info(elem.h2.decode())
+                                if u'h2' in elem.h2.decode():
+                                    logging.info("maybe h2")
+                                    logging.info(repr(elem))
+                                    tvshow = elem.h2.getText
+                            except:
+                                pass
+                    logging.debug("tvshow")
+                    logging.debug(tvshow)
+                    logging.debug("Original Title")
+                    logging.debug(originalTitle)
+                    logging.debug("Seasson")
+                    logging.debug(season)
+                    logging.debug("Episode Number")
+                    logging.debug(episodeNumber)
+                except:
+                    logging.error("Couldn't get details of the episode")
+                    raise
 
         except KeyError:
             # if we enable loggin for this, would be a storm of log.
@@ -354,7 +366,7 @@ def linkToVideoInProv(link):
                 raise Exception("CaptCha Alert, you seem like a robot")
             else:
                 logging.error("Eror getting video in provider. Check:")
-                logging.error(resultlink)
+                logging.error(resultLink)
         else:
             FinalLink = resultLink
     except urllib2.HTTPError as err:

@@ -6,9 +6,8 @@
 import webapp2
 import logging
 import jinja2
-import os 
+import os
 from google.appengine.api import taskqueue
-from google.appengine.api import mail
 from google.appengine.ext import db
 
 import episode  # it's actually used, but not declared explicitly.
@@ -16,18 +15,20 @@ import episode  # it's actually used, but not declared explicitly.
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates"))
 
+
 class NewPostHandler(webapp2.RequestHandler):
 
     def post(self):
         """In this task, we should get an episode from bd, and elaborate
-            a blog post. Then send it to IFTTT (or the admin while in development"""
+            a blog post. Then send it to IFTTT (or the admin
+            while in development"""
 
         # TODO 1: in the first run, we shoul defer it for later, because if
         # there were no task pending, it will be instantly trigguered :(
 
         logging.debug("NewPostHandler Entered")
         keyEpisode = self.request.get('keyEpisode')
-        try: 
+        try:
             # - get the episode from the database
             epObj = self.getEpisodeFromBD(keyEpisode)
             # QUESTION: how should i encapsulate this??
@@ -40,7 +41,7 @@ class NewPostHandler(webapp2.RequestHandler):
             if len(epObj.videos) > 0:
                 logging.debug("-- has videos --")
                 # - start building the email body
-                queriedEpisode = [epObj] 
+                queriedEpisode = [epObj]
                 logging.debug("queriedEpisode")
                 logging.debug(epObj.title)
                 logging.debug(repr(queriedEpisode))
@@ -54,7 +55,7 @@ class NewPostHandler(webapp2.RequestHandler):
                 # - build the rest of the message
                 sender = "Capitulizer Mighty Poster Bot <capitulizer@capitulizer.appspotmail.com>"
                 subject = "watch %s online" % epObj.title
-                to = "capitulizer.mail@gmail.com"  # send them to IFTTT TODO
+                to = "capitulizer.mail@gmail.com"
                 cc = "trigger@ifttt.com, wakaru44@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
                 # send a copy to the admin; try to post by email also
                 bodyTags = "automagicoespialidoso, %s" % "SERIE DEL CAPITULO"
@@ -65,7 +66,7 @@ class NewPostHandler(webapp2.RequestHandler):
                 # QUESTION: Will we reach the size limit for task parameters??
                 logging.debug("Creating a sendEmail Task with a new Post")
                 queue = taskqueue.Queue('sendEmail')
-                task = taskqueue.Task(url='/tasks/sendEmail', 
+                task = taskqueue.Task(url='/tasks/sendEmail',
                                       params={'sender': sender,
                                               'subject': subject,
                                               'to': to,
@@ -79,8 +80,8 @@ class NewPostHandler(webapp2.RequestHandler):
 
 
 
-                
-                # ............................................................ 
+
+                # ............................................................
                 # TODO 1: .........write over the dotted line ..........
 
         except TypeError:
@@ -91,7 +92,7 @@ class NewPostHandler(webapp2.RequestHandler):
 
 
         ############################################################
-        # # check if all this episode videos have been added or failed 
+        # # check if all this episode videos have been added or failed
         # # (second version)
         # queue = taskqueue.Queue() # newVideos
         # #queueStats = taskqueue.QueueStats(queue, ['newVideo'], 2)
@@ -104,7 +105,7 @@ class NewPostHandler(webapp2.RequestHandler):
 
         #     sender = "Capitulizer Mighty Bot <capitulizer@capitulizer.appspotmail.com>"
         #     to = submitter  # send them to the submitter TODO
-        #     cc = "wakaru44@gmail.com"  # and send a copy to the admin 
+        #     cc = "wakaru44@gmail.com"  # and send a copy to the admin
         #     subject = "New Episode Available to Watch"
         #     body  = """<html><h1>This shoul be like the /blogger template.</h1>
         #     http://capitulizer.appspot.com/blogger</html>"""
@@ -117,7 +118,7 @@ class NewPostHandler(webapp2.RequestHandler):
         #     # QUESTION: Will we reach the size limit for task parameters??
         #     logging.debug("Creating a sendEmail Task")
         #     queue = taskqueue.Queue('sendEmail')
-        #     task = taskqueue.Task(url='/tasks/sendEmail', 
+        #     task = taskqueue.Task(url='/tasks/sendEmail',
         #                           params={'sender': sender,
         #                                   'subject': subject,
         #                                   'body': body,
@@ -130,7 +131,7 @@ class NewPostHandler(webapp2.RequestHandler):
         #     logging.debug("There are still some video tasks to complete")
         #     # so retry
         #     raise Exception("Still new videos waiting. Maybe next time...")
-        ############################################################ 
+        ############################################################
 
         #return 0  # big mistake! REMOVE
 
@@ -147,7 +148,7 @@ class NewPostHandler(webapp2.RequestHandler):
             method="post">
             Episode key <input type="text" name="keyEpisode" value="a1a1a1a1a1a1a"><br>
             <input type="submit" value="Submit">
-            </form> 
+            </form>
 
         </body>
         """
