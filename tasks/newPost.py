@@ -13,7 +13,7 @@ from google.appengine.ext import db
 import episode  # it's actually used, but not declared explicitly.
 
 jinja_environment = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates"))
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/../templates"))
 
 
 class NewPostHandler(webapp2.RequestHandler):
@@ -58,9 +58,10 @@ class NewPostHandler(webapp2.RequestHandler):
                 to = "capitulizer.mail@gmail.com"
                 cc = "trigger@ifttt.com, wakaru44@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
                 # send a copy to the admin; try to post by email also
-                bodyTags = "automagicoespialidoso, %s" % "SERIE DEL CAPITULO"
+                bodyTags = "automagicoespialidoso, %s" % "SERIE AUTOMATIc",epObj.getDetails()["tvshow"]
                 logging.debug("subject")
                 logging.debug(repr(subject))
+                logging.debug(epObj.getDetails()["tvshow"])
 
                 # QUESTION: could this way be more maintenable and powerful?
                 # QUESTION: Will we reach the size limit for task parameters??

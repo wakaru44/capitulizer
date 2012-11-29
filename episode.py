@@ -71,7 +71,10 @@ class episode(db.Model):
     def getDetails(self):
         """Get the details from the episode and return a 
            dict of the contents"""
-        return json.loads(self.details)
+        if self.details is not None:
+            return json.loads(self.details)
+        else:
+            return {}
 
     def bigMistake(self):
         """Here be dragons. This is a big mistake, creating the object 
@@ -79,4 +82,5 @@ class episode(db.Model):
         Because the details are saved in json, they need to be deserialized
         before showing...
         It would be nice to serialize and deserialize automagicly"""
-        self.detailsDict = self.getDetails()
+        if self.details is not None:
+            self.detailsDict = self.getDetails()
