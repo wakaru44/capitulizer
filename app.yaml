@@ -31,7 +31,7 @@ handlers:
   static_dir: staticfiles
 
 - url: /tasks/.+
-  script: tasks.app
+  script: backend.app
   login: admin
   
 

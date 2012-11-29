@@ -86,6 +86,15 @@ class test_buildLink():
         print result
         assert expect == result
 
+    def test_A_malformed_link_returns_a_correct_one(self):
+        link = u"http://capitulo/the-big-bang-theory/capitulo-8/224754"
+        expect = u"http://www.seriescoco.com/capitulo/the-big-bang-theory/capitulo-8/224754"
+        result = extractSY.buildLink(link)
+        print expect
+        print result
+        assert expect == result
+
+
 
 
 class test_extractEpisodesFromMail():
@@ -294,11 +303,12 @@ class test_episodeDataFromEpisodeWeb():
         # HTML version
         expect2 = u'<h2> C\xf3mo conoc\xed a vuestra madre</h2> <p><strong>  T\xedtulo original: </strong> Cap\xedtulo 6</p><p> <strong>  Temporada: </strong> 8</p> <p> <strong>  Cap\xedtulo: </strong> 6</p>'
         web = loadFixt("episodeDataFromEpisodeWeb-GoodUnicode-input.html")
-        result1, result2 = extractSY.episodeDataFromEpisodeWeb(web)
+        result1, result2, resultDic = extractSY.episodeDataFromEpisodeWeb(web)
         print "expect 1 = ", repr(expect1  )
         print "Result 1 = ", repr(result1)
         print "expect 2 = ", repr(expect2)
         print "Result 2 = ", repr(result2)
+        print "Details  = ", repr(resultDic)
         assert expect1 == result1
         assert expect2 == result2
 

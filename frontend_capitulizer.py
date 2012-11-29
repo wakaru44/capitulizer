@@ -10,6 +10,7 @@ from google.appengine.ext import db
 
 import jinja2
 import os
+import logging
 
 import episode  # it's actually used, but not declared explicitly.
 
@@ -30,7 +31,7 @@ class CapHandler(webapp2.RequestHandler):
         queriedEpisodes = db.GqlQuery("SELECT * FROM episode ")
         episodeObjs = []
         for q in queriedEpisodes:
-            q.addLista()
+            q.bigMistake()
             episodeObjs.append(q.link)
 
         output = {'title': "Maquinavajo!",
@@ -57,11 +58,15 @@ class BloggerHandler(webapp2.RequestHandler):
         queriedEpisodes = db.GqlQuery("SELECT * FROM episode ")
         episodeObjs = []
         for q in queriedEpisodes:
-            q.addLista()
-            episodeObjs.append(q.link)
+            q.bigMistake()
+            logging.error(q.detailsDict)
+            episodeObjs.append(q)
+
+
+
 
         output = {'title': "Maquinavajo!",
-                  'episodeObjs': queriedEpisodes}
+                  'episodeObjs': episodeObjs }
 
         # And output the thing out
         self.renderAndWrite(output, "blogger.html")

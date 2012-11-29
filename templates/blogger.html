@@ -3,13 +3,21 @@
         {% for episode in episodeObjs %}
             <div class="MYarticle">
                 <div class="MYheader">
-                    <p class="MYentry-title">
-                        {{ episode.title }}
+                    <p  class="MYentry-title">
+		    Ver {{episode.detailsDict['tvshow'] }} {{ episode.title }} Online
                     </p>
                 </div>
-                <div class="MYentry-content">
-                    <p>{{ episode.description }}</p>
+		<div class="MYentry-content">
+			<p>Disfruta online de {{ episode.detailsDict['fullTitle'] }}, 
+			de la temporada {{ episode.detailsDict['season'] }} 
+			de {{episode.detailsDict['tvshow'] }} </p>
                     <br>
+		    <ul>
+			    <li>Titulo: 	{{ episode.detailsDict['fullTitle'] }}</li>
+			    <li>Temporada: 	{{ episode.detailsDict['season'] }}</li>
+			    <li>Numero de capitulo: {{ episode.detailsDict['episodeNumber'] }}</li>
+		    </ul>
+
                     
                     {% for video in episode.videos %}
                         <li>

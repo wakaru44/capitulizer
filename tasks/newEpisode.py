@@ -16,7 +16,7 @@ import extractSY
 
 
 class NewEpisodeHandler(webapp2.RequestHandler):
-    def post(self):  
+    def post(self):
         try:
             episodeLink = self.request.get('episodeLink')
             submitter = self.request.get('submitter')
@@ -34,17 +34,20 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             episodeWeb = extractSY.openWebsite(episodeLink)
             # extract the interlinks
             linksInter = extractSY.interLinks(episodeWeb)
-            
+
             # - and the data of the episode
-            title, description = extractSY.episodeDataFromEpisodeWeb(
+            title, description, details = extractSY.episodeDataFromEpisodeWeb(
                                                               episodeWeb)
             logging.debug("title:")
             logging.debug(title)
             logging.debug("desc:")
             logging.debug(description)
+            logging.debug("details")
+            logging.debug(repr(details))
 
             epObj.addTitle(title)
             epObj.addDesc(description)
+            epObj.addDetails(details)
 
             # We use a function to store the object in a single transaction
             def putEpisode(epObj):
@@ -59,13 +62,15 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 # then get the key
                 keyEpisode = epObj.key()
                 # and give it away
-                return keyEpisode 
-                # QUESTION how can i catch Timeout? 
+                return keyEpisode
+                # QUESTION how can i catch Timeout?
                 #except  (Timeout, TransactionFailedError, InternalError) as err:
                 #    # TODO catch errors puttin in bd
                 #    logging.error("Error Putting episode in the bd")
                 #    logging.error(err)
                 #    raise Exception(err)
+                #NOTE: add the serialized details dictionary to episode
+                # attributes
 
             # put the episode in the bd and get the key in a transaction
             if len(linksInter) == 0:
@@ -93,7 +98,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 if limit > 0:
                     # Call a newVideo task for each interlink
                     queue = taskqueue.Queue('newVideo')
-                    task = taskqueue.Task(url='/tasks/newVideo', 
+                    task = taskqueue.Task(url='/tasks/newVideo',
                                   params={'keyEpisode': keyEpisode,
                                           'interLink': linkInter})
                     queue.add(task)

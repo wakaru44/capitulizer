@@ -4,6 +4,7 @@
 
 import logging
 import datetime
+import json
 
 from google.appengine.ext import db
 
@@ -22,12 +23,13 @@ class episode(db.Model):
     link = db.LinkProperty(required=True)
     title = db.StringProperty()
     description = db.StringProperty()
-    lista = db.StringListProperty()
     videos = db.StringListProperty()  # a string list to save videos
+    details = db.StringProperty()  # a json string of a dictionary 
 
     ## Future interesting data
     submitter = db.EmailProperty  # save the submitter email for future alerts
     objeto = db.ReferenceProperty # here we can save the links to the videos?
+    detailsDict = {}
 
 
 
@@ -51,10 +53,6 @@ class episode(db.Model):
         else:
             logging.debug("No title to add")
 
-    def addLista(self):
-        """test adding to a list"""
-        l = ["uno", "dos", "tres"]
-        self.lista = l
 
     def addDesc(self, text):
         """adds a description text"""
@@ -62,3 +60,23 @@ class episode(db.Model):
             self.description = text
         else:
             logging.error("no description given")
+
+
+    def addDetails(self, details):
+        """Add the details of the episode to the property.
+        It has to convert the dictionary to json string"""
+        self.details = json.dumps(details)
+
+
+    def getDetails(self):
+        """Get the details from the episode and return a 
+           dict of the contents"""
+        return json.loads(self.details)
+
+    def bigMistake(self):
+        """Here be dragons. This is a big mistake, creating the object 
+        episode, or the way i use jinja. 
+        Because the details are saved in json, they need to be deserialized
+        before showing...
+        It would be nice to serialize and deserialize automagicly"""
+        self.detailsDict = self.getDetails()

@@ -8,6 +8,7 @@ import logging
 import time
 import random
 import urllib2
+#import json  # Utilizado para serializar el diccionario con episode Details 
 import bs4
 
 # minimum wait time in seconds
@@ -208,6 +209,11 @@ def episodeDataFromEpisodeWeb(web):
 
     fullTitle = u''
     description = u''
+    originalTitle = u''
+    episodeNumber = u''
+    season = u''
+    tvshow = u''
+    details = {}
 
     # ERROR - this can lead to a recursion error, if we feed the parser with
     # some kind of crap. QUESTION: how can i check this
@@ -223,55 +229,53 @@ def episodeDataFromEpisodeWeb(web):
         try:
             if "section-intro" in block['class']:
                 # get the title
+                details['fullTitle'] = plainString(block.h1.contents).strip()
                 fullTitle = plainString(block.h1.contents).strip()
                 # get the description
                 # this way, we plain the string
                 #description = plainString(block.div.contents)
                 # this way, we use the html
                 descriptionTag = block.div.contents
+                details['description'] = plainString(descriptionTag).strip()
                 description = plainString(descriptionTag).strip()
                 logging.error("BOUNTY: this is the yummy content madafaca")
                 logging.debug(repr(descriptionTag))
                 logging.debug("------")
                 logging.debug(repr(block.div.contents))
                 # Collect the details
-                originalTitle = u''
-                episodeNumber = u''
-                season = u''
-                tvshow = u''
+                details['season'] = None
+                details['tvshow'] = ""
+                details['episodeNumber'] = None
+                details['tvshow'] = None
                 try:
                     #doing this in a separate function, will do perfectly
                     logging.debug("Extracting details of the episode")
                     for elem in descriptionTag:
                         #plain = plainString(elem)
                         plain = elem.decode()
-                        logging.info(u'plain: ' + plain)
+                        #logging.debug(u'plain: ' + plain)  #noisy
                         if u'tulo original' in plain:
-                            originalTitle = elem.decode() # Just convert it
+                            elem.strong.extract()
+                            details['originalTitle'] = elem.getText().strip()   # Just convert it
                         elif u'Capítulo' in plain:
                             elem.strong.extract()  # remove unwanted tag
-                            episodeNumber = elem.decode_contents().strip()
+                            details['episodeNumber'] = elem.decode_contents().strip()
+                            details['episodeNumber'] = int(details['episodeNumber'])
                         elif u'Temporada' in plain:
                             elem.strong.extract()  # remove unwanted tag
-                            season = elem.decode_contents().strip()
-                            season = int(season)
+                            details['season'] = int(elem.decode_contents().strip())
                         else:
                             try:
-                                logging.info(elem.h2.decode())
-                                if u'h2' in elem.h2.decode():
-                                    logging.info("maybe h2")
-                                    logging.info(repr(elem))
-                                    tvshow = elem.h2.getText
+                                logging.debug(type(elem))
+                                if isinstance(elem, bs4.element.Tag):
+                                    logging.debug("maybe h2")
+                                    logging.debug(elem.getText())
+                                    details['tvshow'] = elem.getText()
+                                else:
+                                    pass
+                                    
                             except:
                                 pass
-                    logging.debug("tvshow")
-                    logging.debug(tvshow)
-                    logging.debug("Original Title")
-                    logging.debug(originalTitle)
-                    logging.debug("Seasson")
-                    logging.debug(season)
-                    logging.debug("Episode Number")
-                    logging.debug(episodeNumber)
                 except:
                     logging.error("Couldn't get details of the episode")
                     raise
@@ -283,11 +287,18 @@ def episodeDataFromEpisodeWeb(web):
             pass
 
     logging.debug("fullTitle")
-    logging.debug(fullTitle)
+    logging.debug(details['fullTitle'])
     logging.debug("description")
-    logging.debug(description)
-    return fullTitle, description
-
+    logging.debug(details['description'])
+    logging.debug("tvshow")
+    logging.debug(details['tvshow'])
+    logging.debug("Original Title")
+    logging.debug(details['originalTitle'])
+    logging.debug("Seasson")
+    logging.debug(details['season'])
+    logging.debug("Episode Number")
+    logging.debug(details['episodeNumber'])
+    return fullTitle, description, details
 
 
 def linkToVideoSY(web):
@@ -375,7 +386,7 @@ def linkToVideoInProv(link):
             logging.error(w.geturl())
             FinalLink = resultLink
         else:
-            logging.error("Could not get a link to video in provider. HTTPError")
+            logging.error("Could not get link to video in provider. HTTPError")
             logging.error(repr(w))
             logging.error(repr(w.geturl()))
     except Exception as err:
@@ -403,7 +414,7 @@ def linkToVideoAndProvFromInterLink(interWeb):
         if SYLink != "":
             provLink = linkToVideoInProv(SYLink)
         else:
-            logging.error("Ups, there was no return from linkToVideoSY extractSY:327")
+            logging.error("Ups, there was no return from linkToVideoSY")
             provLink = ""
         provName = providerFromInterWeb(interWeb)
         logging.debug("Provider Name: ")
