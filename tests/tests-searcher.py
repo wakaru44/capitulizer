@@ -30,6 +30,20 @@ class test_searcher_images():
         print result
         
         assert expect == result
+ 
+
+    def test_getImageList_handles_unicode(self):
+        search = u'Capítulo'
+        userIP = "91.142.222.222"
+        result = searcher.image.getLink( search , userIP )
+        # This result seems product of a bad encoding in the search 
+        #expect = u'http://www.wallsave.com/wallpapers/1024x768/fon-reborn/780384/fon-reborn-katekyo-automatic-epis-dio-cap-tulo-780384.jpg'
+        expect = []
+        print expect 
+        print result
+        
+        assert expect == result
+    
 
 
     def test_getLink_returns_only_a_single_link(self):
@@ -54,7 +68,7 @@ class test_searcher_images():
         print result
         
         assert expect == result
- 
+
 
     def test_getLink_returns_empty_string_if_no_results(self):
         search = ""
