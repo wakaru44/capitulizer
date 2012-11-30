@@ -25,6 +25,7 @@ class NewPostHandler(webapp2.RequestHandler):
 
         # TODO 1: in the first run, we shoul defer it for later, because if
         # there were no task pending, it will be instantly trigguered :(
+        TRIGGER_TAG="#NewChapter"
 
         logging.debug("NewPostHandler Entered")
         keyEpisode = self.request.get('keyEpisode')
@@ -55,10 +56,11 @@ class NewPostHandler(webapp2.RequestHandler):
                 # - build the rest of the message
                 sender = "Capitulizer Mighty Poster Bot <capitulizer@capitulizer.appspotmail.com>"
                 #subject = "watch %s - %s online" % epObj.getDetails()["tvshow"], epObj.title
-                subject = u'Ver {0} - {1} online'.format(epObj.getDetails()["tvshow"],
-                               epObj.title)
+                subject = u'Ver {0} - {1} online {2}'.format(epObj.getDetails()["tvshow"],
+                               epObj.title,
+                               TRIGGER_TAG)
                 to = "capitulizer.mail@gmail.com"
-                cc = "trigger@ifttt.com, wakaru44@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
+                cc = "trigger@ifttt.com, capitulizer.mail.icanhazpozt@blogger.com"
                 # send a copy to the admin; try to post by email also
                 bodyTags = "automagicoespialidoso, {0},{1}".format(
                                         epObj.getDetails()["tvshow"],

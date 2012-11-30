@@ -1,3 +1,13 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns='http://www.w3.org/1999/xhtml'>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>"New Episode"</title> 
+    </head>
+
+<body>
+
+
 <div id="MYcontent">
     <div class="MYblog-index">
         {% for episode in episodeObjs %}
@@ -11,8 +21,8 @@
 
 			{% if episode.picture  %}
 				<div class="separator" style="clear: both; text-align: center;">
-					<a href="{{ episode.picture }}" imageanchor="1" style="margin-left: 1em; margin-right: 1em;">
-						<img border="0" src="{{ episode.picture }}" width="320" />
+					<a href="{{ episode.picture }}" style="margin-left: 1em; margin-right: 1em;">
+						<img alt="the episode's picture" border="0" src="{{ episode.picture }}" width="320" />
 					</a>
 				</div>
 			{% endif %}
@@ -23,7 +33,6 @@
 				de {{episode.detailsDict['tvshow'] }} </p>
 			{% endif %}
 
-			<br>
 			<!--
 			    <ul>
 			    <li>Titulo: 	{{ episode.detailsDict['fullTitle'] }}</li>
@@ -33,6 +42,7 @@
 			-->
 
 			<h4>Enlaces para ver online</h4>
+			<ul>
 			    {% for video in episode.videos %}
 				<li>
 				    <a href="{{ video }}" >
@@ -45,7 +55,7 @@
 				    </a>
 				</li>
 			    {% endfor %}
-
+			</ul>
 			{% if episode.dowloads %}
 			<ul>
 				{% for down in episode.downloads %}
@@ -60,6 +70,7 @@
 				</a>
 				</li>
 				{% endfor %}
+			</ul>
 			{% endif %}
 
 
@@ -68,8 +79,7 @@
             </div>
         {% endfor %}
     </div>
-    <span class="MYcb_message" class="MYcb_message" >All praise to Hipno Sapo</span>
+    <span class="MYcb_message" >All praise to Hipno Sapo</span>
 </div>
-<hr/>
--------------------------------
-<hr>
+</body>
+</html>

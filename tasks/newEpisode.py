@@ -47,8 +47,12 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             logging.debug(repr(details))
 
             # - and a cool picture too
-            picture = searcher.image.getLink( title + "+" + details["tvshow"],
+            try:
+                picture = searcher.image.getLink( title + "+" + details["tvshow"],
                                              "91.142.222.222" )
+            except:
+                logging.error("Something happend in ne wEpisode")
+                raise
 
             epObj.addTitle(title)
             epObj.addDesc(description)

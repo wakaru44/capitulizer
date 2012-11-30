@@ -238,7 +238,7 @@ def episodeDataFromEpisodeWeb(web):
                 descriptionTag = block.div.contents
                 details['description'] = plainString(descriptionTag).strip()
                 description = plainString(descriptionTag).strip()
-                logging.error("BOUNTY: this is the yummy content madafaca")
+                logging.debug("Description Tag")
                 logging.debug(repr(descriptionTag))
                 logging.debug("------")
                 logging.debug(repr(block.div.contents))

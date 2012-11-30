@@ -23,25 +23,38 @@ def iriToUri(iri):
     )
 
 
+def cleanTags(string):
+    string = string.replace("<span>", "")
+    string = string.replace("</span>", "")
+    string = string.replace("<h1>", "")
+    string = string.replace("</h1>", "")
+    return string
+
+
+def escapeSearch(search):
+    """Clean a search of tags, not allowed chars, etc..."""
+    search = search.replace(u' ', u'+') 
+    search = cleanTags(search)
+    # - convert it to a normal uri.
+    #search = iriToUri( urlEncodeNonAscii(search) )
+    search = iriToUri(search)
+    logging.debug(repr(search))
+    # BEWARE maybe we should escape this before hitting google
+    return search
+
+
 class image(object):
 
     @staticmethod
     def getImageList(search, userIP, referer = "capitulizer.appspot.com"):
         """Do a image search"""
-        search = search.replace(u' ', u'+') 
         logging.debug( "searching images for...")
-        #search = iriToUri( urlEncodeNonAscii(search) )
-        search = iriToUri(search)
-        
-        # TODO: i know that you can do search in unicode ¿HOW?
-        logging.debug(repr(search))
-        # BEWARE maybe we should escape this before hitting google
 
         # The request also includes the userip parameter which provides the end
         # user's IP address. Doing so will help distinguish this legitimate 
         # server-side traffic from traffic which doesn't come from an end-user.
         url = ('https://ajax.googleapis.com/ajax/services/search/images'
-                      '?v=1.0&q={0}&userip={1}'.format(search, userIP)  )
+                      '?v=1.0&q={0}&userip={1}'.format(escapeSearch(search), userIP)  )
         # QUESTION: encode in utf-8? really?
         logging.debug("received")
 

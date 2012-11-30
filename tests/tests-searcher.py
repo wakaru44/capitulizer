@@ -33,7 +33,7 @@ class test_searcher_images():
  
 
     def test_getImageList_handles_unicode(self):
-        search = u'Capítulo'
+        search = u'Cómo conocí a vuestra madre'
         userIP = "91.142.222.222"
         result = searcher.image.getLink( search , userIP )
         # This result seems product of a bad encoding in the search 
