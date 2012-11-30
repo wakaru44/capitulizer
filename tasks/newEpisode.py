@@ -13,6 +13,7 @@ from google.appengine.ext import db
 
 import episode
 import extractSY
+import searcher
 
 
 class NewEpisodeHandler(webapp2.RequestHandler):
@@ -45,9 +46,14 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             logging.debug("details")
             logging.debug(repr(details))
 
+            # - and a cool picture too
+            picture = searcher.image.getLink( title + "+" + details["tvshow"],
+                                             "91.142.222.222" )
+
             epObj.addTitle(title)
             epObj.addDesc(description)
             epObj.addDetails(details)
+            epObj.addPicture(picture)
 
             # We use a function to store the object in a single transaction
             def putEpisode(epObj):

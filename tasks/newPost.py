@@ -55,8 +55,7 @@ class NewPostHandler(webapp2.RequestHandler):
                 # - build the rest of the message
                 sender = "Capitulizer Mighty Poster Bot <capitulizer@capitulizer.appspotmail.com>"
                 #subject = "watch %s - %s online" % epObj.getDetails()["tvshow"], epObj.title
-                subject = u'Ver {0} - {1}
-                online'.format(epObj.getDetails()["tvshow"],
+                subject = u'Ver {0} - {1} online'.format(epObj.getDetails()["tvshow"],
                                epObj.title)
                 to = "capitulizer.mail@gmail.com"
                 cc = "trigger@ifttt.com, wakaru44@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"

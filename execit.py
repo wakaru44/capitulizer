@@ -71,24 +71,43 @@ import json
 # print d.geturl()
 
 
-def addDetails(details):
-    print "normal"
-    print details
-    details = json.dumps(details)
-    print "jeison"
-    print details
-    return details
+# def addDetails(details):
+#     print "normal"
+#     print details
+#     details = json.dumps(details)
+#     print "jeison"
+#     print details
+#     return details
+# 
+# def getDetails(details):
+#     details = json.loads(details)
+#     print "and again"
+#     print details
+# 
+# details = {'episodeNumber': 7,
+#               'description': u'<h2> The Walking Dead</h2> <p> <strong>  T\xedtulo original: </strong> Cap\xedtulo 7</p> <p>  <strong>  Temporada: </strong> 3</p> <p> <strong>  Cap\xedtulo: </strong> 7</p>', 
+#               'season': 3, 
+#               'originalTitle': u'Cap\xedtulo 7',
+#               'tvshow': u'The Walking Dead', 
+#               'fullTitle': u'Cap\xedtulo 7 <span> 3x7</span>'}
+# detallucos = addDetails(details)
+# getDetails(detallucos)
 
-def getDetails(details):
-    details = json.loads(details)
-    print "and again"
-    print details
+import urllib2
+import json
 
-details = {'episodeNumber': 7,
-              'description': u'<h2> The Walking Dead</h2> <p> <strong>  T\xedtulo original: </strong> Cap\xedtulo 7</p> <p>  <strong>  Temporada: </strong> 3</p> <p> <strong>  Cap\xedtulo: </strong> 7</p>', 
-              'season': 3, 
-              'originalTitle': u'Cap\xedtulo 7',
-              'tvshow': u'The Walking Dead', 
-              'fullTitle': u'Cap\xedtulo 7 <span> 3x7</span>'}
-detallucos = addDetails(details)
-getDetails(detallucos)
+# The request also includes the userip parameter which provides the end
+# user's IP address. Doing so will help distinguish this legitimate # server-side traffic from traffic which doesn't come from an end-user.
+url = ('https://ajax.googleapis.com/ajax/services/search/images'
+              '?v=1.0&q=Paris%20Hilton&userip=91.142.222.222')
+
+request = urllib2.Request(
+        url, None, {'Referer': 'capitulizer.appspot.com'})
+response = urllib2.urlopen(request)
+
+# Process the JSON string.
+results = json.load(response)
+
+print json.dumps(results,sort_keys=True,indent=4, separators=(',', ': ') )
+
+#print results

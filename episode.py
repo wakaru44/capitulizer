@@ -25,6 +25,7 @@ class episode(db.Model):
     description = db.StringProperty()
     videos = db.StringListProperty()  # a string list to save videos
     details = db.StringProperty()  # a json string of a dictionary 
+    picture = db.StringProperty()  # the url to an image 
 
     ## Future interesting data
     submitter = db.EmailProperty  # save the submitter email for future alerts
@@ -75,6 +76,9 @@ class episode(db.Model):
             return json.loads(self.details)
         else:
             return {}
+
+    def addPicture(self, link):
+        self.picture = link
 
     def bigMistake(self):
         """Here be dragons. This is a big mistake, creating the object 
