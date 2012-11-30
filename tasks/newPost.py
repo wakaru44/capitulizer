@@ -60,7 +60,9 @@ class NewPostHandler(webapp2.RequestHandler):
                 to = "capitulizer.mail@gmail.com"
                 cc = "trigger@ifttt.com, wakaru44@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
                 # send a copy to the admin; try to post by email also
-                bodyTags = "automagicoespialidoso, %s" % "SERIE AUTOMATIc",epObj.getDetails()["tvshow"]
+                bodyTags = "automagicoespialidoso, {0},{1}".format(
+                                        epObj.getDetails()["tvshow"],
+                                        "Temporada " + epObj.getDetails()["season"])
                 logging.debug("subject")
                 logging.debug(repr(subject))
                 logging.debug(epObj.getDetails()["tvshow"])
