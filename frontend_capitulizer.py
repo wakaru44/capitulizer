@@ -59,7 +59,7 @@ class BloggerHandler(webapp2.RequestHandler):
         episodeObjs = []
         for q in queriedEpisodes:
             q.bigMistake()
-            logging.error(q.detailsDict)
+            logging.debug(q.detailsDict)
             episodeObjs.append(q)
 
 
