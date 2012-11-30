@@ -8,36 +8,61 @@
                     </p>
                 </div>
 		<div class="MYentry-content">
-			<div class="separator" style="clear: both; text-align: center;">
-				<a href="{{ episode.picture }}" imageanchor="1" style="margin-left: 1em; margin-right: 1em;">
-					<img border="0" height="134" src="{{ episode.picture }}" width="320" />
-				</a>
-			</div>
 
-			<p>Disfruta online de {{ episode.detailsDict['fullTitle'] }}, 
-			de la temporada {{ episode.detailsDict['season'] }} 
-			de {{episode.detailsDict['tvshow'] }} </p>
-                    <br>
-		    <ul>
+			{% if episode.picture  %}
+				<div class="separator" style="clear: both; text-align: center;">
+					<a href="{{ episode.picture }}" imageanchor="1" style="margin-left: 1em; margin-right: 1em;">
+						<img border="0" height="134" src="{{ episode.picture }}" width="320" />
+					</a>
+				</div>
+			{% endif %}
+
+			{% if episode.detailsDict %}
+				<p>Disfruta online de {{ episode.detailsDict['fullTitle'] }}, 
+				de la temporada {{ episode.detailsDict['season'] }} 
+				de {{episode.detailsDict['tvshow'] }} </p>
+			{% endif %}
+
+			<br>
+			<!--
+			    <ul>
 			    <li>Titulo: 	{{ episode.detailsDict['fullTitle'] }}</li>
 			    <li>Temporada: 	{{ episode.detailsDict['season'] }}</li>
 			    <li>Numero de capitulo: {{ episode.detailsDict['episodeNumber'] }}</li>
-		    </ul>
+			    </ul>
+			-->
 
-                    
-                    {% for video in episode.videos %}
-                        <li>
-                            <a href="{{ video }}" >
-                            Ver Online 
-                            {% if video["provider"] %}  
-                                <span> 
-                                en 
-                                {{video["provider"] }} 
-                                </span> 
-                            {% endif %} 
-                            </a>
-                        </li>
-                    {% endfor %}
+			<h4>Enlaces para ver online</h4>
+			    {% for video in episode.videos %}
+				<li>
+				    <a href="{{ video }}" >
+				    Ver Online {% if video["provider"] %}  
+					<span> 
+					en 
+					{{video["provider"] }} 
+					</span> 
+				    {% endif %} 
+				    </a>
+				</li>
+			    {% endfor %}
+
+			{% if episode.dowloads %}
+			<ul>
+				{% for down in episode.downloads %}
+				<li> 
+				<a href="{{ video }}" >
+				    Descargar {% if down["provider"] %}  
+					<span> 
+					en 
+					{{down["provider"] }} 
+					</span> 
+				    {% endif %} 
+				</a>
+				</li>
+				{% endfor %}
+			{% endif %}
+
+
 
                 </div>
             </div>
@@ -45,3 +70,6 @@
     </div>
     <span class="MYcb_message" class="MYcb_message" >All praise to Hipno Sapo</span>
 </div>
+<hr/>
+-------------------------------
+<hr>

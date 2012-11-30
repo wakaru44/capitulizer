@@ -5,6 +5,7 @@
 # Library to extract data from SY website.
 import urllib2
 import logging
+#import random 
 import json  
 
 
@@ -45,8 +46,18 @@ class image(object):
         """return just one link to an image"""
         logging.debug("getting link to an image")
         listOfThem = image.getImageList(search, userIP)
-        # pick just one
-        return listOfThem[3]
+        if len(listOfThem) > 0:
+            # pick just one
+            # TODO: Enable this
+            # I change this to a static choose to test it easier
+            #selec = random.randint(0,len(listOfThem))
+            selec = 1
+            chosenLink = listOfThem[selec]
+            return chosenLink
+        else:
+            return u''
+
+
 
 
 
