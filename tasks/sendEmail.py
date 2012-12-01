@@ -50,6 +50,7 @@ class SendEmailHandler(webapp2.RequestHandler):
                 # logging.error("No Black Carbon Copy. Sending one to the admin")
                 # message.bcc = "wakaru44@gmail.com"
                 # bcc = "wakaru44@gmail.com"
+                pass
 
             message.html = bodyContent
             # - NOTE: we use the body to make the tags of the article

@@ -136,7 +136,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
     def buildSearch(self, details):
         """ Build a search string for an image """
-        ss = searcher.image.getLink( details["fullTitle"] + "+" + details["tvshow"],
+        ss = searcher.image.getLink(details["tvshow"],
                                              "91.142.222.222" )
         logging.debug("search String")
         logging.debug(ss)

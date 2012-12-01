@@ -5,7 +5,7 @@
 # Library to extract data from SY website.
 import urllib2
 import logging
-#import random 
+import random 
 import json  
 import re, urlparse
 
@@ -82,9 +82,9 @@ class image(object):
             # pick just one
             # TODO: Enable this
             # I change this to a static choose to test it easier
-            #selec = random.randint(0,len(listOfThem))
-            selec = 1
-            chosenLink = listOfThem[selec]
+            selec = random.randint(1,len(listOfThem))
+            #selec = 1
+            chosenLink = listOfThem[selec-1]
             return chosenLink
         else:
             return u''

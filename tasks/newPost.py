@@ -17,6 +17,9 @@ jinja_environment = jinja2.Environment(
 
 
 class NewPostHandler(webapp2.RequestHandler):
+    
+
+    TRIGGER_TAG="#NewChapter"
 
     def post(self):
         """In this task, we should get an episode from bd, and elaborate
@@ -25,7 +28,6 @@ class NewPostHandler(webapp2.RequestHandler):
 
         # TODO 1: in the first run, we shoul defer it for later, because if
         # there were no task pending, it will be instantly trigguered :(
-        TRIGGER_TAG="#NewChapter"
 
         logging.debug("NewPostHandler Entered")
         keyEpisode = self.request.get('keyEpisode')
@@ -158,14 +160,14 @@ class NewPostHandler(webapp2.RequestHandler):
         output = {'title': epObj.title,
                   'episodeObjs': queriedEpisode}
 
-        template = jinja_environment.get_template(template)
-        return  template.render(output, "blogger.html")
+        template = jinja_environment.get_template("blogger.html")
+        return  template.render(output)
 
 
     def buildSubject(self, epObj):
         subject = u'Ver {0} - {1} online {2}'.format(epObj.getDetails()["tvshow"],
                                str( epObj.getDetails()["season"] ),
-                               TRIGGER_TAG)
+                               self.TRIGGER_TAG)
         return subject
 
     def buildTags(self, epObj):
