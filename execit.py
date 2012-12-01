@@ -30,6 +30,8 @@ import json
 #     print "es mierda en bote"
 ############################################################# 
 
+############################################################
+## testing opening links
 # import random
 # import time
 # import urllib2
@@ -93,21 +95,26 @@ import json
 # detallucos = addDetails(details)
 # getDetails(detallucos)
 
-import urllib2
-import json
+#############################################################
+## testing web search for images
+# import urllib2
+# import json
+# 
+# # The request also includes the userip parameter which provides the end
+# # user's IP address. Doing so will help distinguish this legitimate # server-side traffic from traffic which doesn't come from an end-user.
+# url = ('https://ajax.googleapis.com/ajax/services/search/images'
+#               '?v=1.0&q=Paris%20Hilton&userip=91.142.222.222')
+# 
+# request = urllib2.Request(
+#         url, None, {'Referer': 'capitulizer.appspot.com'})
+# response = urllib2.urlopen(request)
+# 
+# # Process the JSON string.
+# results = json.load(response)
+# 
+# print json.dumps(results,sort_keys=True,indent=4, separators=(',', ': ') )
+# 
+# #print results
 
-# The request also includes the userip parameter which provides the end
-# user's IP address. Doing so will help distinguish this legitimate # server-side traffic from traffic which doesn't come from an end-user.
-url = ('https://ajax.googleapis.com/ajax/services/search/images'
-              '?v=1.0&q=Paris%20Hilton&userip=91.142.222.222')
 
-request = urllib2.Request(
-        url, None, {'Referer': 'capitulizer.appspot.com'})
-response = urllib2.urlopen(request)
 
-# Process the JSON string.
-results = json.load(response)
-
-print json.dumps(results,sort_keys=True,indent=4, separators=(',', ': ') )
-
-#print results

@@ -20,7 +20,6 @@ class SendEmailHandler(webapp2.RequestHandler):
         subject = self.request.get('subject')
         bodyContent = self.request.get('body')
         bodyTags = self.request.get('bodyTags')
-        # TODO 1: we need to know the tvshow to put the fucking tag
         cc = self.request.get('cc')
         bcc = self.request.get('bcc')
         to = self.request.get('to')
@@ -29,8 +28,10 @@ class SendEmailHandler(webapp2.RequestHandler):
 
             logging.debug("We are about to send an email")
             # - first create the message
-            # QUESTION I think that this should be in a function to test it
+            # QUESTION I think that some of this should be in a function to test it
             # better
+            if sender == "":
+                sender = "Capitulizer Mighty Poster Bot <capitulizer@capitulizer.appspotmail.com>"
             message = mail.EmailMessage(sender=sender,
                               subject=subject)
             if to != "":
@@ -46,36 +47,22 @@ class SendEmailHandler(webapp2.RequestHandler):
             if bcc != "":
                 message.bcc = bcc
             else:
-                message.bcc = "wakaru44@gmail.com"
-                logging.error("No Black Carbon Copy. Sending one to the admin")
-                bcc = "wakaru44@gmail.com"
-                # TODO: disable this copy
+                # logging.error("No Black Carbon Copy. Sending one to the admin")
+                # message.bcc = "wakaru44@gmail.com"
+                # bcc = "wakaru44@gmail.com"
+
             message.html = bodyContent
             # - NOTE: we use the body to make the tags of the article
             message.body = bodyTags
 
 
-            #post(payload=body.as_string())
             # noisy group:
             logging.debug("sender")
             logging.debug(repr(sender))
-            #logging.debug("to")
-            #logging.debug(repr(to))
-            #logging.debug("cc")
-            #logging.debug(repr(cc))
-            #logging.debug("subject")
-            #logging.debug(repr(subject))
             #logging.debug("body HTML")
             #logging.debug(repr(bodyContent))
             #logging.debug("mail")
             #logging.debug(repr(mail))
-            # OLD REMOVE
-            #mail.send_mail(sender, to, cc, subject, body)
-            #mail.send_mail(sender.encode(), 
-            #               to.encode(), 
-            #               cc.encode(),
-            #               subject.encode(), 
-            #               body)
 
             # - then send an email
             message.send()

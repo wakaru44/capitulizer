@@ -1,12 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html  xmlns='http://www.w3.org/1999/xhtml'>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>"New Episode"</title> 
-    </head>
-
-<body>
-
+<div>
 
 <div id="MYcontent">
     <div class="MYblog-index">
@@ -14,65 +6,43 @@
             <div class="MYarticle">
                 <div class="MYheader">
                     <p  class="MYentry-title">
-		    Ver {{episode.detailsDict['tvshow'] }} {{ episode.title }} Online
+ 			Ver {{episode.detailsDict['tvshow'] }} {{ episode.title }} Online
                     </p>
                 </div>
 		<div class="MYentry-content">
 
-			{% if episode.picture  %}
-				<div class="separator" style="clear: both; text-align: center;">
-					<a href="{{ episode.picture }}" style="margin-left: 1em; margin-right: 1em;">
-						<img alt="the episode's picture" border="0" src="{{ episode.picture }}" width="320" />
-					</a>
-				</div>
-			{% endif %}
+		{% if episode.picture  %}
+			<div class="separator" style="clear: both; text-align: center;">
+				<a href="{{ episode.picture }}" style="margin-left: 1em; margin-right: 1em;">
+					<img alt="the episode's picture" border="0" src="{{ episode.picture }}" width="320" />
+				</a>
+			</div>
+		{% endif %}
 
-			{% if episode.detailsDict %}
-				<p>Disfruta online de {{ episode.detailsDict['fullTitle'] }}, 
-				de la temporada {{ episode.detailsDict['season'] }} 
-				de {{episode.detailsDict['tvshow'] }} </p>
-			{% endif %}
+		{% if episode.detailsDict %}
+			<p>Disfruta online del {{ episode.detailsDict['fullTitle'] }}, 
+			de la temporada {{ episode.detailsDict['season'] }} 
+			de {{episode.detailsDict['tvshow'] }} </p>
+		{% endif %}
 
-			<!--
-			    <ul>
-			    <li>Titulo: 	{{ episode.detailsDict['fullTitle'] }}</li>
-			    <li>Temporada: 	{{ episode.detailsDict['season'] }}</li>
-			    <li>Numero de capitulo: {{ episode.detailsDict['episodeNumber'] }}</li>
-			    </ul>
-			-->
 
+		{% if episode.videos %}
 			<h4>Enlaces para ver online</h4>
 			<ul>
-			    {% for video in episode.videos %}
+				{% for video in episode.videos %}
 				<li>
-				    <a href="{{ video }}" >
-				    Ver Online {% if video["provider"] %}  
+					<a href="{{ video }}" >
+					Ver Online {% if video["provider"] %}  
 					<span> 
 					en 
 					{{video["provider"] }} 
 					</span> 
-				    {% endif %} 
-				    </a>
-				</li>
-			    {% endfor %}
-			</ul>
-			{% if episode.dowloads %}
-			<ul>
-				{% for down in episode.downloads %}
-				<li> 
-				<a href="{{ video }}" >
-				    Descargar {% if down["provider"] %}  
-					<span> 
-					en 
-					{{down["provider"] }} 
-					</span> 
-				    {% endif %} 
-				</a>
+					{% endif %} 
+					</a>
 				</li>
 				{% endfor %}
 			</ul>
-			{% endif %}
-
+		{% endif %}
 
 
                 </div>
@@ -81,5 +51,4 @@
     </div>
     <span class="MYcb_message" >All praise to Hipno Sapo</span>
 </div>
-</body>
-</html>
+</div>

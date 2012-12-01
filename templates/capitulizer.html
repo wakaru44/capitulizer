@@ -98,12 +98,19 @@
 	<!--
 	<time datetime="2012-10-17T18:39:00+02:00" pubdate="" data >Oct 17<span>th</span>, 2012</time>
 	--> 
+			<!--
+			    <ul>
+			    <li>Titulo: 	{{ episode.detailsDict['fullTitle'] }}</li>
+			    <li>Temporada: 	{{ episode.detailsDict['season'] }}</li>
+			    <li>Numero de capitulo: {{ episode.detailsDict['episodeNumber'] }}</li>
+			    </ul>
+			-->
         </p>
 
       </header>
         <div class="entry-content">
 		<p>{{ episode.description }}</p>
-		<br>
+		<br><!-- Episode desc -->
 
 		{% for video in episode.videos %}
 		<li>

@@ -40,41 +40,35 @@ class NewPostHandler(webapp2.RequestHandler):
 
             # - check if this episode has videos.
             if len(epObj.videos) > 0:
-                logging.debug("-- has videos --")
-                # - start building the email body
-                queriedEpisode = [epObj]
-                logging.debug("queriedEpisode")
-                logging.debug(epObj.title)
-                logging.debug(repr(queriedEpisode))
-                output = {'title': epObj.title,
-                          'episodeObjs': queriedEpisode}
+                logging.debug("has videos")
 
-                body = self.renderBody(output, "blogger.html")
+                # - start building the email body
+                body = self.buildBody(epObj)
                 #logging.debug("body")  # noisy
                 #logging.debug(body)  # noisy
 
-                # - build the rest of the message
-                sender = "Capitulizer Mighty Poster Bot <capitulizer@capitulizer.appspotmail.com>"
-                #subject = "watch %s - %s online" % epObj.getDetails()["tvshow"], epObj.title
-                subject = u'Ver {0} - {1} online {2}'.format(epObj.getDetails()["tvshow"],
-                               epObj.title,
-                               TRIGGER_TAG)
-                to = "capitulizer.mail@gmail.com"
-                cc = "trigger@ifttt.com, capitulizer.mail.icanhazpozt@blogger.com"
-                # send a copy to the admin; try to post by email also
-                bodyTags = "automagicoespialidoso, {0},{1}".format(
-                                        epObj.getDetails()["tvshow"],
-                                        "Temporada " + epObj.getDetails()["season"])
+                # - build other parts of the message
+
+                # - The subject will be the sentence of the title in the post
+                # - TRIGGER_TAG is the tag that will action the IFTTT trigger
+                # - and create the post
+                subject = self.buildSubject(epObj)
+                # - We send it to IFTTT to create the post
+                to = "trigger@ifttt.com"
+                # - send a copy to the mail account - try to post by email also
+                cc = "capitulizer.mail@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
+                # - The body tags are the boy of the message, that we use to send
+                # - the tags of the episode
+                bodyTags = self.buildTags
                 logging.debug("subject")
                 logging.debug(repr(subject))
-                logging.debug(epObj.getDetails()["tvshow"])
 
                 # QUESTION: could this way be more maintenable and powerful?
                 # QUESTION: Will we reach the size limit for task parameters??
                 logging.debug("Creating a sendEmail Task with a new Post")
                 queue = taskqueue.Queue('sendEmail')
                 task = taskqueue.Task(url='/tasks/sendEmail',
-                                      params={'sender': sender,
+                                      params={
                                               'subject': subject,
                                               'to': to,
                                               'cc': cc,
@@ -85,11 +79,6 @@ class NewPostHandler(webapp2.RequestHandler):
                 logging.error("no videos in the database yet. Retrying")
                 raise Exception
 
-
-
-
-                # ............................................................
-                # TODO 1: .........write over the dotted line ..........
 
         except TypeError:
             logging.error("No episode object?")
@@ -162,10 +151,28 @@ class NewPostHandler(webapp2.RequestHandler):
         self.response.out.write(HTML)
 
 
-    def renderBody(self, values, template="error.html"):
-        """render the values in the template.
-            by default it goes to the index page"""
+    def buildBody(self, epObj):
+        queriedEpisode = [epObj]
+        logging.debug("queriedEpisode")
+        logging.debug(epObj.title)
+        output = {'title': epObj.title,
+                  'episodeObjs': queriedEpisode}
+
         template = jinja_environment.get_template(template)
-        return template.render(values)
+        return  template.render(output, "blogger.html")
+
+
+    def buildSubject(self, epObj):
+        subject = u'Ver {0} - {1} online {2}'.format(epObj.getDetails()["tvshow"],
+                               str( epObj.getDetails()["season"] ),
+                               TRIGGER_TAG)
+        return subject
+
+    def buildTags(self, epObj):
+        tags = "automagicoespialidoso, {0},{1}".format(
+                                        epObj.getDetails()["tvshow"],
+                                        "Temporada " + str(epObj.getDetails()["season"])
+                )
+        return tags
 
 

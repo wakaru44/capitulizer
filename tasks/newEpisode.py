@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 # 17-nov-2012 juanantoniofm
-# file for the first task, created as a test.
 # we want task to aleviate the effort of parsing the emails and the episodes
 # from our main request, so it wont get interrupted
 
@@ -37,25 +36,20 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             linksInter = extractSY.interLinks(episodeWeb)
 
             # - and the data of the episode
-            title, description, details = extractSY.episodeDataFromEpisodeWeb(
+            description, details = extractSY.episodeDataFromEpisodeWeb(
                                                               episodeWeb)
-            logging.debug("title:")
-            logging.debug(title)
-            logging.debug("desc:")
-            logging.debug(description)
             logging.debug("details")
             logging.debug(repr(details))
 
             # - and a cool picture too
             try:
-                picture = searcher.image.getLink( title + "+" + details["tvshow"],
-                                             "91.142.222.222" )
+                picture = self.buildSearch(details)
             except:
-                logging.error("Something happend in ne wEpisode")
+                logging.error("Something happend in newEpisode with the picture")
                 raise
 
-            epObj.addTitle(title)
-            epObj.addDesc(description)
+            epObj.addTitle(details["fullTitle"])
+            epObj.addDesc(details["description"])
             epObj.addDetails(details)
             epObj.addPicture(picture)
 
@@ -136,3 +130,14 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
     def get(self):
         self.response.out.write("welcome")
+
+
+    def buildSearch(self, details):
+        """ Build a search string for an image """
+        ss = searcher.image.getLink( details["fullTitle"] + "+" + details["tvshow"],
+                                             "91.142.222.222" )
+        logging.debug("search String")
+        logging.debug(ss)
+        return ss
+
+

@@ -19,13 +19,16 @@ class MailTestCase(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    def testMailSent(self):
+    def send_Email():
         mail.send_mail(to='wakaru44@gmail.com',
             subject='this is a mail test',
             sender='capitulos@waklab0.appspotmail.com',
             body=u'this is a test mail body.'
-            )
-        messages = self.mail_stub.get_sent_messages(to='wakaru44@gmail.com')
+            ) 
+
+    def testMailSent(self):
+        self.send_Email()
+        messages_sent = self.mail_stub.get_sent_messages(to='wakaru44@gmail.com')
         self.assertEqual(1, len(messages))
         self.assertEqual('wakaru44@gmail.com', messages[0].to)
 

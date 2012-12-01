@@ -237,7 +237,6 @@ def episodeDataFromEpisodeWeb(web):
                 # this way, we use the html
                 descriptionTag = block.div.contents
                 details['description'] = plainString(descriptionTag).strip()
-                description = plainString(descriptionTag).strip()
                 logging.debug("Description Tag")
                 logging.debug(repr(descriptionTag))
                 logging.debug("------")
@@ -298,7 +297,7 @@ def episodeDataFromEpisodeWeb(web):
     logging.debug(details['season'])
     logging.debug("Episode Number")
     logging.debug(details['episodeNumber'])
-    return fullTitle, description, details
+    return details
 
 
 def linkToVideoSY(web):
