@@ -33,15 +33,14 @@ class test_episodeObject():
     def setUp(self):
         """ - """
         link = "http://seriesyonis.com/capitulo/mock"
-        episode = episode.episode(link)
+        self.episode = episode.episode(link)
 
     def test_A_dictionary_of_details_is_correctly_saved(self):
         """a normal website says we are not robots"""
         expect = None
         dictionary = {}
         link = "http://seriesyonis.com/capitulo/mock"
-        episode = episode.episode(link)
-        result = episode(dictionary)
+        result = self.episode(dictionary)
         print "expect: ", expect                                
         print "result", result                          
         assert expect == result  

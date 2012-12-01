@@ -36,8 +36,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             linksInter = extractSY.interLinks(episodeWeb)
 
             # - and the data of the episode
-            description, details = extractSY.episodeDataFromEpisodeWeb(
-                                                              episodeWeb)
+            details = extractSY.episodeDataFromEpisodeWeb(episodeWeb)
             logging.debug("details")
             logging.debug(repr(details))
 
@@ -46,6 +45,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 picture = self.buildSearch(details)
             except:
                 logging.error("Something happend in newEpisode with the picture")
+                logging.info("trying again")
                 raise
 
             epObj.addTitle(details["fullTitle"])
@@ -79,6 +79,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             # put the episode in the bd and get the key in a transaction
             if len(linksInter) == 0:
                 logging.error("There are no videos found, so it doesn't deserve to be saved")
+                logging.info("trying again")
                 raise Exception
 
             keyEpisode = db.run_in_transaction(putEpisode, epObj)
@@ -122,6 +123,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
         except TypeError:
             logging.error("Type Error madafaca. Dunno if this mean something, but i will just die")  # TODO just dont remember why I put this here
             #logging.error(err)
+            logging.info("trying again")
             raise
         #except :
         #    # TODO handle key errors in the request, to die completly and notify
