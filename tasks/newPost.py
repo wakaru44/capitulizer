@@ -22,18 +22,17 @@ def getEpisodeFromBD(keyEpisode):
     return db.get(keyEpisode)
 
 
-def buildTags(epObj):
-    tags = "automagicoespialidoso, {0},{1}".format(
-                                epObj.getDetails()["tvshow"],
-                                "Temporada " + str(epObj.getDetails()["season"])
-            )
+def buildTags(show, season):
+    tags = "automagicoespialidoso,{0},{1}".format(
+                                show.encode("utf-8"),
+                                "Temporada " + str(season))
     return tags
 
 
-def buildSubject(epObj):
-    show = epObj.getDetails()["tvshow"].encode("utf-8")
-    subject = 'Ver {0} - {1} online {2}'.format(show,
-                           str( epObj.getDetails()["season"] ),
+def buildSubject(show, season):
+    subject = 'Ver {0} - {1} online {2}'.format(
+                        show.encode("utf-8"),
+                        str(season),
                            TRIGGER_TAG)
     return subject
 
@@ -85,14 +84,14 @@ class NewPostHandler(webapp2.RequestHandler):
                 # - The subject will be the sentence of the title in the post
                 # - TRIGGER_TAG is the tag that will action the IFTTT trigger
                 # - and create the post
-                subject = buildSubject(epObj)
+                subject = self.buildSubject(epObj)
                 # - We send it to IFTTT to create the post
                 to = "trigger@ifttt.com"
                 # - send a copy to the mail account - try to post by email also
                 cc = "capitulizer.mail@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
                 # - The body tags are the boy of the message, that we use to send
                 # - the tags of the episode
-                bodyTags = buildTags(epObj)
+                bodyTags = self.buildTags(epObj)
                 logging.debug("subject")
                 logging.debug(repr(subject))
 
@@ -154,5 +153,19 @@ class NewPostHandler(webapp2.RequestHandler):
         </body>
         """
         self.response.out.write(HTML)
+
+
+    def buildTags(self, epObj):
+        show = epObj.getDetails()["tvshow"]
+        season = epObj.getDetails()["season"]
+        tags = buildTags(show, season)
+        return tags
+
+
+    def buildSubject(self, epObj):
+        show = epObj.getDetails()["tvshow"].encode("utf-8")
+        season = epObj.getDetails()["season"]
+        subject = buildSubject(show, season)
+        return subject
 
 
