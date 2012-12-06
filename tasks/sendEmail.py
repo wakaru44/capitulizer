@@ -73,8 +73,8 @@ class SendEmailHandler(webapp2.RequestHandler):
             logging.debug(repr(cc))
             logging.debug("subject")
             logging.debug(repr(subject))
-            logging.debug("text Body")
-            logging.debug(repr(body))
+            logging.debug("text Body or BodyTags")
+            logging.debug(repr(bodyTags))
 
 
         except:

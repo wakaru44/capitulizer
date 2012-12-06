@@ -5,6 +5,7 @@
 
 import webapp2
 import logging
+import unicodedata
 import jinja2
 import os
 from google.appengine.api import taskqueue
@@ -25,15 +26,37 @@ def getEpisodeFromBD(keyEpisode):
 def buildTags(show, season):
     """gets the episode details in unicode and converts them
         to tags for the episode in blogger"""
+    # The tags are not decoded to unicode throug IFTTT
+    # and you can not send them in unicode, because
+    # appengine encodes them in base64, and IFTTT doesn't
+    # undestand that
+
+    # UNICODE Version. just testing how it works
+    #tags = u'automagicoespialidoso,{0},{1}'.format(
+    #                            show,
+    #                            u'Temporada ' + unicode(season))
+
+    # ASCII Version. It works, but the letters dissapear
+    #tags = "automagicoespialidoso,{0},{1}".format(
+    #                            show.encode("utf-8"),
+    #                            "Temporada " + str(season))
+
+    # The ideal case, is to find a function that converts from 
+    # unicode to ascii, nicely
+    showstr = unicodedata.normalize('NFKD', show).encode('ascii', 'ignore')
     tags = "automagicoespialidoso,{0},{1}".format(
-                                show.encode("utf-8"),
+                                showstr,
                                 "Temporada " + str(season))
+    logging.debug
+    logging.debug
+
     return tags
 
 
 def buildSubject(show, season):
     """ gets the episode details, decode them and build
         a subject for the email, title of the post"""
+    # El caso es que con el asunto, si que se re-codifica en unicode
     subject = 'Ver {0} - {1} online {2}'.format(
                         show.encode("utf-8"),
                         str(season),
