@@ -61,7 +61,7 @@ class NewPostHandler(webapp2.RequestHandler):
                 cc = "capitulizer.mail@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
                 # - The body tags are the boy of the message, that we use to send
                 # - the tags of the episode
-                bodyTags = self.buildTags()
+                bodyTags = self.buildTags(epObj)
                 logging.debug("subject")
                 logging.debug(repr(subject))
 
