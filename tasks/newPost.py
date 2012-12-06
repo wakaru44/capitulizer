@@ -64,7 +64,7 @@ class NewPostHandler(webapp2.RequestHandler):
         keyEpisode = self.request.get('keyEpisode')
         try:
             # - get the episode from the database
-            epObj = self.getEpisodeFromBD(keyEpisode)
+            epObj = getEpisodeFromBD(keyEpisode)
             # QUESTION: how should i encapsulate this??
             # answer: how about putting all the stuff about
             # building the message, and leave here only the sending?
