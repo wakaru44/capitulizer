@@ -165,7 +165,8 @@ class NewPostHandler(webapp2.RequestHandler):
 
 
     def buildSubject(self, epObj):
-        subject = u'Ver {0} - {1} online {2}'.format(epObj.getDetails()["tvshow"],
+        show = epObj.getDetails()["tvshow"].encode("utf-8")
+        subject = u'Ver {0} - {1} online {2}'.format(show,
                                str( epObj.getDetails()["season"] ),
                                self.TRIGGER_TAG)
         return subject
