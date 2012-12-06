@@ -23,6 +23,8 @@ def getEpisodeFromBD(keyEpisode):
 
 
 def buildTags(show, season):
+    """gets the episode details in unicode and converts them
+        to tags for the episode in blogger"""
     tags = "automagicoespialidoso,{0},{1}".format(
                                 show.encode("utf-8"),
                                 "Temporada " + str(season))
@@ -30,6 +32,8 @@ def buildTags(show, season):
 
 
 def buildSubject(show, season):
+    """ gets the episode details, decode them and build
+        a subject for the email, title of the post"""
     subject = 'Ver {0} - {1} online {2}'.format(
                         show.encode("utf-8"),
                         str(season),
@@ -95,8 +99,7 @@ class NewPostHandler(webapp2.RequestHandler):
                 logging.debug("subject")
                 logging.debug(repr(subject))
 
-                # QUESTION: could this way be more maintenable and powerful?
-                # QUESTION: Will we reach the size limit for task parameters??
+                # WARN: we can reach the size limit for task parameters
                 logging.debug("Creating a sendEmail Task with a new Post")
                 queue = taskqueue.Queue('sendEmail')
                 task = taskqueue.Task(url='/tasks/sendEmail',
@@ -163,7 +166,9 @@ class NewPostHandler(webapp2.RequestHandler):
 
 
     def buildSubject(self, epObj):
-        show = epObj.getDetails()["tvshow"].encode("utf-8")
+        """ gets the details in unicode and pass them to
+            the function that really builds the subject"""
+        show = epObj.getDetails()["tvshow"]
         season = epObj.getDetails()["season"]
         subject = buildSubject(show, season)
         return subject
