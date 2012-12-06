@@ -131,27 +131,31 @@ def linksToEpisodes(msg):
         # SY especifics
         # First, we have to clean the message
         # from some weird chars in emails
-        syMsg = msg.replace("=\n", "")
-        soup = bs4.BeautifulSoup(syMsg)
-        for link in soup.find_all("a"):
-            # Check that is a "capitulo" kind of link
-            # logging.debug("a link found")  # noisy
-            # logging.debug(link)  # noisy
-            try:
-                l1 = link['href']
-                l1 = l1.replace('3D"', '')
-                cleanLink = l1.replace('"', '')
-                if "capitulo" in cleanLink:
-                    logging.debug("agregando capitulo a la lista")
-                    episodeList.append(cleanLink.decode())
-                else:
-                    # logging.debug("no agregamos el enlace a la lista")  #
-                    # noisy
+        try:
+            syMsg = msg.replace("=\n", "")
+            soup = bs4.BeautifulSoup(syMsg)
+            for link in soup.find_all("a"):
+                # Check that is a "capitulo" kind of link
+                # logging.debug("a link found")  # noisy
+                # logging.debug(link)  # noisy
+                try:
+                    l1 = link['href']
+                    l1 = l1.replace('3D"', '')
+                    cleanLink = l1.replace('"', '')
+                    if "capitulo" in cleanLink:
+                        logging.debug("agregando capitulo a la lista")
+                        episodeList.append(cleanLink.decode())
+                    else:
+                        # logging.debug("no agregamos el enlace a la lista")  #
+                        # noisy
+                        pass
+                except KeyError as e:
+                    #logging.debug("No href Found in Email Message")  # noisy
+                    #logging.debug(e)  # noisy
                     pass
-            except KeyError as e:
-                #logging.debug("No href Found in Email Message")  # noisy
-                #logging.debug(e)  # noisy
-                pass
+        except:
+            logging.error("extracting links to episodes: could not extract")
+            logging.error(msg)
 
     if len(episodeList) <= 0:
         logging.error("No episodes found in the mail. PLEASE REPORT THIS")

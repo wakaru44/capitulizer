@@ -30,6 +30,9 @@ class LogSenderHandler(InboundMailHandler):
             mail_message.sender)
         logging.info(self.getBody(mail_message))
         ## TODO 1: send an email back to the admin
+        # - we are going to use a task to send that email to the admin
+        self.sendEmailByTask(mail_message)
+
 
     def getBody(self, mail_message):
         """Return the html body of a message. """
@@ -41,6 +44,27 @@ class LogSenderHandler(InboundMailHandler):
             # return the first htmlbody found in unicode format.
             # i think that should be a way to avoid this for loop, but...
             return decoded_html
+
+    def sendEmailByTask(self, mail_message):
+        """Uses the message received to send it to the app's mail"""
+        subject = "Message Received on capitulizer::" + mail_message.subject
+        to = "capitulizer.mail@gmail.com"
+        cc = "wakaru44@gmail.com"
+        body = mail_message.bodies
+        # TODO 1: maybe you should get the mail bodies separate first
+
+
+        logging.debug("Creating a sendEmail Task with a new Post")
+        queue = taskqueue.Queue('sendEmail')
+        task = taskqueue.Task(url='/tasks/sendEmail',
+                              params={
+                                      'subject': subject,
+                                      'to': to,
+                                      'cc': cc,
+                                      'bodyTags': bodyTags,
+                                      'body': body})
+        queue.add(task)
+
 
 # Entry point for the general receiving app
 app = webapp2.WSGIApplication(

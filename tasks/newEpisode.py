@@ -18,6 +18,7 @@ import searcher
 class NewEpisodeHandler(webapp2.RequestHandler):
     def post(self):
         try:
+            # - get the params
             episodeLink = self.request.get('episodeLink')
             submitter = self.request.get('submitter')
             logging.debug(episodeLink)
@@ -27,6 +28,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
             # - we create an object to store the episode data
             epObj = episode.episode(link=episodeLink)
+            epObj.submitter = submitter
 
             # - to retrieve the links to intermediate, we need to
             # - get the webcontent
@@ -69,7 +71,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 return keyEpisode
                 # QUESTION how can i catch Timeout?
                 #except  (Timeout, TransactionFailedError, InternalError) as err:
-                #    # TODO catch errors puttin in bd
+                #    # TO-DO catch errors puttin in bd
                 #    logging.error("Error Putting episode in the bd")
                 #    logging.error(err)
                 #    raise Exception(err)
@@ -121,7 +123,6 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                     break
         #except TypeError as err:
         except TypeError:
-            logging.error("Type Error madafaca. Dunno if this mean something, but i will just die")  # TODO just dont remember why I put this here
             #logging.error(err)
             logging.info("trying again")
             raise

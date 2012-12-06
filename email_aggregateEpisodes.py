@@ -47,6 +47,7 @@ class CapHandler(InboundMailHandler):
             except TypeError as err:
                 logging.error("Error")
                 logging.error(err)
+                logging.error(mail_message)
 
         #return 0
 

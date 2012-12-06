@@ -1,6 +1,79 @@
+<div xmlns='http://www.w3.org/1999/xhtml'> 
+
+	{%  if not episodeObjs %}
+		<p> Shit man!!! no episodes given!
+	{% endif %}
+
+        {% for episode in episodeObjs %}
+	<div class='MYarticle'>
+		<div class='MYheader'>
+			<p class='MYentry-title'>
+ 			Ver {{episode.detailsDict['tvshow'] }} {{ episode.title }} Online
+			</p>
+		</div>
+		<div class='MYentry-content'>
+
+
+		{% if episode.picture  %}
+			<div style='clear: both; text-align: center;' class='separator'>
+			       	<a style='margin-left: 1em; margin-right: 1em;'   href='{{ episode.picture }}'>
+				<img width='320'   src='{{ episode.picture }}' border='0' alt='the episode&apos;s   picture'/> </a> 
+			</div>
+		{% endif %}
+
+		<!-- Detalles del episodio -->
+
+		{% if episode.detailsDict %}
+			<p>Disfruta online del {{ episode.detailsDict['fullTitle'] }}, 
+			de la temporada {{ episode.detailsDict['season'] }} 
+			de {{episode.detailsDict['tvshow'] }} </p>
+		{% endif %}
+
+
+
+
+
+		<h4>Enlaces para ver online</h4>
+		<ul>
+
+		      {% for video in episode.videos %}
+		      	<li>
+		      	<a href="{{ video }}" >Ver Online 
+		      		{% if video["provider"] %}  
+		      			<span> {{video["provider"] }} </span> 
+		      		{% endif %} </a>
+		      	</li>
+		      {% endfor %}
+        
+		</ul> 
+
+
+
+		  </div> 
+	  </div> 
+	  {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
 <div>
 
-<div id="MYcontent">
+<div class="MYcontent">
     <div class="MYblog-index">
         {% for episode in episodeObjs %}
             <div class="MYarticle">
@@ -52,3 +125,4 @@
     <span class="MYcb_message" >All praise to Hipno Sapo</span>
 </div>
 </div>
+-->
