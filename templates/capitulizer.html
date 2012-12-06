@@ -108,7 +108,17 @@
         </p>
 
       </header>
-        <div class="entry-content">
+      <div class="entry-content">
+
+
+		{% if episode.picture  %}
+			<div style='clear: both; text-align: center;' class='separator'>
+			       	<a style='margin-left: 1em; margin-right: 1em;'   href='{{ episode.picture }}'>
+				<img width='320'   src='{{ episode.picture }}' border='0' alt='the episode&apos;s   picture'/> </a> 
+			</div>
+		{% endif %}
+
+
 		<p>{{ episode.description }}</p>
 		<br><!-- Episode desc -->
 

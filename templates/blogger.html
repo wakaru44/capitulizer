@@ -1,4 +1,5 @@
-<div xmlns='http://www.w3.org/1999/xhtml'> 
+<div xmlns='http://www.w3.org/1999/xhtml' class="version1"> 
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 
 	{%  if not episodeObjs %}
 		<p> Shit man!!! no episodes given!
@@ -8,7 +9,7 @@
 	<div class='MYarticle'>
 		<div class='MYheader'>
 			<p class='MYentry-title'>
- 			Ver {{episode.detailsDict['tvshow'] }} {{ episode.title }} Online
+ 			Ver {{episode.detailsDict['tvshow'] }} {{ episode.detailsDict['fullTitle'] }} Online
 			</p>
 		</div>
 		<div class='MYentry-content'>
@@ -17,16 +18,21 @@
 		{% if episode.picture  %}
 			<div style='clear: both; text-align: center;' class='separator'>
 			       	<a style='margin-left: 1em; margin-right: 1em;'   href='{{ episode.picture }}'>
-				<img width='320'   src='{{ episode.picture }}' border='0' alt='the episode&apos;s   picture'/> </a> 
+					<img width='320'   src='{{ episode.picture }}' border='0' alt='the episode&apos;s   picture'/> 
+				</a> 
 			</div>
 		{% endif %}
 
 		<!-- Detalles del episodio -->
 
-		{% if episode.detailsDict %}
-			<p>Disfruta online del {{ episode.detailsDict['fullTitle'] }}, 
-			de la temporada {{ episode.detailsDict['season'] }} 
-			de {{episode.detailsDict['tvshow'] }} </p>
+		{% if episode.detailsDict['fullTitle'] %}
+			<p>Disfruta online del {{ episode.detailsDict['fullTitle'] }} 
+			{% if episode.detailsDict[''] %}
+				, de la temporada {{ episode.detailsDict['season'] }} 
+				{% if episode.detailsDict[''] %}
+					de {{episode.detailsDict['tvshow'] }} </p>
+				{% endif %}
+			{% endif %}
 		{% endif %}
 
 
@@ -40,8 +46,9 @@
 		      	<li>
 		      	<a href="{{ video }}" >Ver Online 
 		      		{% if video["provider"] %}  
-		      			<span> {{video["provider"] }} </span> 
-		      		{% endif %} </a>
+					en 	<span> {{video["provider"] }} </span> 
+				{% endif %}
+			</a>
 		      	</li>
 		      {% endfor %}
         
