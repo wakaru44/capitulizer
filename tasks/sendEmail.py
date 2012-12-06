@@ -40,9 +40,6 @@ class SendEmailHandler(webapp2.RequestHandler):
                 message.to = "wakaru44@gmail.com"
                 logging.error("No TO address. Sending one to the admin")
             if cc != "":
-                logging.debug("cc type")
-                logging.debug(type(cc))
-                logging.debug(repr(cc))
                 message.cc = cc
             if bcc != "":
                 message.bcc = bcc
@@ -76,6 +73,8 @@ class SendEmailHandler(webapp2.RequestHandler):
             logging.debug(repr(cc))
             logging.debug("subject")
             logging.debug(repr(subject))
+            logging.debug("text Body")
+            logging.debug(repr(body))
 
 
         except:
