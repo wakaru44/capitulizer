@@ -80,7 +80,7 @@ class episode(db.Model):
     def addPicture(self, link):
         self.picture = link
 
-    def bigMistake(self):
+    def deserializeDetails(self):
         """Here be dragons. This is a big mistake, creating the object 
         episode, or the way i use jinja. 
         Because the details are saved in json, they need to be deserialized

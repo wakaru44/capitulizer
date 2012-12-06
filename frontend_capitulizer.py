@@ -31,7 +31,7 @@ class CapHandler(webapp2.RequestHandler):
         queriedEpisodes = db.GqlQuery("SELECT * FROM episode ")
         episodeObjs = []
         for q in queriedEpisodes:
-            q.bigMistake()
+            q.deserializeDetails()
             episodeObjs.append(q.link)
 
         output = {'title': "Maquinavajo!",
@@ -58,7 +58,7 @@ class BloggerHandler(webapp2.RequestHandler):
         queriedEpisodes = db.GqlQuery("SELECT * FROM episode ")
         episodeObjs = []
         for q in queriedEpisodes:
-            q.bigMistake()
+            q.deserializeDetails()
             logging.debug(q.detailsDict)
             episodeObjs.append(q)
 

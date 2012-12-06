@@ -207,10 +207,9 @@ def interLinks(web):
 
 def episodeDataFromEpisodeWeb(web):
     """receives a seriescoco webcontent
-        returns the data of the episode"""
+    returns a dictionary with the details of the episode"""
 
     logging.debug("extracting data from episode web")
-
     fullTitle = u''
     description = u''
     originalTitle = u''

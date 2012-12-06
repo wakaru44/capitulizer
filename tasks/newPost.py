@@ -15,12 +15,42 @@ import episode  # it's actually used, but not declared explicitly.
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/../templates"))
 
+TRIGGER_TAG="#NewChapter"
+
+def getEpisodeFromBD(keyEpisode):
+    """This method should retrieve an episode object from bd safely"""
+    return db.get(keyEpisode)
+
+
+def buildTags(epObj):
+    tags = "automagicoespialidoso, {0},{1}".format(
+                                epObj.getDetails()["tvshow"],
+                                "Temporada " + str(epObj.getDetails()["season"])
+            )
+    return tags
+
+
+def buildSubject(epObj):
+    show = epObj.getDetails()["tvshow"].encode("utf-8")
+    subject = 'Ver {0} - {1} online {2}'.format(show,
+                           str( epObj.getDetails()["season"] ),
+                           TRIGGER_TAG)
+    return subject
+
+
+def buildBody(epObj):
+    queriedEpisode = [epObj]
+    logging.debug("queriedEpisode")
+    logging.debug(epObj.title)
+    output = {'title': epObj.title,
+              'episodeObjs': queriedEpisode}
+
+    template = jinja_environment.get_template("blogger.html")
+    return  template.render(output)
+
 
 class NewPostHandler(webapp2.RequestHandler):
     
-
-    TRIGGER_TAG="#NewChapter"
-
     def post(self):
         """In this task, we should get an episode from bd, and elaborate
             a blog post. Then send it to IFTTT (or the admin
@@ -28,6 +58,7 @@ class NewPostHandler(webapp2.RequestHandler):
 
         # TODO 1: in the first run, we shoul defer it for later, because if
         # there were no task pending, it will be instantly trigguered :(
+        # below there are some code about how to check the queue
 
         logging.debug("NewPostHandler Entered")
         keyEpisode = self.request.get('keyEpisode')
@@ -45,7 +76,7 @@ class NewPostHandler(webapp2.RequestHandler):
                 logging.debug("has videos")
 
                 # - start building the email body
-                body = self.buildBody(epObj)
+                body = buildBody(epObj)
                 #logging.debug("body")  # noisy
                 #logging.debug(body)  # noisy
 
@@ -54,14 +85,14 @@ class NewPostHandler(webapp2.RequestHandler):
                 # - The subject will be the sentence of the title in the post
                 # - TRIGGER_TAG is the tag that will action the IFTTT trigger
                 # - and create the post
-                subject = self.buildSubject(epObj)
+                subject = buildSubject(epObj)
                 # - We send it to IFTTT to create the post
                 to = "trigger@ifttt.com"
                 # - send a copy to the mail account - try to post by email also
                 cc = "capitulizer.mail@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
                 # - The body tags are the boy of the message, that we use to send
                 # - the tags of the episode
-                bodyTags = self.buildTags(epObj)
+                bodyTags = buildTags(epObj)
                 logging.debug("subject")
                 logging.debug(repr(subject))
 
@@ -109,34 +140,6 @@ class NewPostHandler(webapp2.RequestHandler):
         #     http://capitulizer.appspot.com/blogger</html>"""
 
 
-        #     # Old version, sending the mail from here.
-        #     # mail.send_mail(sender, to, subject, body)
-        #     # New version, creating a new task
-        #     # QUESTION: could this way be more maintenable and powerful?
-        #     # QUESTION: Will we reach the size limit for task parameters??
-        #     logging.debug("Creating a sendEmail Task")
-        #     queue = taskqueue.Queue('sendEmail')
-        #     task = taskqueue.Task(url='/tasks/sendEmail',
-        #                           params={'sender': sender,
-        #                                   'subject': subject,
-        #                                   'body': body,
-        #                                   'cc': cc,
-        #                                   'to': to})
-        #     queue.add(task)
-
-
-        # else:
-        #     logging.debug("There are still some video tasks to complete")
-        #     # so retry
-        #     raise Exception("Still new videos waiting. Maybe next time...")
-        ############################################################
-
-        #return 0  # big mistake! REMOVE
-
-    def getEpisodeFromBD(self, keyEpisode):
-        """This method should retrieve an episode object from bd safely"""
-        return db.get(keyEpisode)
-
 
     def get(self):
         HTML="""
@@ -151,31 +154,5 @@ class NewPostHandler(webapp2.RequestHandler):
         </body>
         """
         self.response.out.write(HTML)
-
-
-    def buildBody(self, epObj):
-        queriedEpisode = [epObj]
-        logging.debug("queriedEpisode")
-        logging.debug(epObj.title)
-        output = {'title': epObj.title,
-                  'episodeObjs': queriedEpisode}
-
-        template = jinja_environment.get_template("blogger.html")
-        return  template.render(output)
-
-
-    def buildSubject(self, epObj):
-        show = epObj.getDetails()["tvshow"].encode("utf-8")
-        subject = u'Ver {0} - {1} online {2}'.format(show,
-                               str( epObj.getDetails()["season"] ),
-                               self.TRIGGER_TAG)
-        return subject
-
-    def buildTags(self, epObj):
-        tags = "automagicoespialidoso, {0},{1}".format(
-                                        epObj.getDetails()["tvshow"],
-                                        "Temporada " + str(epObj.getDetails()["season"])
-                )
-        return tags
 
 
