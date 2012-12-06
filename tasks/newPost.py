@@ -53,13 +53,13 @@ def buildTags(show, season):
     return tags
 
 
-def buildSubject(show, season):
+def buildSubject(show, title):
     """ gets the episode details, decode them and build
         a subject for the email, title of the post"""
     # El caso es que con el asunto, si que se re-codifica en unicode
     subject = 'Ver {0} - {1} online {2}'.format(
                         show.encode("utf-8"),
-                        str(season),
+                        title.encode("utf-8"),
                            TRIGGER_TAG)
     return subject
 
@@ -143,6 +143,7 @@ class NewPostHandler(webapp2.RequestHandler):
             raise
         except:
             raise
+        self.redirect("/tasks/newPost")
 
 
         ############################################################
@@ -172,7 +173,7 @@ class NewPostHandler(webapp2.RequestHandler):
 
             <form name="input" action="/tasks/newPost"
             method="post">
-            Episode key <input type="text" name="keyEpisode" value="a1a1a1a1a1a1a"><br>
+            Episode key <input type="text" name="keyEpisode" value=""><br>
             <input type="submit" value="Submit">
             </form>
 
@@ -192,8 +193,8 @@ class NewPostHandler(webapp2.RequestHandler):
         """ gets the details in unicode and pass them to
             the function that really builds the subject"""
         show = epObj.getDetails()["tvshow"]
-        season = epObj.getDetails()["season"]
-        subject = buildSubject(show, season)
+        season = epObj.getDetails()["fullTitle"]
+        subject = buildSubject(show, title)
         return subject
 
 
