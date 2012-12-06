@@ -20,7 +20,11 @@ class MainHandler(webapp2.RequestHandler):
                         <ul>
                             <li>Envia un email a agregar at
                             capitulizer.appspotmail.com</li>
-                            <li>Entra en /capitulizer</li>
+                            <li>Entra en 
+                            <a href="http://capitulizer.appspot.com/capitulizer">
+                                capitulizer
+                            </a>
+                            </li>
                         </ul>
                         ''')
 
