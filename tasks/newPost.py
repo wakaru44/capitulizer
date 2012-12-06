@@ -193,7 +193,7 @@ class NewPostHandler(webapp2.RequestHandler):
         """ gets the details in unicode and pass them to
             the function that really builds the subject"""
         show = epObj.getDetails()["tvshow"]
-        season = epObj.getDetails()["fullTitle"]
+        title = epObj.getDetails()["fullTitle"]
         subject = buildSubject(show, title)
         return subject
 
