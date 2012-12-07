@@ -63,8 +63,18 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 #try:
                 # first put the episode
                 logging.debug("saving - newEpisodeHandle:48")
-                epObj.put()
-                #logging.debug("--------- ** real transaction ** --------")  # noisy
+                try:
+                    epObj.save()
+                    #logging.debug("--------- ** real transaction ** --------")  # noisy
+                except Exception as e:
+                    # catch the Duplicate Exception, and fail permanently
+                    logging.error("Duplicate Object. Giving Up")
+                    logging.error(e.args)
+                    # Option 1: using deferred library
+                    #raise deferred.PermanentTaskFailure
+                    # Option 2: using taskqueue errors
+                    raise taskqueue.TaskAlreadyExistsError
+
                 # then get the key
                 keyEpisode = epObj.key()
                 # and give it away

@@ -32,6 +32,24 @@ class episode(db.Model):
     objeto = db.ReferenceProperty # here we can save the links to the videos?
     detailsDict = {}
 
+    def save(self):
+        """ saves in datastore, checking for duplicates"""
+        # - check for duplicates
+        episodes = self.all()
+        logging.debug("Episodes ")
+        logging.debug(episodes)
+        dupes = False
+        for epi in episodes:
+            if epi.link == self.link:
+                dupes = True
+        # - save
+        if dupes == False:
+            logging.debug("Saving the episode")
+            self.put()
+        else:
+            # - Raise a "duplicate" exception. 
+            # - This should make the task fail permanently
+            raise Exception("Duplicate Episode")
 
 
     def addVideo(self, link, provider="Video Online"):
