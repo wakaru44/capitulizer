@@ -46,7 +46,7 @@ def escapeSearch(search):
 class image(object):
 
     @staticmethod
-    def getImageList(search, userIP, referer = "capitulizer.appspot.com"):
+    def getImageResults(search, userIP, referer =  "capitulizer.appspot.com"):
         """Do a image search"""
         logging.debug( "searching images for...")
 
@@ -70,8 +70,30 @@ class image(object):
             #pretty printin
             #logging.debug( json.dumps(retorna ,sort_keys=True,indent=4, separators=(',', ': ') )
             logging.debug(result["url"])
-
         return listOfLinks
+
+
+
+
+    @staticmethod
+    def getImageList(search, userIP, referer = "capitulizer.appspot.com"):
+        """Do a image search"""
+        # TODO 1: Hacer tests para esta funcion
+        logging.debug( "Searching a good Image in the haystack")
+        # - we have to build more than one search
+        searches = [search, search + " online", search + " wallpaper"]
+
+        seen = []
+        goodResults = []
+        for search in searches:
+            result = self.getImageSearch(search, userIP, referer)
+            for link in result:
+                if link in seen:
+                    goodResults.append(link)
+                else:
+                    seen.append(link)
+
+        return goodResults
 
     @staticmethod
     def getLink(search, userIP):
