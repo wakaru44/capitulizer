@@ -10,7 +10,6 @@ import webapp2
 # Import the application scripts
 import frontend_capitulizer
 # import task_newEpisode
-# import task_newEmail
 # import task_newVideo
 
 

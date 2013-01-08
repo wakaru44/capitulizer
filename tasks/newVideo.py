@@ -6,7 +6,7 @@
 import webapp2
 import logging
 from google.appengine.ext import db
-import extractSY
+import extract
 import episode
 
 class NewVideoHandler(webapp2.RequestHandler):
@@ -32,12 +32,12 @@ class NewVideoHandler(webapp2.RequestHandler):
             #Keep this to deactivate getting videos
             #logging.error("DEACTIVATED")
             #raise
-            interWeb = extractSY.openWebsite(interLink)
+            interWeb = extract.openWebsite(interLink)
 
             logging.debug("interWeb type")
             logging.debug(type(interWeb))
 
-            vLink, vProv = extractSY.linkToVideoAndProvFromInterLink(
+            vLink, vProv = extract.linkToVideoAndProvFromInterLink(
                                                               interWeb)
             # save the video link in the episode entity
             # I use a function to work with the bd in a single transaction

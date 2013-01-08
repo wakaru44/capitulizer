@@ -9,7 +9,7 @@ import tasks.newPost as nuPost
 #from google.appengine.ext import testbed
 #from google.appengine.ext import db
 #import episode
-#import extractSY
+#import extract
 
 
 #class DbTestCase(unittest.TestCase):
@@ -25,8 +25,8 @@ import tasks.newPost as nuPost
 #        self.testbed.init_datastore_v3_stub()
 #        link="http://seriescoco.com/capitulo/mock"
 #        self.episode= episode.episode(link=link)
-#        #web = extractSY.openWebsite(link)
-#        #details = extractSY.episodeDataFromEpisodeWeb(web)
+#        #web = extract.openWebsite(link)
+#        #details = extract.episodeDataFromEpisodeWeb(web)
 #        #self.episode.addDetails(details)
 #        
 #

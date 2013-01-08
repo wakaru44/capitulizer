@@ -4,7 +4,7 @@
 
 # Library to extract data from SY website.
 import logging
-
+import quopri
 import time
 import random
 import urllib2
@@ -114,61 +114,65 @@ def amIARobot(web):
     # TODO: this should be a little bit smartter
     # for example, it should check if the text is in some place
     # if not, this will give false positives
-    if "comprobar que eres humano" in web:
-        return True
-    else:
-        return False
+    return "comprobar que eres humano" in web
 
 
-def linksToEpisodes(msg):
+def linksToEpisodesSY(msg):
+    if msg is None:
+        raise TypeError
+
+    syMsg = quopri.decodestring(msg)
+    soup = bs4.BeautifulSoup(syMsg)
+    
+    episodes = set()
+
+    for link in soup.find_all("a"):
+        cleanLink = link.get('href', '')
+        if "capitulo" in cleanLink:
+            episodes.add(cleanLink.decode())
+
+    lst = list(episodes)
+    lst.sort()
+
+    return lst
+
+extractors = {
+    "seriesyonkis": linksToEpisodesSY,
+    "seriescoco": linksToEpisodesSY
+}
+
+
+class LinkExtractionError(Exception):
+    """General exception for this module"""
+    pass
+ 
+
+class NoExtractorFoundError(LinkExtractionError):
+    pass
+
+
+class NoEpisodesFoundError(LinkExtractionError):
+    pass
+   
+
+def linksToEpisodes(msg, extractors=extractors):
     """extract the episode links from the mail"""
-    logging.debug("linkstToEpisodes has Received:")
-    #logging.debug(msg) #  too many output
-    episodeList = []
+    applicable_extractors = [extractor for (s, extractor) in extractors.iteritems() if s in msg]
 
-    if "seriesyonkis" or "seriescoco" in msg:
-        logging.debug("it seems a seriesyonkis kind of email")
-        # SY especifics
-        # First, we have to clean the message
-        # from some weird chars in emails
-        try:
-            syMsg = msg.replace("=\n", "")
-            soup = bs4.BeautifulSoup(syMsg)
-            for link in soup.find_all("a"):
-                # Check that is a "capitulo" kind of link
-                # logging.debug("a link found")  # noisy
-                # logging.debug(link)  # noisy
-                try:
-                    l1 = link['href']
-                    l1 = l1.replace('3D"', '')
-                    cleanLink = l1.replace('"', '')
-                    if "capitulo" in cleanLink:
-                        logging.debug("agregando capitulo a la lista")
-                        episodeList.append(cleanLink.decode())
-                    else:
-                        # logging.debug("no agregamos el enlace a la lista")  #
-                        # noisy
-                        pass
-                except KeyError as e:
-                    #logging.debug("No href Found in Email Message")  # noisy
-                    #logging.debug(e)  # noisy
-                    pass
-        except:
-            logging.error("extracting links to episodes: could not extract")
-            logging.error(msg)
+    if len(applicable_extractors) == 0:
+        raise NoExtractorFoundError
 
-    if len(episodeList) <= 0:
-        logging.error("No episodes found in the mail. PLEASE REPORT THIS")
-        logging.debug(msg)  # carefull. too much output
-    else:
-        episodeList = list(set(episodeList))
-        episodeList.sort()
+    episodes = []
+    for extractor in applicable_extractors:
+        episodes.extend(extractor(msg))
 
-    logging.debug(episodeList)
-    #lint:disable
-    return episodeList
-    #lint:enable
+    if len(episodes) == 0:
+        raise NoEpisodesFoundError
 
+    episodes = list(set(episodes))
+    episodes.sort()
+
+    return episodes
 
 def interLinks(web):
     """get the html of an episode page.

@@ -11,7 +11,7 @@ from google.appengine.api import taskqueue
 from google.appengine.ext import db
 
 import episode
-import extractSY
+import extract
 import searcher
 
 
@@ -22,7 +22,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             episodeLink = self.request.get('episodeLink')
             submitter = self.request.get('submitter')
             logging.debug(episodeLink)
-            episodeLink = extractSY.buildLink(episodeLink)  # make sure link its ok
+            episodeLink = extract.buildLink(episodeLink)  # make sure link its ok
             logging.debug("Creating new Episode")
             logging.debug(episodeLink)
 
@@ -33,12 +33,12 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             # - to retrieve the links to intermediate, we need to
             # - get the webcontent
             logging.debug("opening a website")
-            episodeWeb = extractSY.openWebsite(episodeLink)
+            episodeWeb = extract.openWebsite(episodeLink)
             # extract the interlinks
-            linksInter = extractSY.interLinks(episodeWeb)
+            linksInter = extract.interLinks(episodeWeb)
 
             # - and the data of the episode
-            details = extractSY.episodeDataFromEpisodeWeb(episodeWeb)
+            details = extract.episodeDataFromEpisodeWeb(episodeWeb)
             logging.debug("details")
             logging.debug(repr(details))
 
@@ -110,7 +110,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 # TODO: rename linkInter to interLink
                 limit -= 1
                 # build a link if its not complete
-                linkInter = extractSY.buildLink(linkInter)
+                linkInter = extract.buildLink(linkInter)
                 # and dont get past the limit
                 if limit > 0:
                     # Call a newVideo task for each interlink
@@ -119,14 +119,6 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                                   params={'keyEpisode': keyEpisode,
                                           'interLink': linkInter})
                     queue.add(task)
-
-                    # CAREFULL this is meant to be launched once for episode
-                    # REMOVE
-                    #queue = taskqueue.Queue('newEmail')
-                    #task = taskqueue.Task(url='/tasks/newEmail',
-                    #                      params={'keyEpisode': keyEpisode,})
-                    #queue.add(task)
-
 
                 else:
                     logging.error("We still have a limit set")
