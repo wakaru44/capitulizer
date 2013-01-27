@@ -24,32 +24,13 @@ class episode(db.Model):
     title = db.StringProperty()
     description = db.StringProperty()
     videos = db.StringListProperty()  # a string list to save videos
-    details = db.StringProperty()  # a json string of a dictionary 
-    picture = db.StringProperty()  # the url to an image 
+    details = db.StringProperty()  # a json string of a dictionary
+    picture = db.StringProperty()  # the url to an image
 
     ## Future interesting data
     submitter = db.EmailProperty  # save the submitter email for future alerts
     objeto = db.ReferenceProperty # here we can save the links to the videos?
     detailsDict = {}
-
-    def save(self):
-        """ saves in datastore, checking for duplicates"""
-        # - check for duplicates
-        episodes = self.all()
-        logging.debug("Episodes ")
-        logging.debug(episodes)
-        dupes = False
-        for epi in episodes:
-            if epi.link == self.link:
-                dupes = True
-        # - save
-        if dupes == False:
-            logging.debug("Saving the episode")
-            self.put()
-        else:
-            # - Raise a "duplicate" exception. 
-            # - This should make the task fail permanently
-            raise Exception("Duplicate Episode")
 
 
     def addVideo(self, link, provider="Video Online"):
@@ -88,7 +69,7 @@ class episode(db.Model):
 
 
     def getDetails(self):
-        """Get the details from the episode and return a 
+        """Get the details from the episode and return a
            dict of the contents"""
         if self.details is not None:
             return json.loads(self.details)
@@ -99,8 +80,8 @@ class episode(db.Model):
         self.picture = link
 
     def deserializeDetails(self):
-        """Here be dragons. This is a big mistake, creating the object 
-        episode, or the way i use jinja. 
+        """Here be dragons. This is a big mistake, creating the object
+        episode, or the way i use jinja.
         Because the details are saved in json, they need to be deserialized
         before showing...
         It would be nice to serialize and deserialize automagicly"""

@@ -44,9 +44,9 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
             # - and a cool picture too
             try:
-                picture = self.buildSearch(details)
+                picture = self.getImageLink(details)
             except:
-                logging.error("Something happend in newEpisode with the picture")
+                logging.error("Something happened in newEpisode with the picture")
                 logging.info("trying again")
                 raise
 
@@ -59,20 +59,31 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             def putEpisode(epObj):
                 """ put the episode instance in the bd and return the key.
                     Ensure that we are not writing it twice, etc..."""
-                    # TODO this is still a sketch. should improve soon
-                #try:
                 # first put the episode
                 logging.debug("saving - newEpisodeHandle:48")
                 try:
-                    epObj.save()
-                    #logging.debug("--------- ** real transaction ** --------")  # noisy
+                    # - check for duplicates must be done outside transaction.
+                    episodes = epObj.all()
+                    logging.debug("Episodes ")
+                    logging.debug(episodes)
+                    dupes = False
+                    for epi in episodes:
+                        if epi.link == self.link:
+                            dupes = True
+                    # - save
+                    if dupes == False:
+                        logging.debug("Saving the episode")
+                        epObj.put()
+                    else:
+                        # - Raise a "duplicate" exception.
+                        # - This should make the task fail permanently
+                        raise Exception("Duplicate Episode")
+
                 except Exception as e:
-                    # catch the Duplicate Exception, and fail permanently
-                    logging.error("Duplicate Object. Giving Up")
+                    # - catch the Duplicate Exception, and fail permanently
+                    logging.error("Duplicate Object or DDBB error. Giving Up")
                     logging.error(e.args)
-                    # Option 1: using deferred library
-                    #raise deferred.PermanentTaskFailure
-                    # Option 2: using taskqueue errors
+                    # - using taskqueue errors
                     raise taskqueue.TaskAlreadyExistsError
 
                 # then get the key
@@ -136,13 +147,20 @@ class NewEpisodeHandler(webapp2.RequestHandler):
     def get(self):
         self.response.out.write("welcome")
 
-
-    def buildSearch(self, details):
-        """ Build a search string for an image """
-        ss = searcher.image.getLink(details["tvshow"],
-                                             "91.142.222.222" )
+    def getImageLink(self, details):
+        ss = searcher.image.getLink(self.buildSearch(details),
+                                             "91.142.222.222")
         logging.debug("search String")
         logging.debug(ss)
         return ss
+
+    def buildSearch(self, details):
+        """ Build a search string for an image """
+        restrictions = u'inurl:blogspot '
+        if details["tvshoe"] != u'':
+            return details["tvshow"] + restrictions
+        else:
+            raise ValueError("No tvshow data in image search")
+
 
 
