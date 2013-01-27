@@ -8,7 +8,7 @@ import quopri
 import time
 import random
 import urllib2
-#import json  # Utilizado para serializar el diccionario con episode Details 
+#import json  # Utilizado para serializar el diccionario con episode Details
 import bs4
 
 # minimum wait time in seconds
@@ -123,7 +123,7 @@ def linksToEpisodesSY(msg):
 
     syMsg = quopri.decodestring(msg)
     soup = bs4.BeautifulSoup(syMsg)
-    
+
     episodes = set()
 
     for link in soup.find_all("a"):
@@ -145,7 +145,7 @@ extractors = {
 class LinkExtractionError(Exception):
     """General exception for this module"""
     pass
- 
+
 
 class NoExtractorFoundError(LinkExtractionError):
     pass
@@ -153,7 +153,7 @@ class NoExtractorFoundError(LinkExtractionError):
 
 class NoEpisodesFoundError(LinkExtractionError):
     pass
-   
+
 
 def linksToEpisodes(msg, extractors=extractors):
     """extract the episode links from the mail"""
@@ -279,7 +279,7 @@ def episodeDataFromEpisodeWeb(web):
                                     details['tvshow'] = elem.getText()
                                 else:
                                     pass
-                                    
+
                             except:
                                 pass
                 except:

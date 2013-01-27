@@ -52,7 +52,7 @@ class CapHandler(InboundMailHandler):
                 # Create a queue
                 queue = taskqueue.Queue('newEpisode')
                 # Conform a task
-                task = taskqueue.Task(url='/tasks/newEpisode', 
+                task = taskqueue.Task(url='/tasks/newEpisode',
                               params={'episodeLink': ep,
                               'submitter': mail_message.sender,})
                 # Add the task to the queue.

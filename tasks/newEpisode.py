@@ -44,7 +44,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
             # - and a cool picture too
             try:
-                picture = self.getImageLink(details)
+                picture = searcher.image.getLink(details)
             except:
                 logging.error("Something happened in newEpisode with the picture")
                 logging.info("trying again")
@@ -62,23 +62,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 # first put the episode
                 logging.debug("saving - newEpisodeHandle:48")
                 try:
-                    # - check for duplicates must be done outside transaction.
-                    episodes = epObj.all()
-                    logging.debug("Episodes ")
-                    logging.debug(episodes)
-                    dupes = False
-                    for epi in episodes:
-                        if epi.link == self.link:
-                            dupes = True
-                    # - save
-                    if dupes == False:
-                        logging.debug("Saving the episode")
-                        epObj.put()
-                    else:
-                        # - Raise a "duplicate" exception.
-                        # - This should make the task fail permanently
-                        raise Exception("Duplicate Episode")
-
+                    epObj.put()
                 except Exception as e:
                     # - catch the Duplicate Exception, and fail permanently
                     logging.error("Duplicate Object or DDBB error. Giving Up")
@@ -105,7 +89,31 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 logging.info("trying again")
                 raise Exception
 
-            keyEpisode = db.run_in_transaction(putEpisode, epObj)
+
+            # - check for duplicates must be done outside transaction.
+            episodes = epObj.all()
+            logging.debug("Episodes ")
+            logging.debug(episodes)
+            dupes = False
+            keyEpisode = 0
+            for epi in episodes:
+                if epi.link == self.link:
+                    dupes = True
+            # - save
+            if dupes == False:
+                logging.debug("Saving the episode")
+                keyEpisode = db.run_in_transaction(putEpisode, epObj)
+            else:
+                # - Raise a "duplicate" exception.
+                # - This should make the task fail permanently
+                raise Exception("Duplicate Episode")
+
+
+
+
+
+
+
             queue = taskqueue.Queue('watchNotify')
             task = taskqueue.Task(url='/tasks/watchNotify',
                                   params={'keyEpisode': keyEpisode,
@@ -146,21 +154,3 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
     def get(self):
         self.response.out.write("welcome")
-
-    def getImageLink(self, details):
-        ss = searcher.image.getLink(self.buildSearch(details),
-                                             "91.142.222.222")
-        logging.debug("search String")
-        logging.debug(ss)
-        return ss
-
-    def buildSearch(self, details):
-        """ Build a search string for an image """
-        restrictions = u'inurl:blogspot '
-        if details["tvshoe"] != u'':
-            return details["tvshow"] + restrictions
-        else:
-            raise ValueError("No tvshow data in image search")
-
-
-
