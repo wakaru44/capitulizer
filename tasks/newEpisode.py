@@ -76,9 +76,12 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                     raise taskqueue.TaskAlreadyExistsError
 
                 # then get the key
-                keyEpisode = epObj.key()
+                # TODO 1 : This fails, because queries are not allowed in
+                # transactions
+                #keyEpisode = epObj.key()
                 # and give it away
-                return keyEpisode
+                # TODO 1 : this should return someting, fail, etc
+                #return keyEpisode
                 # QUESTION how can i catch Timeout?
                 #except  (Timeout, TransactionFailedError, InternalError) as err:
                 #    # TO-DO catch errors puttin in bd
@@ -94,7 +97,9 @@ class NewEpisodeHandler(webapp2.RequestHandler):
                 logging.info("trying again")
                 raise Exception
 
-            keyEpisode = db.run_in_transaction(putEpisode, epObj)
+            #keyEpisode = db.run_in_transaction(putEpisode, epObj)
+            db.run_in_transaction(putEpisode, epObj)
+            keyEpisode = epObj.key()
             queue = taskqueue.Queue('watchNotify')
             task = taskqueue.Task(url='/tasks/watchNotify',
                                   params={'keyEpisode': keyEpisode,

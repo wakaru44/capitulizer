@@ -18,6 +18,7 @@ import logging
 
 import webapp2
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from google.appengine.api import taskqueue
 
 
 class LogSenderHandler(InboundMailHandler):
