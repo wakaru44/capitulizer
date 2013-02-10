@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# 2012 10 24
 # General application to receive email. It is listening in all the addresses,
 # and just logs the message to the app log.
 #
@@ -70,25 +69,6 @@ class CapHandler(InboundMailHandler):
         bodies = mail_message.bodies()
         for content_type, body in bodies:
             return body.decode().encode("utf-8")
-
-
-#        # TODO: improve this to fall to plain text body if not html available
-#        html_bodies = mail_message.bodies('text/html')
-#        plaintext_bodies = mail_message.bodies('text/plain')
-#        allbodies = []
-#        for content_type, body in html_bodies:
-#            #decoded_html = body.decode() #REMOVE?
-#            decoded_html = str(body)
-#            # return the first htmlbody found in unicode format.
-#            # i think that should be a way to avoid this for loop, but...
-#            allbodies.append(decoded_html)
-#
-#        for content_type, body in plaintext_bodies:
-#            allbodies.append(body)
-#
-#        logging.error("DELETE THIS LOG")
-#        logging.error(allbodies)
-#        return allbodies[0]
 
 
 #######################################
