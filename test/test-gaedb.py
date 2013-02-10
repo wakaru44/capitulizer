@@ -4,6 +4,11 @@
 
 import unittest
 from nose import tools
+
+
+import sys
+sys.path.append("/usr/share/google_appengine")
+
 from google.appengine.ext import testbed
 from google.appengine.ext import db
 import episode

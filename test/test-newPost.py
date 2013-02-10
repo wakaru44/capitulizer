@@ -47,7 +47,7 @@ def test_buildSubject():
 
 def test_buildTags():
     expect = "automagicoespialidoso,Ej\xc3\xa9mpl\xc3\xb3 de show,Temporada 99"
-    result = nuPost.buildTags(u'Ejémpló de show', 99)
+    result = nuPost.buildTags(u'Ejémpló de show', u'99')
     tools.assert_equal(expect, result)
 
 

@@ -24,11 +24,11 @@ class CapHandler(InboundMailHandler):
     def receive(self, mail_message):
         try:
             self.doReceive(mail_message)
-        except NoExtractorFoundError:
+        except extract.NoExtractorFoundError:
             logging.error('Error, Could not extract a shit')
             logging.error(mail_message)
-            auxtools.send_email_to_admin(NoExtractorFoundError, mail_message)
-        except NoEpisodesFoundError:
+            auxtools.send_email_to_admin(extract.NoExtractorFoundError, mail_message)
+        except extract.NoEpisodesFoundError:
             logging.error('Error, No episodes found bro!')
             logging.error(mail_message)
             auxtools.send_email_to_admin(NoEpisodesFoundError, mail_message)
@@ -67,13 +67,28 @@ class CapHandler(InboundMailHandler):
 
     def getBody(self, mail_message):
         """Get the best body available. It can be the html or the text part"""
-        # TODO: improve this to fall to plain text body if not html available
-        html_bodies = mail_message.bodies('text/html')
-        for content_type, body in html_bodies:
-            decoded_html = body.decode()
-            # return the first htmlbody found in unicode format.
-            # i think that should be a way to avoid this for loop, but...
-            return decoded_html
+        bodies = mail_message.bodies()
+        for content_type, body in bodies:
+            return body.decode().encode("utf-8")
+
+
+#        # TODO: improve this to fall to plain text body if not html available
+#        html_bodies = mail_message.bodies('text/html')
+#        plaintext_bodies = mail_message.bodies('text/plain')
+#        allbodies = []
+#        for content_type, body in html_bodies:
+#            #decoded_html = body.decode() #REMOVE?
+#            decoded_html = str(body)
+#            # return the first htmlbody found in unicode format.
+#            # i think that should be a way to avoid this for loop, but...
+#            allbodies.append(decoded_html)
+#
+#        for content_type, body in plaintext_bodies:
+#            allbodies.append(body)
+#
+#        logging.error("DELETE THIS LOG")
+#        logging.error(allbodies)
+#        return allbodies[0]
 
 
 #######################################

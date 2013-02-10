@@ -11,6 +11,7 @@ import webapp2
 import frontend_capitulizer
 # import task_newEpisode
 # import task_newVideo
+import reloadImages
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -23,6 +24,8 @@ class MainHandler(webapp2.RequestHandler):
                             <a href="http://capitulizer.appspot.com/capitulizer">
                                 capitulizer
                             </a>
+                            <a href="/reloading"> para recargar las imagenes</a>
+                            <a href="/tasks/newPost"> Para crear un nuevo post</a>
                             </li>
                         </ul>
                         ''')
@@ -30,4 +33,5 @@ class MainHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/capitulizer', frontend_capitulizer.CapHandler),
     ('/blogger', frontend_capitulizer.BloggerHandler),
+    ('/reloading', reloadImages.reloaderHandler),
     ('/', MainHandler)], debug=True)

@@ -9,6 +9,12 @@ import time
 import random
 import urllib2
 #import json  # Utilizado para serializar el diccionario con episode Details
+# Probando how it works
+import unicodedata 
+
+
+
+
 import bs4
 
 # minimum wait time in seconds
@@ -121,6 +127,14 @@ def linksToEpisodesSY(msg):
     if msg is None:
         raise TypeError
 
+    # TODO testing how to encode an email right
+    #logging.info(repr(str_msg))
+
+    #syMsg = f.parsestr(str)
+    #syMsg = f.parsestr(str_msg)
+    #syMsg = msg
+    # TODO: aclarar si esto es asi, o no. mientras tanto, esta funcion 
+    # falla con errores de encoding, asi que no me vale.
     syMsg = quopri.decodestring(msg)
     soup = bs4.BeautifulSoup(syMsg)
 

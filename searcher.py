@@ -69,14 +69,23 @@ class image(object):
             listOfLinks.append(result["url"])
             #pretty printin
             #logging.debug( json.dumps(retorna ,sort_keys=True,indent=4, separators=(',', ': ') )
-            logging.debug(result["url"])
+            logging.debug(image.build_img_tag(result["url"]))
         return listOfLinks
+
+    @staticmethod
+    def build_img_tag(url):
+        template = "<img src = \" {0} \" alt=\"imagen buscada\" />"
+        return template.format(url)
 
 
     @staticmethod
     def buildSearches(details):
         """Build a list of search strings"""
         restrictions =  u' '
+        if type(details) != type({}):
+            logging.error("Wrong details Given")
+            logging.error(repr(details))
+            raise ValueError("Wrong Details Given" )
 
         if details["tvshow"] == u'':
             raise ValueError("No data in image search")
@@ -102,7 +111,7 @@ class image(object):
         for search in searches:
             result = image.getImageResults(search, userIP, referer)
             for link in result:
-                if link in seen:
+                if link not in seen:
                     goodResults.append(link)
                 else:
                     seen.append(link)
@@ -110,14 +119,12 @@ class image(object):
         return goodResults
 
     @staticmethod
-    def getLink(details, userIP):
+    def getLink(details = {"tvshow": "minimo esfuerzo"} , userIP = "91.142.222.222"):
         """return just one link to an image"""
         logging.debug("getting link to an image")
         listOfThem = image.getImageList(details, userIP)
         if len(listOfThem) > 0:
-            # pick just one
-            # TODO: Enable this
-            # I change this to a static choose to test it easier
+            # pick just one randomly
             selec = random.randint(1,len(listOfThem))
             #selec = 1
             chosenLink = listOfThem[selec-1]

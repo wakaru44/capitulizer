@@ -16,12 +16,15 @@ import searcher
 
 
 class NewEpisodeHandler(webapp2.RequestHandler):
+
     def post(self):
+        self.episodeLink = ""
         try:
             # - get the params
             episodeLink = self.request.get('episodeLink')
             submitter = self.request.get('submitter')
             logging.debug(episodeLink)
+            self.episodeLink = extract.buildLink(episodeLink)  # make sure link its ok
             episodeLink = extract.buildLink(episodeLink)  # make sure link its ok
             logging.debug("Creating new Episode")
             logging.debug(episodeLink)
@@ -44,7 +47,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
 
             # - and a cool picture too
             try:
-                picture = searcher.image.getLink(details)
+                picture = searcher.image.getLink(details, "91.142.222.222")
             except:
                 logging.error("Something happened in newEpisode with the picture")
                 logging.info("trying again")
@@ -97,7 +100,8 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             dupes = False
             keyEpisode = 0
             for epi in episodes:
-                if epi.link == self.link:
+                dir(self)
+                if epi.link == self.episodeLink:
                     dupes = True
             # - save
             if dupes == False:
