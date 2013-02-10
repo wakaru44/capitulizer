@@ -86,7 +86,7 @@ class image(object):
         seen = []
         goodResults = []
         for search in searches:
-            result = self.getImageSearch(search, userIP, referer)
+            result = image.getImageResults(search, userIP, referer)
             for link in result:
                 if link in seen:
                     goodResults.append(link)
