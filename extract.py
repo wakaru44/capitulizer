@@ -46,6 +46,8 @@ def openLink(link):
                                         % len(userAgents) )]
     logging.debug("user agent")
     logging.debug(pickOneUserAgent)
+    logging.debug("sy link to get the video in provider")
+    logging.debug(link)
     try:
         #headers = { 'User-Agent' : pickOneUserAgent }
         # safe - mode
@@ -56,7 +58,7 @@ def openLink(link):
         w = urllib2.urlopen(rqst)
         return w
     except urllib2.URLError as e:
-        logging.error("Could't get the link. Url ERROR")
+        logging.error("Couldn't get the link. Url ERROR")
         logging.error(e)
         logging.error(headers)
         logging.error(repr(link))

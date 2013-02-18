@@ -44,7 +44,7 @@ def buildTags(show, season):
     # The ideal case, is to find a function that converts from 
     # unicode to ascii, nicely
     showstr = unicodedata.normalize('NFKD', show).encode('ascii', 'ignore')
-    tags = "automagicoespialidoso,{0},{1}".format(
+    tags = "nuevaola,{0},{1}".format(
                                 showstr,
                                 "Temporada " + str(season))
     logging.debug
@@ -114,8 +114,11 @@ class NewPostHandler(webapp2.RequestHandler):
                 subject = self.buildSubject(epObj)
                 # - We send it to IFTTT to create the post
                 to = "trigger@ifttt.com"
-                # - send a copy to the mail account - try to post by email also
-                cc = "capitulizer.mail@gmail.com, capitulizer.mail.icanhazpozt@blogger.com"
+                # - send a copy to the mail account 
+                # - post by email disabled. Is not needed anymore, but can be
+                # - enabled in blogger settings, and sent here in cc
+                # cc = "capitulizer.mail@gmail.com, posting.email@blogger.com"
+                cc = "capitulizer.mail@gmail.com" 
                 # - The body tags are the boy of the message, that we use to send
                 # - the tags of the episode
                 bodyTags = self.buildTags(epObj)

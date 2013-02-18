@@ -85,7 +85,7 @@ class image(object):
         if type(details) != type({}):
             logging.error("Wrong details Given")
             logging.error(repr(details))
-            raise ValueError("Wrong Details Given" )
+            raise ValueError("Wrong Details Given. Are you using getDetails()?" )
 
         if details["tvshow"] == u'':
             raise ValueError("No data in image search")
