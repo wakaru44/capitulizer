@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-
 # Library to extract data from SY website.
+
 import logging
 import quopri
 import time

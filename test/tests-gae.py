@@ -21,7 +21,7 @@ class MailTestCase(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    def send_Email():
+    def send_Email(self):
         mail.send_mail(to='wakaru44@gmail.com',
             subject='this is a mail test',
             sender='capitulos@waklab0.appspotmail.com',
@@ -31,7 +31,7 @@ class MailTestCase(unittest.TestCase):
     def testMailSent(self):
         self.send_Email()
         messages_sent = self.mail_stub.get_sent_messages(to='wakaru44@gmail.com')
-        self.assertEqual(1, len(messages))
-        self.assertEqual('wakaru44@gmail.com', messages[0].to)
+        self.assertEqual(1, len(messages_sent))
+        self.assertEqual('wakaru44@gmail.com', messages_sent[0].to)
 
 #unittest.main()

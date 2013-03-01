@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # 25-nov-2012 juanantoniofm
+# This should be improved, so it can generate more kinds of posts, for example
+# for wordpress, or the new "whole seasson post" suggested by csaavedra
 
 import webapp2
 import logging
@@ -44,7 +46,7 @@ def buildTags(show, season):
     # The ideal case, is to find a function that converts from 
     # unicode to ascii, nicely
     showstr = unicodedata.normalize('NFKD', show).encode('ascii', 'ignore')
-    tags = "nuevaola,{0},{1}".format(
+    tags = "{0},{1}".format(
                                 showstr,
                                 "Temporada " + str(season))
     logging.debug
@@ -53,14 +55,18 @@ def buildTags(show, season):
     return tags
 
 
-def buildSubject(show, title):
+def buildPostTitle(details):
     """ gets the episode details, decode them and build
         a subject for the email, title of the post"""
     # El caso es que con el asunto, si que se re-codifica en unicode
-    subject = 'Ver {0} - {1} online {2}'.format(
-                        show.encode("utf-8"),
-                        title.encode("utf-8"),
-                           TRIGGER_TAG)
+    show = details["tvshow"].encode("utf-8")
+    title = details["fullTitle"].encode("utf-8")
+    season = details["season"].encode("utf-8")
+
+    subject = 'Ver {0} - Temp. {1} - {2} online {3}'.format(show,
+                                                            season,
+                                                            title,
+                                                            TRIGGER_TAG)
     return subject
 
 
@@ -111,15 +117,17 @@ class NewPostHandler(webapp2.RequestHandler):
                 # - The subject will be the sentence of the title in the post
                 # - TRIGGER_TAG is the tag that will action the IFTTT trigger
                 # - and create the post
-                subject = self.buildSubject(epObj)
+                subject = self.buildPostTitle(epObj)
                 # - We send it to IFTTT to create the post
                 to = "trigger@ifttt.com"
                 # - send a copy to the mail account 
                 # - post by email disabled. Is not needed anymore, but can be
                 # - enabled in blogger settings, and sent here in cc
                 # cc = "capitulizer.mail@gmail.com, posting.email@blogger.com"
-                cc = "capitulizer.mail@gmail.com" 
-                # - The body tags are the boy of the message, that we use to send
+                # cc = "capitulizer.mail@gmail.com"
+                # backup in email disabled 2013 03 01 
+                cc = "" # stingy but functional :(
+                # - The body tags are the body of the message, that we use to send
                 # - the tags of the episode
                 bodyTags = self.buildTags(epObj)
                 logging.debug("subject")
@@ -149,27 +157,6 @@ class NewPostHandler(webapp2.RequestHandler):
         self.redirect("/tasks/newPost")
 
 
-        ############################################################
-        # # check if all this episode videos have been added or failed
-        # # (second version)
-        # queue = taskqueue.Queue() # newVideos
-        # #queueStats = taskqueue.QueueStats(queue, ['newVideo'], 2)
-        # # new way
-        # queueStats = queue.fetch_statistics()  # returns QueueStatistics
-
-        # if queueStats.tasks == 0:
-        #     logging.debug("There are no pending video tasks")
-        #     # so send an email
-
-        #     sender = "Capitulizer Mighty Bot <capitulizer@capitulizer.appspotmail.com>"
-        #     to = submitter  # send them to the submitter TODO
-        #     cc = "wakaru44@gmail.com"  # and send a copy to the admin
-        #     subject = "New Episode Available to Watch"
-        #     body  = """<html><h1>This shoul be like the /blogger template.</h1>
-        #     http://capitulizer.appspot.com/blogger</html>"""
-
-
-
     def get(self):
         HTML="""
         <body>
@@ -186,18 +173,21 @@ class NewPostHandler(webapp2.RequestHandler):
 
 
     def buildTags(self, epObj):
+            #TODO: refactor this to be in a "post" object with
+            # a well known pattern
         show = epObj.getDetails()["tvshow"]
         season = epObj.getDetails()["season"]
         tags = buildTags(show, season)
         return tags
 
 
-    def buildSubject(self, epObj):
+    def buildPostTitle(self, epObj):
         """ gets the details in unicode and pass them to
             the function that really builds the subject"""
-        show = epObj.getDetails()["tvshow"]
-        title = epObj.getDetails()["fullTitle"]
-        subject = buildSubject(show, title)
+            #TODO: refactor this to be in a "post" object with
+            # a well known pattern
+        details = epObj.getDetails()
+        subject = buildPostTitle(details)
         return subject
 
 

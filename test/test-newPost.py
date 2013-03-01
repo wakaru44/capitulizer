@@ -39,16 +39,25 @@ import tasks.newPost as nuPost
 #
 
 
-def test_buildSubject():
+def test_buildPostTitle():
     expect = "Ver Ej\xc3\xa9mpl\xc3\xb3 de show - 99 online #NewChapter"
-    result = nuPost.buildSubject(u'Ejémpló de show', 99)
+    result = nuPost.buildPostTitle({ "tvshow": u'Ejémpló de show',
+                                    "season": u'9',
+                                    "episodeNumber": 99})
     print result
     tools.assert_equal(expect, result)
 
-def test_buildTags():
+def test_buildTags_with_unicode():
     expect = "automagicoespialidoso,Ej\xc3\xa9mpl\xc3\xb3 de show,Temporada 99"
     result = nuPost.buildTags(u'Ejémpló de show', u'99')
     tools.assert_equal(expect, result)
+
+
+def test_buildTags_no_unicode():
+    expect = "Ejemplo de show,Temporada 99"
+    result = nuPost.buildTags(u'Ejemplo de show', u'99')
+    tools.assert_equal(expect, result)
+
 
 
 #unittest.main()
