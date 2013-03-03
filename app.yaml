@@ -13,21 +13,21 @@ handlers:
   upload: favicon\.ico
 
 - url: /_ah/mail/agregate@capitulizer.appspotmail.com
-  script: email_aggregateEpisodes.app
+  script: handlers.email_aggregateEpisodes.app
   login: admin
 
 
 - url: /_ah/mail/agregar@capitulizer.appspotmail.com
-  script: email_aggregateEpisodes.app
+  script: handlers.email_aggregateEpisodes.app
   login: admin
 
 
 - url: /_ah/mail/agrega.+@capitulizer.appspotmail.com
-  script: email_aggregateEpisodes.app
+  script: handlers.email_aggregateEpisodes.app
   login: admin
 
 - url: /_ah/mail/.+
-  script: email_incoming.app
+  script: handlers.email_incoming.app
   login: admin
 
 - url: /staticfiles

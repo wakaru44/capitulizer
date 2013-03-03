@@ -8,7 +8,7 @@
 import webapp2
 
 # Import the application scripts
-import frontend_capitulizer
+import handlers.frontend_capitulizer as frontend_capitulizer
 # import task_newEpisode
 # import task_newVideo
 import reloadImages

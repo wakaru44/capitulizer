@@ -43,7 +43,7 @@ class MailTestCase(unittest.TestCase):
         self.assertEqual(1, len(messages))
         self.assertEqual('trigger@ifttt.com', messages[0].to)
 
-    def test_taksqueue(self):
+    def test_taskqueue(self):
         print dir(self.testbed)
         #print "enabled stubs"
         #print self.testbed._enabled_stubs
