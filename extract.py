@@ -69,8 +69,8 @@ def openLink(link):
 
 def buildLink(link):
     """check that is a proper www.seriescoco.com link"""
-    logging.debug("building link: ")  # noisy
-    logging.debug(repr(link))  # noisy
+    #logging.debug("building link: ")  # noisy
+    #logging.debug(repr(link))  # noisy
     if "seriesyonkis" in link or "seriescoco" in link:
         return link
     else:
