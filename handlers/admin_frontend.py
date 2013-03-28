@@ -49,6 +49,14 @@ class AdminHandler(webapp2.RequestHandler):
         """
         theQuery = self.request.get("myQuery")
         renderAndWrite(do_query(theQuery),"admin.html")
+        #- we should find out wich button was presssed
+
+        #- take the parameters with the request
+
+        #- and send to the corresponding action
+
+        #- the action will render.
+
 
 
     def do_query(self, query = "SELECT * FROM episode "):
