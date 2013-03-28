@@ -9,12 +9,7 @@ import time
 import random
 import urllib2
 #import json  # Utilizado para serializar el diccionario con episode Details
-# Probando how it works
-import unicodedata 
-
-
-
-
+# import unicodedata
 import bs4
 
 # minimum wait time in seconds
@@ -31,6 +26,7 @@ def openWebsite(link):
         return w.read()
     except urllib2.URLError as e:
         logging.error("Error opening website")
+        logging.error(repr(e))
         raise urllib2.URLError
 
 
@@ -41,9 +37,9 @@ def openLink(link):
     humanizer = int(random.random() * (MAXIMUM_WAIT_TIME - MINIMUM_WAIT_TIME))
     time.sleep(MINIMUM_WAIT_TIME + humanizer)
     userAgents = ['Amiga-AWeb/3.4.167SE ',
-                   'Mozilla/5.0']
-    pickOneUserAgent = userAgents[int((random.random() * 10 )
-                                        % len(userAgents) )]
+                  'Mozilla/5.0']
+    pickOneUserAgent = userAgents[int((random.random() * 10)
+                                  % len(userAgents))]
     logging.debug("user agent")
     logging.debug(pickOneUserAgent)
     logging.debug("sy link to get the video in provider")
@@ -53,7 +49,7 @@ def openLink(link):
         # safe - mode
         # headers = { 'User-Agent' : 'Mozilla/5.0'}
         # UNsafe - mode TODO
-        headers = { 'User-Agent' : pickOneUserAgent}
+        headers = {'User-Agent': pickOneUserAgent}
         rqst = urllib2.Request(link, None, headers)
         w = urllib2.urlopen(rqst)
         return w
@@ -113,7 +109,7 @@ def plainString(s):
             else:
                 logging.error("is unaputamierda")
                 #logging.debug(snip)  # noisy
-    madafaca = madafaca.replace("\n","")
+    madafaca = madafaca.replace("\n", "")
     return madafaca
 
 
@@ -135,7 +131,7 @@ def linksToEpisodesSY(msg):
     #syMsg = f.parsestr(str)
     #syMsg = f.parsestr(str_msg)
     #syMsg = msg
-    # TODO: aclarar si esto es asi, o no. mientras tanto, esta funcion 
+    # TODO: aclarar si esto es asi, o no. mientras tanto, esta funcion
     # falla con errores de encoding, asi que no me vale.
     syMsg = quopri.decodestring(msg)
     soup = bs4.BeautifulSoup(syMsg)
@@ -190,6 +186,7 @@ def linksToEpisodes(msg, extractors=extractors):
 
     return episodes
 
+
 def interLinks(web):
     """get the html of an episode page.
     It returns a list with the links to the intermediate pages.
@@ -230,55 +227,50 @@ def episodeDataFromEpisodeWeb(web):
     returns a dictionary with the details of the episode"""
 
     logging.debug("extracting data from episode web")
-    fullTitle = u''
-    description = u''
-    originalTitle = u''
-    episodeNumber = u''
-    season = u''
-    tvshow = u''
+    # In a prior model we used vars instead of dict
+    # But the keys are the same
+    #fullTitle = u''
+    #description = u''
+    #originalTitle = u''
+    #episodeNumber = u''
+    #season = u''
+    #tvshow = u''
     details = {}
+    details['fullTitle'] = ""
+    details['season'] = None
+    details['tvshow'] = ""
+    details['episodeNumber'] = None
+    details['tvshow'] = None
 
-    # ERROR - this can lead to a recursion error, if we feed the parser with
-    # some kind of crap. QUESTION: how can i check this
-    #print "---------------------------------------------------"
-    #print web
-    #print "---------------------------------------------------"
     soup = bs4.BeautifulSoup(web)
-    # I tried it this way, but it was a mistake. it brokes sometimes
-    # soup = bs4.BeautifulSoup(web.decode("utf-8"))  # es tonteria ponerlo asi,pero
-
-    # with this loop, we get the info from the episode
+        # I tried it this way, but it was a mistake.
+        # it brokes sometimes. I think
+        # due to the extra chars en the email or something
+        # soup = bs4.BeautifulSoup(web.decode("utf-8"))
+    # - with this loop, we get the info from the episode
     for block in soup.find_all("div"):
         try:
-            if "section-intro" in block['class']:
+            if "section-intro ficha_activa" in block['class'] or "section-intro" in block['class']:
                 # get the title
-                details['fullTitle'] = plainString(block.h1.contents).strip()
-                fullTitle = plainString(block.h1.contents).strip()
+                logging.debug(block)
+                logging.debug(type(block.h1))
+                details['fullTitle'] = plainString(block.h2.contents).strip()
                 # get the description
-                # this way, we plain the string
-                #description = plainString(block.div.contents)
-                # this way, we use the html
                 descriptionTag = block.div.contents
                 details['description'] = plainString(descriptionTag).strip()
                 logging.debug("Description Tag")
                 logging.debug(repr(descriptionTag))
-                logging.debug("------")
+                logging.debug("--- full repr of description ---")
                 logging.debug(repr(block.div.contents))
                 # Collect the details
-                details['season'] = None
-                details['tvshow'] = ""
-                details['episodeNumber'] = None
-                details['tvshow'] = None
                 try:
                     #doing this in a separate function, will do perfectly
                     logging.debug("Extracting details of the episode")
                     for elem in descriptionTag:
-                        #plain = plainString(elem)
                         plain = elem.decode()
-                        #logging.debug(u'plain: ' + plain)  #noisy
                         if u'tulo original' in plain:
                             elem.strong.extract()
-                            details['originalTitle'] = elem.getText().strip()   # Just convert it
+                            details['originalTitle'] = elem.getText().strip()
                         elif u'Capítulo' in plain:
                             elem.strong.extract()  # remove unwanted tag
                             details['episodeNumber'] = elem.decode_contents().strip()
@@ -290,17 +282,18 @@ def episodeDataFromEpisodeWeb(web):
                             try:
                                 logging.debug(type(elem))
                                 if isinstance(elem, bs4.element.Tag):
-                                    logging.debug("maybe h2")
+                                    logging.debug("this is the TV show")
                                     logging.debug(elem.getText())
                                     details['tvshow'] = elem.getText()
-                                else:
-                                    pass
-
                             except:
+                                # this exception must be silenced
                                 pass
                 except:
                     logging.error("Couldn't get details of the episode")
                     raise
+            else:
+                logging.error("shit happends!")
+                logging.error(block)
 
         except KeyError:
             # if we enable loggin for this, would be a storm of log.
@@ -390,8 +383,8 @@ def linkToVideoInProv(link):
         resultLink = w.geturl()
         logging.debug(resultLink)
         if "seriescoco" in resultLink:
-            logging.error(
-        "Oops, you seem like a robot to them... We couldn't download this:")
+            logging.error("""Oops, you seem like a robot to them...
+                             We couldn't download this:""")
             logging.error(resultLink)
             suspect = openWebsite(resultLink)
             if amIARobot(suspect):
@@ -404,11 +397,13 @@ def linkToVideoInProv(link):
             FinalLink = resultLink
     except urllib2.HTTPError as err:
         if err.code == '404':
-            logging.error("This guys are smart. They send a 404 but its a fake")
+            logging.error("""This guys are smart.
+                          They send a 404 but its a fake""")
             logging.error(w.geturl())
             FinalLink = resultLink
         else:
-            logging.error("Could not get link to video in provider. HTTPError")
+            logging.error("""Could not get link to video
+                          in provider. HTTPError""")
             logging.error(repr(w))
             logging.error(repr(w.geturl()))
     except Exception as err:
@@ -445,4 +440,3 @@ def linkToVideoAndProvFromInterLink(interWeb):
     except:
         logging.debug("Problem trying to get linkToVideoInProvFromInterLink")
         raise
-

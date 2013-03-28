@@ -1,0 +1,25 @@
+
+//body{color:red;}
+
+//titulo del episodio
+.ep-title{
+}
+
+//Fechas del post
+.meta{
+	display: none;
+}
+
+//contenido
+.entry-content{
+	font-size:8pt;
+	color: blue;
+}
+
+//Imagen - thumbnail
+img.thumbi{
+	width: 20px;
+}
+img{
+	width: 90px;
+}

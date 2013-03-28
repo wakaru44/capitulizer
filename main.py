@@ -11,7 +11,9 @@ import webapp2
 import handlers.frontend_capitulizer as frontend_capitulizer
 # import task_newEpisode
 # import task_newVideo
-import reloadImages
+import handlers.reloadImages as reloadImages
+import handlers.admin_frontend as admin
+import handlers.cams_frontend as cams_frontend
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -34,4 +36,6 @@ app = webapp2.WSGIApplication([
     ('/capitulizer', frontend_capitulizer.CapHandler),
     ('/blogger', frontend_capitulizer.BloggerHandler),
     ('/reloading', reloadImages.reloaderHandler),
+    ('/cams', cams_frontend.CamsHandler),
+    ('/adm', admin.AdminHandler),
     ('/', MainHandler)], debug=True)

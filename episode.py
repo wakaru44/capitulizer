@@ -3,9 +3,8 @@
 # Definition of the episode object
 
 import logging
-import datetime
 import json
-
+#import datetime
 from google.appengine.ext import db
 
 
@@ -29,9 +28,8 @@ class episode(db.Model):
 
     ## Future interesting data
     submitter = db.EmailProperty  # save the submitter email for future alerts
-    objeto = db.ReferenceProperty # here we can save the links to the videos?
+    objeto = db.ReferenceProperty  # here we can save the links to the videos?
     detailsDict = {}
-
 
     def addVideo(self, link, provider="Video Online"):
         """add a link to a video to the list"""
