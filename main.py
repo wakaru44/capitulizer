@@ -14,6 +14,10 @@ import handlers.frontend_capitulizer as frontend_capitulizer
 import handlers.reloadImages as reloadImages
 import handlers.admin_frontend as admin
 import handlers.cams_frontend as cams_frontend
+# Third party libraries path must be fixed before importing webapp2
+import os, sys
+nupat =  os.path.join(os.path.dirname(__file__), '../external')
+sys.path.insert(0, nupat)
 
 
 class MainHandler(webapp2.RequestHandler):

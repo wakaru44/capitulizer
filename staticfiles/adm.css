@@ -1,22 +1,25 @@
-
-//body{color:red;}
-
-//titulo del episodio
+/* body{color:red;} */
+/* /titulo del episodio */
 .ep-title{
 }
 
-//Fechas del post
+/* //Fechas del post */
 .meta{
 	display: none;
 }
 
-//contenido
+/* //contenido */
 .entry-content{
 	font-size:8pt;
 	color: blue;
 }
 
-//Imagen - thumbnail
+/* // Errores */
+.error{
+	color: red;
+}
+
+/* //Imagen - thumbnail */
 img.thumbi{
 	width: 20px;
 }
@@ -24,12 +27,12 @@ img{
 	width: 90px;
 }
 
-//tabla
+/* //tabla */
 #queriedEpisodes{
 	font-size: small;
 	width: 900px;
 }
 
-//Controls in the downpart
+/* //Controls in the downpart */
 #controls{
 }

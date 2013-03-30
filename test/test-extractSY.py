@@ -409,6 +409,23 @@ def test_matching_extractors_are_executed():
     assert_equal(result, expect)
 
 
+class test_extraction_of_details_by_component
+    
+    def test_extraction_of_title(self):
+        pass
 
+    def test_extraction_of_season(self):
+        pass
 
+    def test_extraction_of_tvshow(self):
+        pass
+
+    def test_extraction_of_details(self):
+        pass
+
+    def test_extraction_of_videoList(self):
+        pass
+
+    def test_extraction_of_(self):
+        pass
 

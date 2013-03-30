@@ -1,127 +1,52 @@
-<!DOCTYPE html>
-<html class="js video maskImage placeholder wf-adelle-i4-active wf-adelle-i7-active wf-adelle-n7-active wf-adelle-i6-active wf-museosans-i3-active wf-museosans-n3-active wf-museosans-n9-active wf-museosans-i9-active wf-active" lang="en">
-<!--<![endif]-->
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<title>Capitulizer ULTRA_ALPHA</title>
-<link href="./staticfiles/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-<script src="./staticfiles/modernizr-2.0.js"></script>
-<script src="./staticfiles/ender.js"></script>
-<script src="./staticfiles/octopress.js" type="text/javascript"></script>
-<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="./staticfiles/css" rel="stylesheet" type="text/css">
-<link href="./staticfiles/css(1)" rel="stylesheet" type="text/css">
-<!-- my styles -->
 <link href="./staticfiles/adm.css" rel="stylesheet" type="text/css">
 </head>
-<body data-twttr-rendered="true">
-<header role="banner"><hgroup>
-<h1><a href="http://capitulizer.appspot.com/capitulizer">Capitulizer</a></h1>
-<h2>A tool to procrastinate even more</h2>
-</hgroup>
-</header>
-<nav role="navigation">
-<form action="/adm" method="get">
-	<fieldset role="search">
-		<input class="search" type="text" name="q" results="0" placeholder="{{ myQuery }}">
-	</fieldset>
-	<fieldset class="mobile-nav">
-		<select>
-			<option value="">Navigate…</option>
-			<option value="http://capitulizer.appspot.com/capitulizer/">» Blog</option>
-			<option value="http://capitulizer.appspot.com/about">» Acerca de</option>
-		</select>
-	</fieldset>
-</form>
-<ul class="main-navigation">
-	<li><a href="http://capitulizer.appspot.com/capitulizer">Blog</a></li>
-	<li><a href="http://capitulizer.appspot.com/about">Acerca de</a></li>
-</ul>
-</nav>
-<div id="main">
-	<div id="content">
-		<div class="blog-index">
-			<article>
-				<header> <p> Capitulizer Admin frontend.  </p> </header>
-				<div class="entry-content"> </div>
-			</article>
-			<form action="/adm" method=post>
-			<table border="1" id="queriedEpisodes">
-				<tr>
-					<th>Select</th>
-					<th>Picture</th>
-					<th>Title</th>
-					<th>Link</th>
-					<th>DetailsDict</th>
-					<th>Details</th>
-					<th>Description</th>
-					<th>Dates</th>
-					<th>Videos</th>
-				</tr>
-				{% for episode in episodeObjs %}
-				<tr>
-					<td> <input type="checkbox" name="{{ episode.key }}" /> </td>
-					<td><img src='{{ episode.picture }}' border='0' alt='the episode&apos;s   picture'/></td>
-					<td>{{ episode.title }} </td>
-					<td>{{ episode.link }}</td>
-					<td>{{ episode.detailsDict }}</td>
-					<td>
-						{{ episode.detailsDict["fullTitle"] }}
-						{{ episode.detailsDict['season'] }}
-						{{ episode.detailsDict['episodeNumber'] }}
-					</td>
-					<td>{{ episode.description }}</td>
-					<td>Added: {{ episode.addedDate }} ; Updated: {{ episode.updatedDate }}</td>
-					<td>
-						<ul>
-						 {% for video in episode.videos %}
-						<li> {{ video }} {{video["provider"] }} </li>
-						 {% endfor %}
+<body>
+	<h1>admin cons</h1>
+	<form action="adm" method="post">
+	<table>
+		<tr>
+			<th>{{ megaform.episodes[0].picture.label }}</th>
+			<th>{{ megaform.episodes[0].title.label  }}</th>
+			<th>{{ megaform.episodes[0].link.label }}</th>
+			<th>{{ megaform.episodes[0].details.label  }}</th>
+			<th>DetailsDict</th>
+			<th>{{ megaform.episodes[0].description.label  }}</th>
+			<th>Dates</th>
+			<th>{{ megaform.episodes[0].videos.label  }}</th>
+			<th>{{ megaform.episodes[0].details.label  }}</th>
 
-					</td>
-				</tr>
-				{% endfor %}
-				<tr>
-					<th>Picture</th>
-					<th>Title</th>
-					<th>Link</th>
-					<th>DetailsDict</th>
-					<th>Details</th>
-					<th>Description</th>
-					<th>Dates</th>
-				</tr>
+		</tr>
 
+		{% for form in megaform.episodes %}
+		<tr>
+			<td>{{ form.picture.label }}</td>
+			<td>{{ form.title }}</td>
+			<td>{{ form.link}}</td>
+			<td>{{ form.details }}</td>
+			<td>{{ form.detailsDict }}{{ form.details.data }}</td>
+			<td>{{ form.description }}</td>
+			<td>Created: {{ form.addedDate }};<br />Updated: {{ form.updatedDate }}</td>
+			<td>{{ form.videos }}</td>
+		</tr>
+		{% endfor %}
 
-			</table>
-			<div id="controls">
-				<input type=submit name="aplicar" value="aplicar" />
-			</div>
-			</form>
-		</div>
-
-		<aside class="sidebar thirds">
-		<section class="first odd">
-		<h1>Side Section Links</h1>
-		<ul id="recent_posts">
-			<li class="post">
-			<a href="http://localhost:8080/capitulizer">capitulizer</a>
-			</li>
-		</ul>
-		</section>
-		<section class="even">
-		</section>
-		<section class="odd">
-		</section>
-		</aside>
-		<span class="toggle-sidebar"></span>
+	</table>
+	<div id="controls">
+		<input type="submit" name="actName" value="actVal" />
 	</div>
-</div>
-<footer role="contentinfo">
-<p>
-	 Copyright © 2012 - Juan Antonio Fernandez Morales - <span class="credit">Powered by <a href="http://octopress.org/">Octopress</a></span>
-</p>
-</footer>
-<span id="cb_message" class="cb_message" style="display: none; ">All praise to Hipno Sapo</span>
+	</form>
+	<div class="error">
+		{% if megaform.errors %}
+		<ul>
+			{% for field_name, field_errors in form.errors|dictsort if field_errors %}
+			{% for error in field_errors %}<li>{{ form[field_name].label }}: {{ error }}</li>
+			{% endfor %}
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div><!-- error -->
 </body>
 </html>
+
