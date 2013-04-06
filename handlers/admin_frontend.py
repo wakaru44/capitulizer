@@ -12,7 +12,11 @@ from google.appengine.ext import db
 import jinja2
 import logging
 # Third party libraries path must be fixed before importing webapp2
+#import os, sys
 import os, sys
+nupat =  os.path.join(os.path.dirname(__file__), '../external')
+sys.path.insert(0, nupat)
+print sys.path
 
 from  wtforms import validators, Form, fields
 from wtforms.ext.appengine.db import model_form

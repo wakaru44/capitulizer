@@ -89,6 +89,34 @@ class test_searcher_images(unittest.TestCase):
         print result
         
         assert expect == result
+
+
+
+class OtherFunctionsTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.taskHandler = taskNewEpisode.NewEpisodeHandler()
+
+    def deactivated_buildSearch_builds_a_nice_search(self):
+        details = { "fullTitle": "Capítulo 5",
+                    "tvshow": "True Blood"}
+        expect = "Capítulo 5+True Blood"
+        result = self.taskHandler.buildSearch(self.taskHandler, details)
+        self.assertEqual(expect, result)
+
+class OtherFunctionsTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.taskHandler = taskNewEpisode.NewEpisodeHandler()
+
+    def deactivated_buildSearch_builds_a_nice_search(self):
+        details = { "fullTitle": "Capítulo 5",
+                    "tvshow": "True Blood"}
+        expect = "Capítulo 5+True Blood"
+        result = self.taskHandler.buildSearch(self.taskHandler, details)
+        self.assertEqual(expect, result)
+
+
     
 
 if __name__ == "__main__":
