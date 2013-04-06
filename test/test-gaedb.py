@@ -26,8 +26,9 @@ class DbTestCase(unittest.TestCase):
         #self.mail_stub = self.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
         self.testbed.init_datastore_v3_stub()
         link="http://seriescoco.com/capitulo/mock"
+        link2="http://seriescoco.com/capitulo/mock"
         self.episode= episode.episode(link=link)
-        self.episode2= episode.episode(link=link)
+        self.episode2= episode.episode(link=link2)
         
 
     def tearDown(self):
@@ -44,6 +45,7 @@ class DbTestCase(unittest.TestCase):
         tools.assert_equal(1, len(self.episode.all().fetch(2)))
         
         #tools.assert_raises(self.episode2.save(), "Exception")
+        tools.assert_equal(1, len(self.episode.all().fetch(2)))
         self.assertRaises(Exception, self.episode2.save)
         pass
 

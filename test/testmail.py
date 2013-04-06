@@ -20,8 +20,7 @@ class MailTestCase(unittest.TestCase):
         self.testbed.init_taskqueue_stub()
         self.mail_stub = self.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
         self.task_stub = self.testbed.get_stub(testbed.TASKQUEUE_SERVICE_NAME)
-        #self.task_stub._ParseQueueYaml  ## Is it working?
-        self.task_stub._ParseQueueYaml()  # its like a method
+        self.task_stub._ParseQueueYaml  ## Is it working?
 
     def tearDown(self):
         self.testbed.deactivate()
@@ -58,10 +57,7 @@ class MailTestCase(unittest.TestCase):
         tarea = numail.NewEmailHandler()
         print "\nRequest de la tarea"
         print type(tarea.request)
-        #tarea.request["keyEpisode"] = "asdfb"  # dont use direct assignment
-        request = None
-        response = None
-        tarea.initialize(request, response)
+        tarea.request["keyEpisode"] = "asdfb"
         tarea.post()
         
         

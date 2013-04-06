@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Library to extract data from SY website.
+# Library to extract data from website.
 
 import logging
 import quopri
@@ -31,6 +31,7 @@ def openWebsite(link):
 
 
 def openLink(link):
+    # TEST
     """open a link and return the redirection. I do this in a separate
     function, besides the overkill, to get the sleep time apart, and
     maybe, join all the urllib request in the same function."""
@@ -64,6 +65,7 @@ def openLink(link):
 
 
 def buildLink(link):
+    # TEST
     """check that is a proper www.seriescoco.com link"""
     #logging.debug("building link: ")  # noisy
     #logging.debug(repr(link))  # noisy
@@ -85,6 +87,7 @@ def buildLink(link):
 
 
 def plainString(s):
+    # TOTEST
     """gets a beautifulSoup Element down to its string
         If thats just easy, do it in unicode madafaca"""
     # as excuse for the comentary, i would say that
@@ -114,6 +117,7 @@ def plainString(s):
 
 
 def amIARobot(web):
+    # TEST
     """checks that the web content is not a captcha website."""
     # TODO: this should be a little bit smartter
     # for example, it should check if the text is in some place
@@ -122,6 +126,8 @@ def amIARobot(web):
 
 
 def linksToEpisodesSY(msg):
+    """extract the links to episodes in a seriesyonkis email"""
+    # TESTED
     if msg is None:
         raise TypeError
 
@@ -133,6 +139,9 @@ def linksToEpisodesSY(msg):
     #syMsg = msg
     # TODO: aclarar si esto es asi, o no. mientras tanto, esta funcion
     # falla con errores de encoding, asi que no me vale.
+    # con nosetes funciona, con normal falla  -> con encode
+    # syMsg = quopri.decodestring(msg.encode("UTF-8"))
+    # con nosetest falla, con normal funcion -> sin encode
     syMsg = quopri.decodestring(msg)
     soup = bs4.BeautifulSoup(syMsg)
 
@@ -154,20 +163,8 @@ extractors = {
 }
 
 
-class LinkExtractionError(Exception):
-    """General exception for this module"""
-    pass
-
-
-class NoExtractorFoundError(LinkExtractionError):
-    pass
-
-
-class NoEpisodesFoundError(LinkExtractionError):
-    pass
-
-
 def linksToEpisodes(msg, extractors=extractors):
+    # TESTED
     """extract the episode links from the mail"""
     applicable_extractors = [extractor for (s, extractor) in extractors.iteritems() if s in msg]
 
@@ -188,16 +185,13 @@ def linksToEpisodes(msg, extractors=extractors):
 
 
 def interLinks(web):
+    #TODO: refactor this to return a good link # 2013 03 29
+    # TESTED
     """get the html of an episode page.
     It returns a list with the links to the intermediate pages.
     The origin must be a seriesyonkis o seriescoco page."""
     logging.debug("--- Extracting the interLinks---")
 
-    ## TODO working on it.
-    # Note: we are keeping the retrieval of the document out of this function
-    # to ease the testing. Will it be the right choice?
-    # yes, indeed. it seems the rigth choice by now ;)
-    # QUESTION
     linkList = []
     sopa = bs4.BeautifulSoup(web)
     i = 0
@@ -218,11 +212,18 @@ def interLinks(web):
     if len(linkList) < 1:
         logging.error("No interlinks Found on the website given")
         logging.debug(sopa.find_all("a"))
+        raise LinkExtractionError
 
     return list(set(linkList)) if (len(linkList) > 0) else None
 
 
 def episodeDataFromEpisodeWeb(web):
+    """TODO: this should be a general function and select the proper
+    extractor"""
+    return episodeDataFromEpisodeWebSY(web)
+
+def episodeDataFromEpisodeWebSY(web):
+    # TEST
     """receives a seriescoco webcontent
     returns a dictionary with the details of the episode"""
 
@@ -317,7 +318,9 @@ def episodeDataFromEpisodeWeb(web):
 
 
 def linkToVideoSY(web):
-    # TODO: change this to linkToVideoSYFromInterWeb
+    # This will be part of linkToVideoSYFromInterLink
+    # TODO2: ES_ ademas, esto deberia saltar excepciones, no devolver cadenas
+    # vacias...
     """Takes an intermediate web (in seriesyonkis websites, you
     have to visit an intermediate website with a link to the video).
     returns the link to the video in the SY shortener.
@@ -329,19 +332,29 @@ def linkToVideoSY(web):
             if "action_link" in link['class']:
                 videoLink = link.a['href']
                 #videoProv = link['data-server']
+                if videoLink == "":
+                    #- if no link found, raise exception
+                    logging.debug("No link Found")
+                    logging.debug(repr(link))
+                    raise LinkExtractionError
                 return videoLink.decode()
         except KeyError as e:
             # logging.debug "err"
             logging.error("Error extracting the link to videoSY")
             logging.error(e)
+        except LinkExtractionError:
+            logging.error("No link Found.")
 
 
-def providerFromInterWeb(web):
+def providerFromInterWebSY(web):
+    # TOTEST
     """Takes an intermediate web (in seriesyonkis websites, you
     have to visit an intermediate website with a link to the video).
-    returns the the provider.
+    returns the video provider.
     """
     # TODO: should this be merged into linkToVideoSY? would avoid 1 parsing.
+    # raise a custom exception instead of saying nothing
+
     # QUESTION
     sopa = bs4.BeautifulSoup(web)
     logging.debug("providerFromInterWeb type")
@@ -349,16 +362,17 @@ def providerFromInterWeb(web):
 
     for link in sopa.find_all("tr"):
         try:
+            videoProv = False
             if "action_link" in link['class']:
                 # videoLink = link.a['href']
                 videoProv = link['data-server']
                 return videoProv.decode()
         except KeyError as e:
             # logging.debug "err"
-            logging.error("Error extracting the link to videoSY")
+            logging.error("Error extracting the provider of videoSY")
             logging.error(e)
         except TypeError as e:
-            logging.error("Error extracting the link to VideoSY")
+            logging.error("Error extracting the provider of VideoSY")
             logging.error(e)
         finally:
             if videoProv:
@@ -370,9 +384,12 @@ def providerFromInterWeb(web):
                 return ""
 
 
-def linkToVideoInProv(link):
-    """Takes a link and
+
+def linkToVideoInProvFromShortedLink(link):
+    # TOTEST
+    """Takes a link in the shortener and
         returns the link to the video in the hoster or provider"""
+    FinalLink = ""
     try:
         originLink = buildLink(link)
         logging.debug("LinkToVideoInProv")
@@ -409,34 +426,57 @@ def linkToVideoInProv(link):
     except Exception as err:
         logging.error("Could not get a link to video in provider. OTHER Error")
         logging.error(repr(err))
-        FinalLink = ""
     finally:
         return FinalLink
 
 
 def linkToVideoInProvFromEpisodeLink(link):
+    # TOTEST
     """Takes a link to an episode in SY,
         returns a list with links to videos"""
+        # TODO: This is a meta-like function. write it?
     pass
 
 
-def linkToVideoAndProvFromInterLink(interWeb):
+def linkToVideoAndProvFromInterLink(interLink):
+    # TOTEST
     """Takes a interlink and
-        if no link found, returns empty string
+        if no link found, returns empty string.Else
         returns the list of videos in the provider"""
     logging.debug("getting the link to video and the provider of it")
-    logging.debug(type(interWeb))
+    logging.debug(type(interLink))
     try:
-        SYLink = linkToVideoSY(interWeb)
-        if SYLink != "":
-            provLink = linkToVideoInProv(SYLink)
-        else:
-            logging.error("Ups, there was no return from linkToVideoSY")
-            provLink = ""
-        provName = providerFromInterWeb(interWeb)
+        #- extract the link to video, and test it
+        SYLink = linkToVideoSY(interLink)
+        provLink = linkToVideoInProvFromShortedLink(SYLink)
+        logging.debug("Link in provider")
+        logging.debug(provLink)
+        provName = providerFromInterWebSY(interLink)
         logging.debug("Provider Name: ")
         logging.debug(provName)
         return (provLink, provName)
     except:
         logging.debug("Problem trying to get linkToVideoInProvFromInterLink")
         raise
+
+
+#######################################
+#              Exceptions             #
+#######################################
+class DataExtractionError(Exception):
+    """Another General Exception for this module"""
+    pass
+
+
+class LinkExtractionError(Exception):
+    """General exception for this module"""
+    pass
+
+
+class NoExtractorFoundError(LinkExtractionError):
+    pass
+
+
+class NoEpisodesFoundError(LinkExtractionError):
+    pass
+

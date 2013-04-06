@@ -6,7 +6,7 @@ import unittest
 #from google.appengine.ext import testbed
 #from google.appengine.api import taskqueue
 #
-import tasks.newEpisode as taskNewEpisode
+import tasks.newnewEpisode as taskNewEpisode
 #
 #
 ##class MailTestCase(unittest.TestCase):

@@ -1,0 +1,124 @@
+                                                                                                                                                                                                                                                               
+Delivered-To: wakaru44@gmail.com
+Received: by 10.49.35.72 with SMTP id f8csp26719qej;
+        Sun, 24 Mar 2013 17:03:00 -0700 (PDT)
+X-Received: by 10.194.119.68 with SMTP id ks4mr14556813wjb.3.1364169779342;
+        Sun, 24 Mar 2013 17:02:59 -0700 (PDT)
+Return-Path: <root@seriesyonkis.com>
+Received: from aries.burnmediasl.com (99-111.furanet.com. [91.192.111.99])
+        by mx.google.com with ESMTPS id j2si4305998wje.39.2013.03.24.17.02.58
+        (version=TLSv1 cipher=RC4-SHA bits=128/128);
+        Sun, 24 Mar 2013 17:02:59 -0700 (PDT)
+Received-SPF: pass (google.com: domain of root@seriesyonkis.com designates 91.192.111.99 as permitted sender) client-ip=91.192.111.99;
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of root@seriesyonkis.com designates 91.192.111.99 as permitted sender) smtp.mail=root@seriesyonkis.com
+Received: from root by aries.burnmediasl.com with local (Exim 4.72)
+	(envelope-from <root@seriesyonkis.com>)
+	id 1UJusM-0005YZ-LU
+	for wakaru44@gmail.com; Mon, 25 Mar 2013 01:02:58 +0100
+Date: Mon, 25 Mar 2013 01:02:58 +0100
+Message-Id: <E1UJusM-0005YZ-LU@aries.burnmediasl.com>
+To: wakaru44@gmail.com
+Subject: SeriesYonkis: nuevos capítulos
+X-PHP-Originating-Script: 1000:send_notifications.php
+MIME-Version: 1.0
+Content-type: text/html; charset=UTF-8
+From: SeriesYonkis <noreply@seriesyonkis.com>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>{{title}}</title>
+			<style type="text/css">
+			/* Client-specific Styles */
+			#outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
+			body{width:100% !important;} .ReadMsgBody{width:100%;} .ExternalClass{width:100%;} /* Force Hotmail to display emails at full width */
+			body{-webkit-text-size-adjust:none;} /* Prevent Webkit platforms from changing default text sizes. */
+			/* Reset Styles */
+			body{margin:0; padding:0;}
+			img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
+			table td{border-collapse:collapse;}
+			#backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
+			body, #backgroundTable{background-color:#f7f7f7;}
+			#templateContainer{border: 1px solid #ccc;}
+			h1, .h1{color:#474747;display:block;font-family:Arial;font-size:34px;font-weight:bold;line-height:100%;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;text-align:left;}
+			h2, .h2{color:#474747;display:block;font-family:Arial;font-size:30px;font-weight:bold;line-height:100%;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;text-align:left;}
+			h3, .h3{color:#474747;display:block;font-family:Arial;font-size:20px;font-weight:bold;line-height:100%;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;text-align:left;}
+			#templateContainer .bodyContent div h3 a, #templateContainer .bodyContent div .h3 > a{color: #474747;font-weight: bold;text-decoration: none;}
+			h4, .h4{color:#474747;display:block;font-family:Arial;font-size:22px;font-weight:bold;line-height:100%;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;text-align:left;}
+			.gris{background: #e9e9e9;}
+			#templateHeader{background-color:#FFFFFF;border-bottom:0;}
+			.headerLogo, .headerContent, .bottomLogo{color:#333;font-family:Arial;font-size:34px;font-weight:bold;line-height:100%;padding:0;text-align:center;vertical-align:middle;width: 600px;height: 43px;}
+			.bottomLogo{height: 88px;}
+			.headerContent{width: 400px;padding-left: 20px;}
+			.headerContent a:link, .headerContent a:visited, .headerContent a .yshortcuts {color:#EA7E14;font-weight:normal;text-decoration:underline;}
+			#headerImage{height:auto;max-width:600px !important;}
+			#templateContainer, .bodyContent{background-color:#FFFFFF;}
+			.bodyContent div{color:#333;font-family:Arial;font-size:14px;line-height:150%;text-align:left;}
+			.bodyContent div a, .bodyContent div a:link, .bodyContent div a:visited, /* Yahoo! Mail Override */ .bodyContent div a .yshortcuts /* Yahoo! Mail Override */{color:#EA7E14;font-weight:normal;text-decoration:underline;}
+			.bodyContent img{display:inline;height:auto;padding: 2px;border: solid 1px #999;box-shadow: 1px 1px 1px #666;}
+			.bodyContent .aviso{font-style: italic;color: #666;font-size: 12px;line-height: 14px;}
+		</style>
+	</head>
+    <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+    	<center>
+        	<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
+            	<tr>
+                	<td align="center" valign="top">
+                    	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
+                        	<tr>
+                            	<td align="center" valign="top">
+                                	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
+                                        <tr>
+                                            <td class="headerLogo">
+                                            	<img src="http://www.seriesyonkis.com/img/cabecera_mail.png" style="max-width:600px;" id="headerImage campaign-icon" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        	<tr>
+                            	<td align="center" valign="top">
+                                	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody">
+                                    	<tr>
+                                            <td valign="top" class="bodyContent">
+                                                <table border="0" cellpadding="20" cellspacing="0" width="100%">
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <div>
+                                                            	<h1 style="color:#474747;display:block;font-family:Arial;font-size:34px;font-weight:bold;line-height:100%;margin-bottom:10px;">Lista de nuevos capítulos</h1>
+                                                               	<p>Hola <strong>wakaru</strong>, estos son los nuevos capítulos disponibles en SeriesYonkis</p>
+																<table border="0" cellpadding="20" cellspacing="0" width="100%">
+    		<tr>
+				<td width="40">
+					<a href="http://www.seriesyonkis.com/capitulo/once-upon-a-time/capitulo-18/236053">
+						<img width="35" height="50" src="http://s.staticyonkis.com/img/series/90x130/once-upon-a-time.jpg" style="padding: 2px;border: solid 1px #999;box-shadow: 1px 1px 1px #666;">
+					</a>
+				</td>
+				<td>
+					<h3 style="color:#474747;display:block;font-family:Arial;font-size:20px;font-weight:bold;margin-bottom:10px;"><a title="Érase una vez (2011)" href="http://www.seriesyonkis.com/serie/once-upon-a-time" style="color: #474747;font-weight: bold;text-decoration: none;">Érase una vez (2011)</a></h3>
+					Nuevo Capítulo:
+					<a href="http://www.seriesyonkis.com/capitulo/once-upon-a-time/capitulo-18/236053" style="color:#EA7E14;"><strong>2x18</strong>: Capítulo 18</a>
+				</td>
+			</tr>
+		</table>
+																<p><a href="http://www.seriesyonkis.com/usuario/notificaciones/wakaru" style="color:#EA7E14;">Ver todas las notificaciones</a></p>
+																<p class="aviso" style="font-style: italic;color: #666;font-size: 12px;line-height: 14px;">Estás recibiendo este correo porque tienes activado el sistemas de notificaciones de nuevos episodios o temporadas de las series que sigues en tu perfil en Seriesyonkis. Si quieres dejar de recibir este tipo de mensajes en tu correo electrónico puedes desactivar esta opción en tu perfil de usuario en Seriesyonkis.</p>
+															</div>
+														</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>          	
+                        </table>
+                        <br />
+                    </td>
+                </tr>
+            </table>
+        </center>
+    </body>
+</html>

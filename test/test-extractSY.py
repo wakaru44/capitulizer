@@ -4,6 +4,7 @@
 import pickle
 import extract
 
+import unittest
 from nose.tools import raises, assert_equal
 
 #
@@ -12,13 +13,13 @@ from nose.tools import raises, assert_equal
 ## Helper Function. NOT A TEST
 
 
-#def loadFixt(filename):
-#    """Loads a fixture from a file, usually an HTML document and returns its
-#    content."""
-#    path = "./test/fixtures/" + filename
-#    fh = open(path, "r")
-#    c = fh.read()
-#    return c.decode('utf-8')
+def loadFixt(filename):
+    """Loads a fixture from a file, usually an HTML document and returns its
+    content."""
+    path = "./test/fixtures/" + filename
+    fh = open(path, "r")
+    c = fh.read()
+    return c.decode('utf-8')
 #
 #
 #def loadData(file):
@@ -409,23 +410,115 @@ def test_matching_extractors_are_executed():
     assert_equal(result, expect)
 
 
-class test_extraction_of_details_by_component
+class BaseTest(unittest.TestCase):
+    """base class to test extractions"""
+
+    mappings = {
+        "episodeWeb": "episodeDataFromEpisodeWeb-GoodUnicode-input.html",
+        "interWeb": "extractSYlinkToVideoSY-good-input.html",
+        "captcha": "extractSY-captchaWeb.html",
+        "lostEpisode": "extractSY-badLost.html",
+        "email": "email-example.txt"
+    }
+    
+    def load_html(self, type="episodeWeb"):
+        """load an html in a bs4 element"""
+        web = self.mappings[type]
+        return loadFixt(web)
+
+    def setUp(self):
+        self.fixt = self.load_html()
+
+class test_extraction_of_episodeData_from_episodeWeb(BaseTest):
     
     def test_extraction_of_title(self):
-        pass
-
-    def test_extraction_of_season(self):
-        pass
-
-    def test_extraction_of_tvshow(self):
-        pass
-
-    def test_extraction_of_details(self):
-        pass
-
-    def test_extraction_of_videoList(self):
+        """TODO"""
         pass
 
     def test_extraction_of_(self):
+        """TODO: write test for each field"""
         pass
+
+    #- desde pagina de episodio
+    @raises(extract.LinkExtractionError)
+    def test_interLinks_raise_with_bad_html(self):
+        """raises exception if no links found"""
+        extract.interLinks("<html><head></head><body></body></html>")
+
+    def test_interLinks_with_good_episode_web(self):
+        """Returns a list of links"""
+        expect0 = 74  # number of links expected
+        expect1 = '/s/ngo/4/2/1/5/222'  #example of link
+
+        result = extract.interLinks(self.fixt)
+        print result
+        self.assertEqual(len(result), expect0)  # number of results
+        self.assertEqual(result[0], expect1)  # results are good
+
+
+class test_extraction_from_interweb(BaseTest):
+
+    def setUp(self):
+        self.fixt = self.load_html("interWeb")
+
+    # desde pagina intermedia
+    def test_linkToVideoSY(self):
+        """ES_ comprueba que al pasarle un html de web intermedia, extrae el
+        link al video en el shortener de SY"""
+        expect = "http://www.seriescoco.com/s/y/4091459/0/s/136"  # a link to the video in shortener
+        result = extract.linkToVideoSY(self.fixt)
+        self.assertEqual(expect, result)
+
+    def test_providerFromInterWeb_returns_provider(self):
+        pass  #TODO
+
+
+
+class test_extraction_from_SY_email(BaseTest):
+
+    def setUp(self):
+        self.fixt=self.load_html("email")
+
+    # desde el email
+    def test_linksToEpisodes(self):
+        # Already tested in test_sy_url_extraction.py
+        pass
+
+    # desde el email
+    def test_linksToEpisodesSY(self):
+        """ES_ comprueba que al pasarle un email extrae los enlaces al episodio
+        que hay en el email"""
+        expect = [u"http://www.seriesyonkis.com/capitulo/once-upon-a-time/capitulo-18/236053"]
+        result = extract.linksToEpisodesSY(self.fixt.encode("UTF-8"))
+        self.assertEqual(expect, result)
+
+
+class test_extraction_from_links(BaseTest):
+    # desde link de episodio
+    def test_linkToVideoInProvFromEpisodeLink(self):
+        """ES_ comprueba que la extraccion directamente desde enlace del
+        episodio da una lista de videos"""
+        #- TODO: ES_ comprobar si esta funcion se esta realmente usando.... 
+
+
+    # desde enlace a interweb
+    def test_linkToVideoAndProvFromInterLink(self):
+    # esta func. llama a las que reciben la web.
+        """ES_ pruebas de que la extraccion conjunta funciona igual de bien que
+        la separada"""
+        expectVid = "http://www.seriescoco.com/s/y/4091459/0/s/136"  # a link to the video in shortener
+        expectProv = "moevideos"
+        # Deactivated. requires conection
+        #    resultVid, resultProv = extract.linkToVideoAndProvFromInterLink(self.fixt)
+        #    print resultVid, "--", resultProv
+        #    self.assertEqual(expectVid, resultVid)
+        #    self.assertEqual(expectProv, resultProv)
+
+
+    # desde enlace shortener
+    def test_linkToVideoInProv(self):
+        """ES_ prueba que la extraccion del video en el proveedor desde un
+        enlace al shortener es correcta"""
+        pass
+
 

@@ -8,6 +8,7 @@ import logging
 import unittest
 from google.appengine.ext import db
 from google.appengine.ext import testbed
+from nose.tools import assert_raises
 
 #
 #
@@ -58,7 +59,7 @@ class test_episode_setter_methods():
 
     def test_An_empty_dic_does_not_break_anything(self):
         self.episode.addDetails({})
-        assertEqual({}, self.episode.getDetails())
+        self.assertEqual({}, self.episode.getDetails())
 
 
 
@@ -82,6 +83,7 @@ class Test_episode_saving_in_datastore(unittest.TestCase):
         assertEqual(1, len(episode.episode.all().fetch(2)))
 
     def test_an_empty_episode_does_not_break_anything(self):
+        assert_raises(episode.episode(link=""), BadValueError)
         epi2 = episode.episode(link="")
         epi2.addDetails({})
         epi2.put()
