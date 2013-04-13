@@ -64,6 +64,7 @@ class episode(db.Model):
         """Add the details of the episode to the property.
         It has to convert the dictionary to json string"""
         self.details = json.dumps(details)
+        self.detailsDict = details
 
 
     def getDetails(self):

@@ -73,6 +73,7 @@ class MailTestCase(unittest.TestCase):
         # I'm starting to think that this test is absurd.
         # By now, dont try to test such a complex thing like a task. 
         # divide and conquer.....
+        pass
 
     def test_compose_email_good(self):
         """prueba el compositor de emails con una lista buena de varios prov.""" 

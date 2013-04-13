@@ -77,8 +77,8 @@ class NewEpisodeHandler(webapp2.RequestHandler):
     def populate_episode_object(self, episode_object = None,  details = {},
                                 picture = None, submitter = None):
         try:
-            episode_object.addTitle(details["fullTitle"])
-            episode_object.addDesc(details["description"])
+            episode_object.addTitle(details['fullTitle'])
+            episode_object.addDesc(details['description'])
             episode_object.addDetails(details)
             if picture != None:
                 episode_object.addPicture(picture)

@@ -60,6 +60,9 @@ class test_populate_episode_object(BaseTestCase):
         self.details_empty = {}
         self.picture_empty = ""
         # filled values
+        # QUESTION: ES_ no se porque, pero declare como declare este
+        # diccionario, cuando es convertido a traves del metodo populate episode
+        # object, cambia las comillas a comillas simples, y me jode la asercion.
         self.details_filled = {"fullTitle": "capitulo 3",
                    "description": "no recuerdo como era la descripcion"}
         self.picture_filled = "http://blogspot.com/imagen.png"
@@ -80,11 +83,20 @@ class test_populate_episode_object(BaseTestCase):
                       self.details_filled, self.picture_empty)
 
     def test_filles_it_normally(self):
+        # TODO: broken test. 
+        # the method changes the quotation marks for single quotes, invalidating
+        # the test... aisss
         epObj1 = self.tne.populate_episode_object(
+                                        self.epObj,
                                         self.details_filled,
                                         self.picture_filled)
-        eq_(eObj1.details, self.details_filled)
-        eq_(eObj1.picture, self.picture_filled)
+        #- test the internal dictionary
+        eq_(repr(epObj1.detailsDict), repr(self.details_filled))
+        #- check the json string that will be saved
+        import json
+        eq_(repr(epObj1.details), repr(json.dumps(self.details_filled)))
+        #- check the picture
+        eq_(epObj1.picture, self.picture_filled)
 
 
 ###

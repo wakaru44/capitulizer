@@ -46,12 +46,12 @@ class DbTestCase(unittest.TestCase):
         #tools.assert_raises(self.episode2.save(), "Exception")
         tools.assert_equal(1, len(self.episode.all().fetch(2)))
         self.assertRaises(Exception, self.episode2.save)
-        pass
 
     def test_db_saves_incomplete_object(self):
         pass
 
     def test_db_needs_required_fields(self):
+        """already raises when link is not passed on construction"""
         pass
 
     def test_db_loads_incomplete_object(self):

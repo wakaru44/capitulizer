@@ -38,7 +38,6 @@ class test_episode_setter_methods():
 
     def test_A_dictionary_of_details_is_correctly_added_to_the_episode(self):
         """The details dict is saved"""
-        #TODO: This is all wrong, Its just a note to write the real test
         dictionary = {"season": 5,
                       "tvshow": "Chicho Terremoto",
                       "fullTitle": "mi chica es preciosa" }
@@ -46,14 +45,13 @@ class test_episode_setter_methods():
         self.episode.addDetails(dictionary)
         expect = dictionary
         result = self.episode.getDetails()
-        # TODO check that is saved
         print "expect: ", expect
         print "result", result
         assert expect == result
 
     def test_An_empty_dic_does_not_break_anything(self):
         self.episode.addDetails({})
-        self.assertEqual({}, self.episode.getDetails())
+        eq_({}, self.episode.getDetails())
 
 ##############################
 #   Test related to datastore, no placed in
