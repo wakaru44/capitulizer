@@ -32,7 +32,7 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             logging.debug(episodeLink)
             return (episodeLink, submitter)
         except:
-            raise # TODO
+            raise # TODO if no link given should we fail permanently?
 
 
     def create_object(self, link = "", submitter = "" ):
@@ -89,13 +89,12 @@ class NewEpisodeHandler(webapp2.RequestHandler):
         except:
             raise  # TODO
 
-
     def putEpisode(self, epObj):
         """ put the episode instance in the bd and return the key.
             Ensure that we are not writing it twice, etc..."""
         # We use a function to store the object in a single transaction
         # first put the episode
-        logging.debug("saving - newEpisodeHandle:48")
+        logging.debug("saving")
         try:
             epObj.put()
         except Exception as e:
@@ -104,23 +103,13 @@ class NewEpisodeHandler(webapp2.RequestHandler):
             logging.error(e.args)
             # - using taskqueue errors
             raise taskqueue.TaskAlreadyExistsError
-
-        # then get the key
+        # then get the key and give it away
         keyEpisode = epObj.key()
-        # and give it away
         return keyEpisode
-        # QUESTION how can i catch Timeout?
-        #except  (Timeout, TransactionFailedError, InternalError) as err:
-        #    # TO-DO catch errors puttin in bd
-        #    logging.error("Error Putting episode in the bd")
-        #    logging.error(err)
-        #    raise Exception(err)
-        #NOTE: add the serialized details dictionary to episode
-        # attributes
-
-
+        
     def is_dupe(self, episode_link):
         # - check for duplicates must be done outside transaction.
+        # TODO: this should be in the episode object's method
         episodes = episode.episode.all()
         logging.debug("Episodes ")
         logging.debug(episodes)

@@ -85,3 +85,16 @@ class episode(db.Model):
         It would be nice to serialize and deserialize automagicly"""
         if self.details is not None:
             self.detailsDict = self.getDetails()
+
+
+    # DONE: this should be in the episode object's method test
+    def all_the_same_by_link(self):
+        """find all the duplicates of this episode"""
+        others = []
+        for ep in self.all():
+            if self.link == ep.link:
+                others.append(ep)
+        return others
+
+
+

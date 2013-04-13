@@ -10,7 +10,7 @@ from google.appengine.api import mail
 
 class NewEmailHandler(webapp2.RequestHandler):
 
-    def retrieve_episode_object(self, key):
+    def retrieve_episode_object(self, key = None):
         pass # TODO
 
     def episode_has_videos(self, keyEpisode = None):
@@ -46,7 +46,6 @@ class NewEmailHandler(webapp2.RequestHandler):
         """In this task, we should watch an episode entity
             and maybe check the task queue for the new completed
             episode. and then send an email to the submitter"""
-
         keyEpisode = self.request.get('keyEpisode')
         # get the episode from the database
         episode_object = self.retrieve_episode(keyEpisode)

@@ -9,33 +9,7 @@ from google.appengine.api import taskqueue
 
 import tasks.newEpisode as taskNewEpisode
 import episode
-#
-#
-##class MailTestCase(unittest.TestCase):
-##
-##    def setUp(self):
-##        self.testbed = testbed.Testbed()
-##        self.testbed.activate()
-##        self.testbed.init_mail_stub()
-##        self.task_stub = self.testbed.get_stub(testbed.TASKQUEUE_SERVICE_NAME)
-##        self.task_stub._ParseQueueYaml  ## Is it working?
-##
-##    def tearDown(self):
-##        self.testbed.deactivate()
-##
-##    def test_newPost_creates_a_task(self):
-##        pass
-##
-##
-##class OtherMethodsTestCase(unittest.TestCase):
-##
-##    def setUp(self):
-##        self.testbed = testbed.Testbed()
-##        self.testbed.activate()
-##        self.taskHandler = taskNewEpisode.NewEpisodeHandler()
-##
-##    def tearDown(self):
-##        self.testbed.deactivate()
+
 
 class BaseTestCase(unittest.TestCase):
     pass
@@ -116,36 +90,20 @@ class test_populate_episode_object(BaseTestCase):
 ###
 # putEpisode # epObj, db stub
 ###
-class test_put_episode(BaseTestCase):
-    def setUp(self):
-        self.epObj = episode.episode(link="http://seriesyonkis.com/")
 
-    def test_saves_an_episode(self):
-        pass
-        #datastore test, using db stubs 
-        #TODO: write datastore test
-
+##############################
+#   Test related to datastore, no placed in
+#   test-datastore.py
+##############################
 
 ###
-# is_dupe #db test #TODO: datastore tests
+# is_dupe #db test 
 ###
-class test_is_dupe(BaseTestCase):
-    def setUp(self):
-        self.tne = taskNewEpisode.NewEpisodeHandler()
-        self.link = ""
 
-    def test_returns_true_if_duplicated(self):
-        link = "http://link-the-prueba/"
-        #- save it once
-        epOb = episode.episode(link=link)
-        epOb.put()
-        #- check it  again
-        eq_(self.tne.is_dupe(link), True)
-
-    def test_returns_false_if_not_dupe(self):
-        #epOb = episode.episode(link="http://notdupe")
-        eq_(self.tne.is_dupe("http://undupe"), False)
-
+##############################
+#   Test related to datastore, no placed in
+#   test-datastore.py
+##############################
 
 ###
 # deserves_to_be_saved # epObj #FUTURE TESTS
@@ -157,10 +115,6 @@ class test_is_dupe(BaseTestCase):
 
 ###
 # create_videos_tasks  #taskqueue stubs
-###
-
-###
-# check_and_save #db test TODO
 ###
 
 ###

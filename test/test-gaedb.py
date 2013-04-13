@@ -5,7 +5,6 @@
 import unittest
 from nose import tools
 
-
 import sys
 sys.path.append("/usr/share/google_appengine")
 

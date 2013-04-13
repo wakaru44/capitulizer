@@ -8,14 +8,9 @@ import logging
 import unittest
 from google.appengine.ext import db
 from google.appengine.ext import testbed
-from nose.tools import assert_raises
+from nose.tools import *
 
-#
-#
-#
-## Helper Function. NOT A TEST
-
-
+@nottest
 def loadFixt(filename):
     """Loads a fixture from a file, usually an HTML document and returns its
     content."""
@@ -25,13 +20,12 @@ def loadFixt(filename):
     return c.decode('utf-8')
 
 
+@nottest
 def loadData(file):
     """load data from a file, using pickle"""
     fh = open("./test/fixtures/" + file, "rb")
     data = pickle.load(fh)
     return data
-
-### y aqui empezamos a probar
 
 
 class test_episode_setter_methods():
@@ -61,30 +55,7 @@ class test_episode_setter_methods():
         self.episode.addDetails({})
         self.assertEqual({}, self.episode.getDetails())
 
-
-
-
-class Test_episode_saving_in_datastore(unittest.TestCase):
-    def setUp(self):
-        # - create the intance of testbed
-        self.testbed = testbed.Testbed()
-        # - Activate it 
-        self.testbed.activate()
-        # - declare the stubs
-        self.testbed.init_datastore_v3_stub()
-
-
-    def tearDown(self):
-        self.testbed.deactivate()
-
-    def test_that_an_episode_is_saved_normally(self):
-        epi = episode.episode(link="http://typing.io")
-        epi.put()
-        assertEqual(1, len(episode.episode.all().fetch(2)))
-
-    def test_an_empty_episode_does_not_break_anything(self):
-        assert_raises(episode.episode(link=""), BadValueError)
-        epi2 = episode.episode(link="")
-        epi2.addDetails({})
-        epi2.put()
-        assertEqual(2, len(episode.episode.all().fetch(2)))
+##############################
+#   Test related to datastore, no placed in
+#   test-datastore.py
+##############################
