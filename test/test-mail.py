@@ -20,7 +20,8 @@ class MailTestCase(unittest.TestCase):
         self.testbed.init_taskqueue_stub()
         self.mail_stub = self.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
         self.task_stub = self.testbed.get_stub(testbed.TASKQUEUE_SERVICE_NAME)
-        self.task_stub._ParseQueueYaml  ## Is it working?
+        #self.task_stub._ParseQueueYaml  ## Is it working?
+        self.task_stub._ParseQueueYaml()  # its like a method
 
     def tearDown(self):
         self.testbed.deactivate()
@@ -32,7 +33,9 @@ class MailTestCase(unittest.TestCase):
                        sender='capitulizer@capitulizer.appspotmail.com',
                        body='automagicoespialidoso, True Blood, ',
                        html='<html></html>')
-        #TODO this is bullshit
+        #TODO this is bullshit.
+        # reviewing this, i think its something related to an attemp of testing
+        # the mail_stub.
 
 
 
@@ -43,28 +46,34 @@ class MailTestCase(unittest.TestCase):
         self.assertEqual(1, len(messages))
         self.assertEqual('trigger@ifttt.com', messages[0].to)
 
-    def test_taksqueue(self):
-        print dir(self.testbed)
-        #print "enabled stubs"
-        #print self.testbed._enabled_stubs
-        #print "service "
-        #print dir(self.task_stub)
-        print "colas"
-        print self.task_stub.GetQueues()
-        #print "numail"
-        #print dir(numail.NewEmailHandler)
-        tarea = numail.NewEmailHandler()
-        print "jandler"
-        print dir (repr(tarea.request))
-        #tarea.request["keyEpisode"] = "asdfb"
-        tarea.post()
-        print "colas de tareas"
-        print self.task_stub.GetQueues()
-        
-        
-        
-        # always fail to see the debug while i write this
-        self.assertEqual("1", "2")
+    def test_taskqueue(self):
+        #  print "\nTestBed:"
+        #  print dir(self.testbed)
+        #  #print "enabled stubs"
+        #  #print self.testbed._enabled_stubs
+        #  #print "service "
+        #  #print dir(self.task_stub)
+        #  print "\nEstadisticas de la cola"
+        #  print self.task_stub.GetQueues()
+        #  print "\nnumail Handler, alias tarea"
+        #  print dir(numail.NewEmailHandler)
+        #  tarea = numail.NewEmailHandler()
+        #  print "\nRequest de la tarea"
+        #  print type(tarea.request)
+        #  #tarea.request["keyEpisode"] = "asdfb"  # dont use direct assignment
+        #  request = None
+        #  response = None
+        #  tarea.initialize(request, response)
+        #  tarea.post()
+        #  
+        #  
+        #  # always fail to see the debug while i write this
+        #  self.assertEqual("1", "2")
+        ############################
+        # I'm starting to think that this test is absurd.
+        # By now, dont try to test such a complex thing like a task. 
+        # divide and conquer.....
+        pass
 
     def test_compose_email_good(self):
         """prueba el compositor de emails con una lista buena de varios prov.""" 

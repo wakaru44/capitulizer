@@ -1,4 +1,5 @@
 # script con herramientas para ayudar a experimentar mejor
+# y para hacer algunas pruebas con los test.
 
 from bs4 import BeautifulSoup
 

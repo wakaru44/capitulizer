@@ -6,7 +6,7 @@
 import webapp2
 import logging
 from google.appengine.ext import db
-import extractSY
+import extract
 import episode
 
 class NewVideoHandler(webapp2.RequestHandler):
@@ -32,12 +32,12 @@ class NewVideoHandler(webapp2.RequestHandler):
             #Keep this to deactivate getting videos
             #logging.error("DEACTIVATED")
             #raise
-            interWeb = extractSY.openWebsite(interLink)
+            interWeb = extract.openWebsite(interLink)
 
             logging.debug("interWeb type")
             logging.debug(type(interWeb))
 
-            vLink, vProv = extractSY.linkToVideoAndProvFromInterLink(
+            vLink, vProv = extract.linkToVideoAndProvFromInterLink(
                                                               interWeb)
             # save the video link in the episode entity
             # I use a function to work with the bd in a single transaction
@@ -49,7 +49,7 @@ class NewVideoHandler(webapp2.RequestHandler):
             # TODO 1: define a imARobotException
             # TODO : catch errors getting request parameters
             # if we are detected like robots, fail to retry
-            logging.error("Couldn't handle this - task_newVideo:56")
+            logging.error("Couldn't handle this - task_newVideo:52")
             raise 
 
     def keepThatShit(self, keyEpisode, vLink, vProv  ):
@@ -74,7 +74,9 @@ class NewVideoHandler(webapp2.RequestHandler):
                     logging.debug(vLink)
                     logging.debug("epObj")
                     logging.debug(epObj)
-                    raise Exception("We wont store this video.")
+                    raise Exception("""We wont store this video, but this is not
+                                    the end of the world. We should findout how
+                                    to address the 404 problem.""")
 
             db.run_in_transaction(saveVideo, keyEpisode, vLink, vProv)
             #logging.debug("****90****")  # noisy
@@ -97,7 +99,7 @@ class NewVideoHandler(webapp2.RequestHandler):
             # TODO 1: define a imARobotException
             # if we are detected like robots, raise again to retry
             # TODO : catch errors getting request parameters
-            logging.error("Couldn't handle this - task_newVideo:108")
+            logging.error("Couldn't handle this - task_newVideo:100")
             logging.error(err)
             #raise 
 

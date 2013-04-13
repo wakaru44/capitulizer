@@ -4,6 +4,10 @@
 
 import unittest
 from nose import tools
+
+import sys
+sys.path.append("/usr/share/google_appengine")
+
 from google.appengine.ext import testbed
 from google.appengine.ext import db
 import episode
@@ -21,8 +25,9 @@ class DbTestCase(unittest.TestCase):
         #self.mail_stub = self.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
         self.testbed.init_datastore_v3_stub()
         link="http://seriescoco.com/capitulo/mock"
+        link2="http://seriescoco.com/capitulo/mock"
         self.episode= episode.episode(link=link)
-        self.episode2= episode.episode(link=link)
+        self.episode2= episode.episode(link=link2)
         
 
     def tearDown(self):
@@ -39,13 +44,14 @@ class DbTestCase(unittest.TestCase):
         tools.assert_equal(1, len(self.episode.all().fetch(2)))
         
         #tools.assert_raises(self.episode2.save(), "Exception")
+        tools.assert_equal(1, len(self.episode.all().fetch(2)))
         self.assertRaises(Exception, self.episode2.save)
-        pass
 
     def test_db_saves_incomplete_object(self):
         pass
 
     def test_db_needs_required_fields(self):
+        """already raises when link is not passed on construction"""
         pass
 
     def test_db_loads_incomplete_object(self):

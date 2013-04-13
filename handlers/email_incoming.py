@@ -50,7 +50,7 @@ class LogSenderHandler(InboundMailHandler):
         """Uses the message received to send it to the app's mail"""
         subject = "Message Received on capitulizer::" + mail_message.subject
         to = "capitulizer.mail@gmail.com"
-        cc = "wakaru44@gmail.com"
+        cc = "" # copy to the admin disabled. stingy but functional
         body = mail_message.bodies
         # TODO 1: maybe you should get the mail bodies separate first
 
@@ -62,7 +62,6 @@ class LogSenderHandler(InboundMailHandler):
                                       'subject': subject,
                                       'to': to,
                                       'cc': cc,
-                                      'bodyTags': bodyTags,
                                       'body': body})
         queue.add(task)
 

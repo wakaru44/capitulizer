@@ -1,0 +1,52 @@
+<html>
+<head>
+<link href="./staticfiles/adm.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<h1>admin cons</h1>
+	<form action="adm" method="post">
+	<table>
+		<tr>
+			<th>{{ megaform.episodes[0].picture.label }}</th>
+			<th>{{ megaform.episodes[0].title.label  }}</th>
+			<th>{{ megaform.episodes[0].link.label }}</th>
+			<th>{{ megaform.episodes[0].details.label  }}</th>
+			<th>DetailsDict</th>
+			<th>{{ megaform.episodes[0].description.label  }}</th>
+			<th>Dates</th>
+			<th>{{ megaform.episodes[0].videos.label  }}</th>
+			<th>{{ megaform.episodes[0].details.label  }}</th>
+
+		</tr>
+
+		{% for form in megaform.episodes %}
+		<tr>
+			<td>{{ form.picture.label }}</td>
+			<td>{{ form.title }}</td>
+			<td>{{ form.link}}</td>
+			<td>{{ form.details }}</td>
+			<td>{{ form.detailsDict }}{{ form.details.data }}</td>
+			<td>{{ form.description }}</td>
+			<td>Created: {{ form.addedDate }};<br />Updated: {{ form.updatedDate }}</td>
+			<td>{{ form.videos }}</td>
+		</tr>
+		{% endfor %}
+
+	</table>
+	<div id="controls">
+		<input type="submit" name="actName" value="actVal" />
+	</div>
+	</form>
+	<div class="error">
+		{% if megaform.errors %}
+		<ul>
+			{% for field_name, field_errors in form.errors|dictsort if field_errors %}
+			{% for error in field_errors %}<li>{{ form[field_name].label }}: {{ error }}</li>
+			{% endfor %}
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div><!-- error -->
+</body>
+</html>
+

@@ -3,9 +3,8 @@
 # Definition of the episode object
 
 import logging
-import datetime
 import json
-
+#import datetime
 from google.appengine.ext import db
 
 
@@ -24,33 +23,13 @@ class episode(db.Model):
     title = db.StringProperty()
     description = db.StringProperty()
     videos = db.StringListProperty()  # a string list to save videos
-    details = db.StringProperty()  # a json string of a dictionary 
-    picture = db.StringProperty()  # the url to an image 
+    details = db.StringProperty()  # a json string of a dictionary
+    picture = db.StringProperty()  # the url to an image
 
     ## Future interesting data
     submitter = db.EmailProperty  # save the submitter email for future alerts
-    objeto = db.ReferenceProperty # here we can save the links to the videos?
+    objeto = db.ReferenceProperty  # here we can save the links to the videos?
     detailsDict = {}
-
-    def save(self):
-        """ saves in datastore, checking for duplicates"""
-        # - check for duplicates
-        episodes = self.all()
-        logging.debug("Episodes ")
-        logging.debug(episodes)
-        dupes = False
-        for epi in episodes:
-            if epi.link == self.link:
-                dupes = True
-        # - save
-        if dupes == False:
-            logging.debug("Saving the episode")
-            self.put()
-        else:
-            # - Raise a "duplicate" exception. 
-            # - This should make the task fail permanently
-            raise Exception("Duplicate Episode")
-
 
     def addVideo(self, link, provider="Video Online"):
         """add a link to a video to the list"""
@@ -85,10 +64,11 @@ class episode(db.Model):
         """Add the details of the episode to the property.
         It has to convert the dictionary to json string"""
         self.details = json.dumps(details)
+        self.detailsDict = details
 
 
     def getDetails(self):
-        """Get the details from the episode and return a 
+        """Get the details from the episode and return a
            dict of the contents"""
         if self.details is not None:
             return json.loads(self.details)
@@ -99,10 +79,23 @@ class episode(db.Model):
         self.picture = link
 
     def deserializeDetails(self):
-        """Here be dragons. This is a big mistake, creating the object 
-        episode, or the way i use jinja. 
+        """Here be dragons. This is a big mistake, creating the object
+        episode, or the way i use jinja.
         Because the details are saved in json, they need to be deserialized
         before showing...
         It would be nice to serialize and deserialize automagicly"""
         if self.details is not None:
             self.detailsDict = self.getDetails()
+
+
+    # DONE: this should be in the episode object's method test
+    def all_the_same_by_link(self):
+        """find all the duplicates of this episode"""
+        others = []
+        for ep in self.all():
+            if self.link == ep.link:
+                others.append(ep)
+        return others
+
+
+

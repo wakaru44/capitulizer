@@ -9,7 +9,6 @@ import webapp2
 
 # Import the application scripts
 import tasks.newEpisode
-import tasks.newEmail
 import tasks.newVideo
 import tasks.watchNotify
 import tasks.sendEmail
@@ -26,7 +25,6 @@ class MainHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/tasks/newEpisode', tasks.newEpisode.NewEpisodeHandler),
-    ('/tasks/newEmail', tasks.newEmail.NewEmailHandler),
     ('/tasks/newVideo', tasks.newVideo.NewVideoHandler),
     ('/tasks/watchNotify', tasks.watchNotify.WatchNotifyHandler),
     ('/tasks/sendEmail', tasks.sendEmail.SendEmailHandler),
